@@ -33,7 +33,7 @@ app.get('/api/health', (req, res) => {
       mongodb: mongoose.connection.readyState === 1 ? 'Connected' : 'Connecting/Disconnected',
       groqApi: Boolean(config.groq.apiKey),
       huggingFaceApi: Boolean(config.huggingFace.apiKey),
-      firebaseStorage: Boolean(config.firebase.storageBucket),
+      storage: 'MongoDB Internal Binary Storage (Database-backed)',
     },
     timestamp: new Date().toISOString(),
   });
