@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../config.js";
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -49,7 +50,7 @@ export default function UploadPage() {
       formData.append('file', selectedFileObj);
       formData.append('category', docCategory);
 
-      const response = await fetch('http://localhost:5001/api/documents/upload', {
+      const response = await fetch(`${API_BASE_URL}/api/documents/upload`, {
         method: 'POST',
         body: formData,
       });

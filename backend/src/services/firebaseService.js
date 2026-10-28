@@ -6,17 +6,24 @@ import { config } from '../config.js';
 let bucket = null;
 
 try {
-  const serviceAccount = JSON.parse(fs.readFileSync(config.firebase.serviceAccountPath, 'utf8'));
+  let serviceAccount = null;
 
-  if (!getApps().length) {
+  if (config.firebase.serviceAccountJson) {
+    serviceAccount = JSON.parse(config.firebase.serviceAccountJson);
+  } else if (fs.existsSync(config.firebase.serviceAccountPath)) {
+    serviceAccount = JSON.parse(fs.readFileSync(config.firebase.serviceAccountPath, 'utf8'));
+  }
+
+  if (serviceAccount && !getApps().length) {
     initializeApp({
       credential: cert(serviceAccount),
       storageBucket: config.firebase.storageBucket,
     });
+    bucket = getStorage().bucket();
+    console.log(`[Firebase] Initialized with bucket: ${config.firebase.storageBucket}`);
+  } else if (!serviceAccount) {
+    console.warn('[Firebase] Warning: No service account credentials found. Set FIREBASE_SERVICE_ACCOUNT_JSON in cloud environments.');
   }
-
-  bucket = getStorage().bucket();
-  console.log(`[Firebase] Initialized with bucket: ${config.firebase.storageBucket}`);
 } catch (error) {
   console.error('[Firebase] Initialization error:', error.message);
 }

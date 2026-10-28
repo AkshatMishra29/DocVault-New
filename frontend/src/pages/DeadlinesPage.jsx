@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../config.js";
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -21,7 +22,7 @@ export default function DeadlinesPage() {
   const fetchDeadlines = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5001/api/deadlines');
+      const res = await fetch(`${API_BASE_URL}/api/deadlines`);
       const data = await res.json();
       if (data.success) {
         setDeadlines(data.data);
@@ -38,7 +39,7 @@ export default function DeadlinesPage() {
   }, []);
 
   const handleDownloadCalendar = () => {
-    window.open('http://localhost:5001/api/deadlines/calendar.ics', '_blank');
+    window.open(`${API_BASE_URL}/api/deadlines/calendar.ics`, '_blank');
     setSyncDone(true);
     setTimeout(() => setSyncDone(false), 3000);
   };

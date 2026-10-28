@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../config.js";
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { 
@@ -27,7 +28,7 @@ export default function DocumentsPage() {
   const fetchDocuments = async () => {
     setLoading(true);
     try {
-      let url = 'http://localhost:5001/api/documents';
+      let url = `${API_BASE_URL}/api/documents`;
       const params = new URLSearchParams();
       if (selectedCategory !== 'All') params.append('category', selectedCategory);
       if (query) params.append('q', query);

@@ -20,7 +20,8 @@ export const config = {
     apiUrl: 'https://api-inference.huggingface.co/pipeline/feature-extraction/BAAI/bge-small-en-v1.5',
   },
   firebase: {
-    serviceAccountPath: path.resolve(__dirname, '../firebase-service-account.json'),
+    serviceAccountPath: process.env.FIREBASE_SERVICE_ACCOUNT_PATH || path.resolve(__dirname, '../firebase-service-account.json'),
+    serviceAccountJson: process.env.FIREBASE_SERVICE_ACCOUNT_JSON || null,
     storageBucket: process.env.FIREBASE_STORAGE_BUCKET || 'docvault-app-f867f.firebasestorage.app',
   },
   jwtSecret: process.env.JWT_SECRET || 'docvault_fallback_secret',

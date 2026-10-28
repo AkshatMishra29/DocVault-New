@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../config.js";
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -36,7 +37,7 @@ export default function AssetsPage() {
   const fetchAssets = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5001/api/assets');
+      const res = await fetch(`${API_BASE_URL}/api/assets`);
       const data = await res.json();
       if (data.success) {
         setAssets(data.data);
@@ -55,7 +56,7 @@ export default function AssetsPage() {
   const handleCreateAsset = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5001/api/assets', {
+      const res = await fetch(`${API_BASE_URL}/api/assets`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(assetForm)
@@ -84,7 +85,7 @@ export default function AssetsPage() {
     e.stopPropagation();
     if (!window.confirm('Delete this tracked asset?')) return;
     try {
-      await fetch(`http://localhost:5001/api/assets/${id}`, { method: 'DELETE' });
+      await fetch(`${API_BASE_URL}/api/assets/${id}`, { method: 'DELETE' });
       fetchAssets();
     } catch (err) {
       console.error(err);

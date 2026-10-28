@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../config.js";
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { 
@@ -34,7 +35,7 @@ export default function AskAiPage() {
 
   useEffect(() => {
     if (linkedDocId) {
-      fetch(`http://localhost:5001/api/documents/${linkedDocId}`)
+      fetch(`${API_BASE_URL}/api/documents/${linkedDocId}`)
         .then(res => res.json())
         .then(data => {
           if (data.success && data.data) {
@@ -69,7 +70,7 @@ export default function AskAiPage() {
     setIsTyping(true);
 
     try {
-      const response = await fetch('http://localhost:5001/api/ai/query', {
+      const response = await fetch(`${API_BASE_URL}/api/ai/query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

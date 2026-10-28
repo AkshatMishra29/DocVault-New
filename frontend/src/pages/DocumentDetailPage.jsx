@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../config.js";
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
@@ -29,8 +30,8 @@ export default function DocumentDetailPage() {
       setLoading(true);
       try {
         const [docRes, assetsRes] = await Promise.all([
-          fetch(`http://localhost:5001/api/documents/${id}`),
-          fetch('http://localhost:5001/api/assets')
+          fetch(`${API_BASE_URL}/api/documents/${id}`),
+          fetch(`${API_BASE_URL}/api/assets`)
         ]);
         const docData = await docRes.json();
         const assetsData = await assetsRes.json();
@@ -58,7 +59,7 @@ export default function DocumentDetailPage() {
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this document from your vault?')) return;
     try {
-      const res = await fetch(`http://localhost:5001/api/documents/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/documents/${id}`, {
         method: 'DELETE',
       });
       const data = await res.json();
@@ -108,7 +109,7 @@ export default function DocumentDetailPage() {
               const updatedFav = !doc.isFavorite;
               setDoc({ ...doc, isFavorite: updatedFav });
               try {
-                await fetch(`http://localhost:5001/api/documents/${id}`, {
+                await fetch(`${API_BASE_URL}/api/documents/${id}`, {
                   method: 'PATCH',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ isFavorite: updatedFav })
@@ -240,7 +241,7 @@ export default function DocumentDetailPage() {
               const updatedDoc = { ...doc, assetId: selectedAssetId || null };
               setDoc(updatedDoc);
               try {
-                await fetch(`http://localhost:5001/api/documents/${id}`, {
+                await fetch(`${API_BASE_URL}/api/documents/${id}`, {
                   method: 'PATCH',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ assetId: selectedAssetId || null })

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../config.js";
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShieldCheck, KeyRound, ArrowRight, AlertCircle, Delete, Lock } from 'lucide-react';
@@ -36,7 +37,7 @@ export default function EnterPinPage() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5001/api/auth/verify-pin', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/verify-pin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: activeEmail, pin }),

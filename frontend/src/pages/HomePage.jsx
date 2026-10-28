@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../config.js";
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -23,7 +24,7 @@ export default function HomePage() {
 
   useEffect(() => {
     // Fetch live documents
-    fetch('http://localhost:5001/api/documents')
+    fetch(`${API_BASE_URL}/api/documents`)
       .then(res => res.json())
       .then(data => {
         if (data.success) setDocuments(data.data);
@@ -31,7 +32,7 @@ export default function HomePage() {
       .catch(err => console.error(err));
 
     // Fetch live deadlines
-    fetch('http://localhost:5001/api/deadlines')
+    fetch(`${API_BASE_URL}/api/deadlines`)
       .then(res => res.json())
       .then(data => {
         if (data.success) setDeadlines(data.data);
