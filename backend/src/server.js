@@ -4,9 +4,25 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import { config } from './config.js';
 import { uploadToFirebase, deleteFromFirebase } from './services/firebaseService.js';
+import { uploadToR2, deleteFromR2, isR2Configured } from './services/cloudflareR2Service.js';
 import { extractDocumentMetadata, answerDocumentQuery } from './services/groqService.js';
 import { generateEmbedding } from './services/huggingFaceService.js';
 import { Document, Asset, Deadline, User, AuditLog } from './models/index.js';
+
+// Unified Storage helper (Cloudflare R2 preferred, Firebase as fallback)
+async function uploadFile(buffer, destinationPath, mimetype) {
+  if (isR2Configured()) {
+    return await uploadToR2(buffer, destinationPath, mimetype);
+  }
+  return await uploadToFirebase(buffer, destinationPath, mimetype);
+}
+
+async function deleteFile(storagePath) {
+  if (isR2Configured()) {
+    return await deleteFromR2(storagePath);
+  }
+  return await deleteFromFirebase(storagePath);
+}
 
 const app = express();
 
@@ -33,7 +49,7 @@ app.get('/api/health', (req, res) => {
       mongodb: mongoose.connection.readyState === 1 ? 'Connected' : 'Connecting/Disconnected',
       groqApi: Boolean(config.groq.apiKey),
       huggingFaceApi: Boolean(config.huggingFace.apiKey),
-      firebaseStorage: Boolean(config.firebase.storageBucket),
+      storage: isR2Configured() ? 'Cloudflare R2' : Boolean(config.firebase.storageBucket) ? 'Firebase' : 'None',
     },
     timestamp: new Date().toISOString(),
   });
@@ -228,10 +244,10 @@ app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
     const sizeBytes = req.file.size;
     const fileSizeFormatted = (sizeBytes / (1024 * 1024)).toFixed(1) + ' MB';
 
-    // 1. Upload to Firebase Storage
+    // 1. Upload to Object Storage (Cloudflare R2 or Firebase)
     const timestamp = Date.now();
     const destinationPath = `documents/${timestamp}_${originalName}`;
-    const { storagePath, downloadUrl } = await uploadToFirebase(buffer, destinationPath, mimetype);
+    const { storagePath, downloadUrl } = await uploadFile(buffer, destinationPath, mimetype);
 
     // 2. Extract metadata via Groq
     const metadata = await extractDocumentMetadata('', originalName);
@@ -292,7 +308,7 @@ app.delete('/api/documents/:id', async (req, res) => {
       return res.status(404).json({ success: false, error: 'Document not found' });
     }
 
-    await deleteFromFirebase(doc.storagePath);
+    await deleteFile(doc.storagePath);
     await Document.findByIdAndDelete(req.params.id);
     await Deadline.deleteMany({ linkedDocId: req.params.id });
 
