@@ -142,9 +142,15 @@ export default function DocumentDetailPage() {
             title="Download Document"
             onClick={() => {
               if (doc.downloadUrl) {
-                const fullUrl = doc.downloadUrl.startsWith('http') 
+                const token = localStorage.getItem('docvault_token');
+                let fullUrl = doc.downloadUrl.startsWith('http') 
                   ? doc.downloadUrl 
                   : `${API_BASE_URL}${doc.downloadUrl}`;
+                
+                // Attach security token for browser download request
+                if (token && !fullUrl.includes('token=')) {
+                  fullUrl += `${fullUrl.includes('?') ? '&' : '?'}token=${encodeURIComponent(token)}`;
+                }
                 window.open(fullUrl, '_blank');
               }
             }}

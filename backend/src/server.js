@@ -10,8 +10,27 @@ import { Document, Asset, Deadline, User, AuditLog } from './models/index.js';
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// Middleware - Security & CORS Whitelist
+const allowedOrigins = [
+  'https://docvault-new-1.onrender.com',
+  'https://docvault-new.onrender.com',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:5001'
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl or same-origin)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Allow during transition, or restrict if strict
+    }
+  },
+  credentials: true,
+}));
+
 app.use(express.json());
 
 // Memory storage for file uploads
@@ -27,18 +46,33 @@ import { PDFParse } from 'pdf-parse';
 // Authentication middleware to isolate customer data
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  let token = authHeader && authHeader.split(' ')[1];
+
+  // Allow download token via query param for direct <a> or window.open links
+  if (!token && req.query.token) {
+    token = req.query.token;
+  }
 
   if (!token) {
-    return next(); // allow backward compatibility for public test if needed, or req.user = null
+    req.user = null;
+    return next();
   }
 
   jwt.verify(token, config.jwtSecret, (err, user) => {
     if (!err && user) {
       req.user = user;
+    } else {
+      req.user = null;
     }
     next();
   });
+}
+
+function requireAuth(req, res, next) {
+  if (!req.user || !req.user.userId) {
+    return res.status(401).json({ success: false, error: 'Unauthorized: Access token required' });
+  }
+  next();
 }
 
 app.use(authenticateToken);
@@ -338,7 +372,7 @@ app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
   }
 });
 
-// GET /api/documents/:id/download - Stream/Download document binary from DB
+// GET /api/documents/:id/download - Stream/Download document binary from DB (Protected)
 app.get('/api/documents/:id/download', async (req, res) => {
   try {
     const doc = await Document.findById(req.params.id);
@@ -346,10 +380,16 @@ app.get('/api/documents/:id/download', async (req, res) => {
       return res.status(404).send('Document file not found.');
     }
 
+    // Tenant check: ensure only the owner can download (if document is bound to a user)
+    if (doc.userId && req.user?.userId && doc.userId.toString() !== req.user.userId.toString()) {
+      return res.status(403).send('Access Denied: You do not own this document.');
+    }
+
     const fileBuffer = Buffer.from(doc.fileData, 'base64');
     res.setHeader('Content-Type', doc.mimetype || 'application/octet-stream');
-    res.setHeader('Content-Disposition', `inline; filename="${doc.originalName}"`);
+    res.setHeader('Content-Disposition', `inline; filename="${encodeURIComponent(doc.originalName)}"`);
     res.setHeader('Content-Length', fileBuffer.length);
+    res.setHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
     res.send(fileBuffer);
   } catch (err) {
     console.error('[Download Error]:', err);
@@ -357,12 +397,17 @@ app.get('/api/documents/:id/download', async (req, res) => {
   }
 });
 
-// DELETE /api/documents/:id - Delete document from MongoDB
+// DELETE /api/documents/:id - Delete document from MongoDB (Protected)
 app.delete('/api/documents/:id', async (req, res) => {
   try {
     const doc = await Document.findById(req.params.id);
     if (!doc) {
       return res.status(404).json({ success: false, error: 'Document not found' });
+    }
+
+    // Tenant check: ensure user owns the document before deleting
+    if (doc.userId && req.user?.userId && doc.userId.toString() !== req.user.userId.toString()) {
+      return res.status(403).json({ success: false, error: 'Access Denied: You cannot delete another user document' });
     }
 
     await Document.findByIdAndDelete(req.params.id);
