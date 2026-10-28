@@ -11,21 +11,16 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem('docvault_token') || null);
   
   // Track if vault PIN is currently unlocked for this active session
-  // Default to false so on reopen it requires the quick-unlock PIN
   const [isVaultUnlocked, setIsVaultUnlocked] = useState(() => {
     return sessionStorage.getItem('docvault_unlocked') === 'true';
   });
 
   const [pendingEmail, setPendingEmail] = useState(() => {
-    const saved = localStorage.getItem('docvault_user');
-    const u = saved ? JSON.parse(saved) : null;
-    return sessionStorage.getItem('docvault_pending_email') || u?.email || '';
+    return sessionStorage.getItem('docvault_pending_email') || '';
   });
 
   const [pinLength, setPinLength] = useState(() => {
-    const saved = localStorage.getItem('docvault_user');
-    const u = saved ? JSON.parse(saved) : null;
-    return parseInt(sessionStorage.getItem('docvault_pin_length') || u?.pinLength || '4', 10);
+    return parseInt(sessionStorage.getItem('docvault_pin_length') || '4', 10);
   });
 
   // Step 1 Login Success -> Prompt for PIN
@@ -36,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     setPinLength(len);
     sessionStorage.setItem('docvault_pin_length', len.toString());
     sessionStorage.setItem('docvault_pending_email', userData.email);
-    localStorage.setItem('docvault_user', JSON.stringify(userData));
+    // Don't auto-save as full verified user until PIN is successfully unlocked
     setIsVaultUnlocked(false);
     sessionStorage.removeItem('docvault_unlocked');
   };

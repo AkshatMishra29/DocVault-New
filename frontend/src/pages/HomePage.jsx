@@ -23,8 +23,11 @@ export default function HomePage() {
   const [deadlines, setDeadlines] = useState([]);
 
   useEffect(() => {
+    const token = localStorage.getItem('docvault_token');
+    const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
+
     // Fetch live documents
-    fetch(`${API_BASE_URL}/api/documents`)
+    fetch(`${API_BASE_URL}/api/documents`, { headers: authHeaders })
       .then(res => res.json())
       .then(data => {
         if (data.success) setDocuments(data.data);
@@ -32,7 +35,7 @@ export default function HomePage() {
       .catch(err => console.error(err));
 
     // Fetch live deadlines
-    fetch(`${API_BASE_URL}/api/deadlines`)
+    fetch(`${API_BASE_URL}/api/deadlines`, { headers: authHeaders })
       .then(res => res.json())
       .then(data => {
         if (data.success) setDeadlines(data.data);

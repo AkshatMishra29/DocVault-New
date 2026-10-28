@@ -50,8 +50,12 @@ export default function UploadPage() {
       formData.append('file', selectedFileObj);
       formData.append('category', docCategory);
 
+      const token = localStorage.getItem('docvault_token');
       const response = await fetch(`${API_BASE_URL}/api/documents/upload`, {
         method: 'POST',
+        headers: {
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: formData,
       });
 

@@ -70,9 +70,13 @@ export default function AskAiPage() {
     setIsTyping(true);
 
     try {
+      const token = localStorage.getItem('docvault_token');
       const response = await fetch(`${API_BASE_URL}/api/ai/query`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({
           question: query,
           docId: linkedDocId || null

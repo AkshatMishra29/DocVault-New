@@ -34,7 +34,12 @@ export default function DocumentsPage() {
       if (query) params.append('q', query);
       if (params.toString()) url += `?${params.toString()}`;
 
-      const res = await fetch(url);
+      const token = localStorage.getItem('docvault_token');
+      const res = await fetch(url, {
+        headers: {
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        }
+      });
       const data = await res.json();
       if (data.success) {
         setDocuments(data.data);

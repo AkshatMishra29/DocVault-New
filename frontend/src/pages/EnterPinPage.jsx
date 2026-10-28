@@ -159,9 +159,23 @@ export default function EnterPinPage() {
           <ArrowRight size={18} />
         </button>
 
-        <div className="auth-footer">
-          <button className="switch-user-btn" onClick={() => { logout(); navigate('/login'); }}>
-            Switch Account / Log out
+        <div className="auth-footer" style={{ marginTop: '16px' }}>
+          <button 
+            type="button"
+            className="switch-user-btn" 
+            style={{ 
+              background: 'none', 
+              border: 'none', 
+              color: 'var(--primary)', 
+              fontSize: '0.875rem', 
+              fontWeight: '600', 
+              cursor: 'pointer',
+              padding: '8px 12px',
+              textDecoration: 'underline'
+            }}
+            onClick={() => { logout(); navigate('/login'); }}
+          >
+            Not {user?.name || 'you'}? Sign in as another user
           </button>
         </div>
       </div>

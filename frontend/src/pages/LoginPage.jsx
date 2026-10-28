@@ -7,16 +7,12 @@ import './Auth.css';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { user, isVaultUnlocked, handleLoginSuccess } = useAuth();
+  const { user, isVaultUnlocked, handleLoginSuccess, logout } = useAuth();
 
   React.useEffect(() => {
-    // If user already logged in/registered on this device:
-    if (user) {
-      if (isVaultUnlocked) {
-        navigate('/', { replace: true });
-      } else {
-        navigate('/enter-pin', { replace: true });
-      }
+    // If user is already fully authenticated with valid PIN unlocked:
+    if (user && isVaultUnlocked) {
+      navigate('/', { replace: true });
     }
   }, [user, isVaultUnlocked, navigate]);
 

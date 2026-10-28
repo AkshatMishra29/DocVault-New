@@ -22,6 +22,26 @@ const upload = multer({
 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { PDFParse } from 'pdf-parse';
+
+// Authentication middleware to isolate customer data
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return next(); // allow backward compatibility for public test if needed, or req.user = null
+  }
+
+  jwt.verify(token, config.jwtSecret, (err, user) => {
+    if (!err && user) {
+      req.user = user;
+    }
+    next();
+  });
+}
+
+app.use(authenticateToken);
 
 /* ==========================================================================
    1. Health & Service Verification API
@@ -183,6 +203,11 @@ app.get('/api/documents', async (req, res) => {
     const { category, q } = req.query;
     const filter = {};
 
+    // Isolate by authenticated user if logged in
+    if (req.user?.userId) {
+      filter.userId = req.user.userId;
+    }
+
     if (category && category !== 'All') {
       filter.category = category;
     }
@@ -233,10 +258,24 @@ app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
     const fileDataBase64 = buffer.toString('base64');
     const storagePath = `db_${Date.now()}_${originalName}`;
 
+    // Extract text from PDF if applicable
+    let extractedText = '';
+    if (mimetype.includes('pdf')) {
+      try {
+        const parser = new PDFParse({ data: buffer });
+        const parsedResult = await parser.getText();
+        if (parsedResult && parsedResult.text) {
+          extractedText = parsedResult.text;
+        }
+      } catch (pdfErr) {
+        console.warn('[PDFParse Warning]:', pdfErr.message);
+      }
+    }
+
     // 2. Extract metadata via Groq
     let metadata = { title: originalName, summary: '', tags: [], category: 'Other', keyDetails: {} };
     try {
-      metadata = await extractDocumentMetadata('', originalName);
+      metadata = await extractDocumentMetadata(extractedText, originalName);
     } catch (groqErr) {
       console.warn('[Groq Warning] Metadata extraction fallback:', groqErr.message);
     }
@@ -244,7 +283,7 @@ app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
     // 3. Generate embedding via Hugging Face
     let embedding = [];
     try {
-      const textToEmbed = `${metadata.title} ${metadata.summary} ${(metadata.tags || []).join(' ')}`;
+      const textToEmbed = `${metadata.title} ${metadata.summary} ${(metadata.tags || []).join(' ')} ${extractedText.slice(0, 500)}`;
       embedding = await generateEmbedding(textToEmbed);
     } catch (hfErr) {
       console.warn('[HuggingFace Warning] Embedding fallback:', hfErr.message);
@@ -252,6 +291,7 @@ app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
 
     // 4. Save to MongoDB
     const doc = new Document({
+      userId: req.user?.userId || null,
       title: metadata.title || originalName,
       originalName,
       category: metadata.category || req.body.category || 'Other',
@@ -349,7 +389,8 @@ app.post('/api/ai/query', async (req, res) => {
       const doc = await Document.findById(docId);
       if (doc) contextDocs = [doc];
     } else {
-      contextDocs = await Document.find({}).limit(5);
+      const queryFilter = req.user?.userId ? { userId: req.user.userId } : {};
+      contextDocs = await Document.find(queryFilter).sort({ createdAt: -1 }).limit(10);
     }
 
     const answer = await answerDocumentQuery(question, contextDocs);
