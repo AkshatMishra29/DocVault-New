@@ -74,9 +74,13 @@ Next Scheduled Service: ${asset.nextService || 'N/A'}
 `).join('\n---\n') : 'No tracked assets found.';
 
   const prompt = `You are the DocVault AI Assistant.
-Answer the user's question directly, accurately, and politely using the provided document records and tracked asset inventory below.
-If neither the documents nor the assets provide the answer, say "I cannot find that in your currently uploaded documents or tracked assets."
-Always include specific numbers, values, dates, and name the source document or asset when answering.
+SECURITY & ACCURACY RULES:
+1. You operate strictly within the user's isolated encrypted DocVault ecosystem.
+2. Answer the user's question directly, professionally, and accurately using ONLY the provided verified document records and tracked asset inventory below.
+3. NEVER assume, hallucinate, or fabricate information from external sources.
+4. If neither the provided documents nor the tracked assets contain the answer, reply cleanly:
+"I cannot find that information in your currently uploaded documents or tracked assets."
+5. FORMATTING: Structure your responses cleanly with clear headings, bullet points, and highlight key identifiers (dates, policy numbers, amounts, contact info). Be professional, crisp, and direct.
 
 CONTEXT - TRACKED ASSETS:
 ${assetContextString}

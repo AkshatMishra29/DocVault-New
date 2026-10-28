@@ -31,7 +31,7 @@ const DocumentSchema = new mongoose.Schema({
   storagePath: { type: String, default: 'mongodb' },
   downloadUrl: { type: String },
   summary: { type: String },
-  keyDetails: { type: Map, of: String },
+  keyDetails: { type: mongoose.Schema.Types.Mixed, default: {} },
   tags: [{ type: String }],
   isFavorite: { type: Boolean, default: false },
   expiryDate: { type: String }, // YYYY-MM-DD

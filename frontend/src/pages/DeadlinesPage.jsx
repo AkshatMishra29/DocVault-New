@@ -21,8 +21,11 @@ export default function DeadlinesPage() {
 
   const fetchDeadlines = async () => {
     setLoading(true);
+    const token = localStorage.getItem('docvault_token');
     try {
-      const res = await fetch(`${API_BASE_URL}/api/deadlines`);
+      const res = await fetch(`${API_BASE_URL}/api/deadlines`, {
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+      });
       const data = await res.json();
       if (data.success) {
         setDeadlines(data.data);
@@ -39,7 +42,9 @@ export default function DeadlinesPage() {
   }, []);
 
   const handleDownloadCalendar = () => {
-    window.open(`${API_BASE_URL}/api/deadlines/calendar.ics`, '_blank');
+    const token = localStorage.getItem('docvault_token');
+    const url = `${API_BASE_URL}/api/deadlines/calendar.ics${token ? `?token=${token}` : ''}`;
+    window.open(url, '_blank');
     setSyncDone(true);
     setTimeout(() => setSyncDone(false), 3000);
   };

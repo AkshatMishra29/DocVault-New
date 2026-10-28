@@ -28,10 +28,13 @@ export default function DocumentDetailPage() {
   useEffect(() => {
     const fetchDoc = async () => {
       setLoading(true);
+      const token = localStorage.getItem('docvault_token');
+      const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
+
       try {
         const [docRes, assetsRes] = await Promise.all([
-          fetch(`${API_BASE_URL}/api/documents/${id}`),
-          fetch(`${API_BASE_URL}/api/assets`)
+          fetch(`${API_BASE_URL}/api/documents/${id}`, { headers: authHeaders }),
+          fetch(`${API_BASE_URL}/api/assets`, { headers: authHeaders })
         ]);
         const docData = await docRes.json();
         const assetsData = await assetsRes.json();
@@ -58,13 +61,17 @@ export default function DocumentDetailPage() {
 
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this document from your vault?')) return;
+    const token = localStorage.getItem('docvault_token');
     try {
       const res = await fetch(`${API_BASE_URL}/api/documents/${id}`, {
         method: 'DELETE',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
       });
       const data = await res.json();
       if (data.success) {
         navigate('/documents');
+      } else {
+        alert(data.error || 'Failed to delete document');
       }
     } catch (err) {
       alert('Error deleting document: ' + err.message);
@@ -108,10 +115,14 @@ export default function DocumentDetailPage() {
             onClick={async () => {
               const updatedFav = !doc.isFavorite;
               setDoc({ ...doc, isFavorite: updatedFav });
+              const token = localStorage.getItem('docvault_token');
               try {
                 await fetch(`${API_BASE_URL}/api/documents/${id}`, {
                   method: 'PATCH',
-                  headers: { 'Content-Type': 'application/json' },
+                  headers: { 
+                    'Content-Type': 'application/json',
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                  },
                   body: JSON.stringify({ isFavorite: updatedFav })
                 });
               } catch (e) {
@@ -280,7 +291,11 @@ export default function DocumentDetailPage() {
         {doc.downloadUrl && (
           <button 
             className="btn-secondary" 
-            onClick={() => window.open(doc.downloadUrl, '_blank')}
+            onClick={() => {
+              const token = localStorage.getItem('docvault_token');
+              const url = `${API_BASE_URL}${doc.downloadUrl}${token ? `?token=${token}` : ''}`;
+              window.open(url, '_blank');
+            }}
           >
             <ExternalLink size={16} />
             <span>View Original File</span>

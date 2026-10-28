@@ -42,6 +42,18 @@ const upload = multer({
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { PDFParse } from 'pdf-parse';
+import Tesseract from 'tesseract.js';
+
+// Helper to sanitize keys for MongoDB Map storage (no dots or special characters)
+function sanitizeKeyDetails(details) {
+  if (!details || typeof details !== 'object') return {};
+  const sanitized = {};
+  for (const [k, v] of Object.entries(details)) {
+    const safeKey = String(k).replace(/[.\$]/g, '_').trim();
+    sanitized[safeKey] = typeof v === 'object' ? JSON.stringify(v) : String(v);
+  }
+  return sanitized;
+}
 
 // Authentication middleware to isolate customer data
 function authenticateToken(req, res, next) {
@@ -232,15 +244,10 @@ app.post('/api/auth/verify-pin', async (req, res) => {
    ========================================================================== */
 
 // GET /api/documents - Fetch all documents with optional search & category filter
-app.get('/api/documents', async (req, res) => {
+app.get('/api/documents', requireAuth, async (req, res) => {
   try {
     const { category, q } = req.query;
-    const filter = {};
-
-    // Isolate by authenticated user if logged in
-    if (req.user?.userId) {
-      filter.userId = req.user.userId;
-    }
+    const filter = { userId: req.user.userId };
 
     if (category && category !== 'All') {
       filter.category = category;
@@ -263,11 +270,11 @@ app.get('/api/documents', async (req, res) => {
 });
 
 // GET /api/documents/:id - Single document details
-app.get('/api/documents/:id', async (req, res) => {
+app.get('/api/documents/:id', requireAuth, async (req, res) => {
   try {
-    const doc = await Document.findById(req.params.id).select('-fileData');
+    const doc = await Document.findOne({ _id: req.params.id, userId: req.user.userId }).select('-fileData');
     if (!doc) {
-      return res.status(404).json({ success: false, error: 'Document not found' });
+      return res.status(404).json({ success: false, error: 'Document not found or access denied' });
     }
     res.json({ success: true, data: doc });
   } catch (err) {
@@ -275,8 +282,8 @@ app.get('/api/documents/:id', async (req, res) => {
   }
 });
 
-// POST /api/documents/upload - Upload file, send to Firebase, run Groq & Hugging Face
-app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
+// POST /api/documents/upload - Upload file, run OCR (PDF / Tesseract), Groq & Hugging Face
+app.post('/api/documents/upload', requireAuth, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ success: false, error: 'No file uploaded' });
@@ -292,7 +299,7 @@ app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
     const fileDataBase64 = buffer.toString('base64');
     const storagePath = `db_${Date.now()}_${originalName}`;
 
-    // Extract text from PDF if applicable
+    // Extract text from PDF or OCR for images (JPG, PNG, WEBP)
     let extractedText = '';
     if (mimetype.includes('pdf')) {
       try {
@@ -303,6 +310,17 @@ app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
         }
       } catch (pdfErr) {
         console.warn('[PDFParse Warning]:', pdfErr.message);
+      }
+    } else if (mimetype.includes('image') || /\.(jpe?g|png|webp|bmp|tiff)$/i.test(originalName)) {
+      try {
+        console.log(`[Tesseract OCR] Running optical character recognition on image: ${originalName}...`);
+        const { data: { text } } = await Tesseract.recognize(buffer, 'eng');
+        if (text && text.trim()) {
+          extractedText = text.trim();
+          console.log(`[Tesseract OCR Success] Extracted ${extractedText.length} characters from ${originalName}`);
+        }
+      } catch (ocrErr) {
+        console.warn('[Tesseract OCR Warning]:', ocrErr.message);
       }
     }
 
@@ -336,7 +354,7 @@ app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
       fileSizeFormatted,
       storagePath,
       summary: metadata.summary,
-      keyDetails: metadata.keyDetails || {},
+      keyDetails: sanitizeKeyDetails(metadata.keyDetails),
       tags: metadata.tags || [],
       expiryDate: metadata.expiryDate,
       isExpiringSoon: Boolean(metadata.expiryDate),
@@ -356,6 +374,7 @@ app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
       const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
       await Deadline.create({
+        userId: req.user?.userId || null,
         title: `${metadata.title} Expiry`,
         date: metadata.expiryDate,
         daysLeft: daysLeft > 0 ? daysLeft : 0,
@@ -398,20 +417,15 @@ app.get('/api/documents/:id/download', async (req, res) => {
 });
 
 // DELETE /api/documents/:id - Delete document from MongoDB (Protected)
-app.delete('/api/documents/:id', async (req, res) => {
+app.delete('/api/documents/:id', requireAuth, async (req, res) => {
   try {
-    const doc = await Document.findById(req.params.id);
+    const doc = await Document.findOne({ _id: req.params.id, userId: req.user.userId });
     if (!doc) {
-      return res.status(404).json({ success: false, error: 'Document not found' });
-    }
-
-    // Tenant check: ensure user owns the document before deleting
-    if (doc.userId && req.user?.userId && doc.userId.toString() !== req.user.userId.toString()) {
-      return res.status(403).json({ success: false, error: 'Access Denied: You cannot delete another user document' });
+      return res.status(404).json({ success: false, error: 'Document not found or access denied' });
     }
 
     await Document.findByIdAndDelete(req.params.id);
-    await Deadline.deleteMany({ linkedDocId: req.params.id });
+    await Deadline.deleteMany({ linkedDocId: req.params.id, userId: req.user.userId });
 
     res.json({ success: true, message: 'Document deleted successfully' });
   } catch (err) {
@@ -422,7 +436,7 @@ app.delete('/api/documents/:id', async (req, res) => {
 /* ==========================================================================
    3. AI Q&A API (Groq + RAG)
    ========================================================================== */
-app.post('/api/ai/query', async (req, res) => {
+app.post('/api/ai/query', requireAuth, async (req, res) => {
   try {
     const { question, docId } = req.body;
     if (!question) {
@@ -431,10 +445,10 @@ app.post('/api/ai/query', async (req, res) => {
 
     let contextDocs = [];
     let contextAssets = [];
-    const userFilter = req.user?.userId ? { userId: req.user.userId } : {};
+    const userFilter = { userId: req.user.userId };
 
     if (docId) {
-      const doc = await Document.findById(docId);
+      const doc = await Document.findOne({ _id: docId, userId: req.user.userId });
       if (doc) contextDocs = [doc];
     } else {
       contextDocs = await Document.find(userFilter).sort({ createdAt: -1 }).limit(10);
@@ -459,20 +473,35 @@ app.post('/api/ai/query', async (req, res) => {
 /* ==========================================================================
    4. Assets API
    ========================================================================== */
-app.get('/api/assets', async (req, res) => {
+app.get('/api/assets', requireAuth, async (req, res) => {
   try {
-    const assets = await Asset.find().populate('linkedDocumentIds');
+    const assets = await Asset.find({ userId: req.user.userId }).populate('linkedDocumentIds');
     res.json({ success: true, data: assets });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
 });
 
-app.post('/api/assets', async (req, res) => {
+app.post('/api/assets', requireAuth, async (req, res) => {
   try {
-    const asset = new Asset(req.body);
+    const asset = new Asset({
+      ...req.body,
+      userId: req.user.userId,
+    });
     await asset.save();
     res.status(201).json({ success: true, data: asset });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.delete('/api/assets/:id', requireAuth, async (req, res) => {
+  try {
+    const asset = await Asset.findOneAndDelete({ _id: req.params.id, userId: req.user.userId });
+    if (!asset) {
+      return res.status(404).json({ success: false, error: 'Asset not found or access denied' });
+    }
+    res.json({ success: true, message: 'Asset deleted successfully' });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -481,12 +510,55 @@ app.post('/api/assets', async (req, res) => {
 /* ==========================================================================
    5. Deadlines & Reminders API
    ========================================================================== */
-app.get('/api/deadlines', async (req, res) => {
+app.get('/api/deadlines', requireAuth, async (req, res) => {
   try {
-    const deadlines = await Deadline.find().populate('linkedDocId').sort({ date: 1 });
+    const deadlines = await Deadline.find({ userId: req.user.userId }).populate('linkedDocId').sort({ date: 1 });
     res.json({ success: true, data: deadlines });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// GET /api/deadlines/calendar.ics - Export standard iCalendar file (Apple/Google sync)
+app.get('/api/deadlines/calendar.ics', async (req, res) => {
+  try {
+    const filter = req.user?.userId ? { userId: req.user.userId } : {};
+    const deadlines = await Deadline.find(filter).sort({ date: 1 });
+
+    const lines = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//DocVault//Renewal Deadlines//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH'
+    ];
+
+    const todayStr = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+
+    for (const item of deadlines) {
+      if (!item.date) continue;
+      const cleanDate = item.date.replace(/-/g, '').slice(0, 8);
+      const uid = `${item._id}@docvault.app`;
+      lines.push(
+        'BEGIN:VEVENT',
+        `UID:${uid}`,
+        `DTSTAMP:${todayStr}`,
+        `DTSTART;VALUE=DATE:${cleanDate}`,
+        `SUMMARY:DocVault Reminder: ${item.title.replace(/[\r\n]/g, ' ')}`,
+        `DESCRIPTION:${(item.action || 'Renew document').replace(/[\r\n]/g, ' ')}. Days remaining: ${item.daysLeft}`,
+        'STATUS:CONFIRMED',
+        'END:VEVENT'
+      );
+    }
+
+    lines.push('END:VCALENDAR');
+    const icsContent = lines.join('\r\n');
+
+    res.setHeader('Content-Type', 'text/calendar; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="docvault-deadlines.ics"');
+    res.send(icsContent);
+  } catch (err) {
+    res.status(500).send('Error generating calendar file');
   }
 });
 

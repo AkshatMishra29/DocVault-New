@@ -36,8 +36,11 @@ export default function AssetsPage() {
 
   const fetchAssets = async () => {
     setLoading(true);
+    const token = localStorage.getItem('docvault_token');
     try {
-      const res = await fetch(`${API_BASE_URL}/api/assets`);
+      const res = await fetch(`${API_BASE_URL}/api/assets`, {
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+      });
       const data = await res.json();
       if (data.success) {
         setAssets(data.data);
@@ -55,10 +58,14 @@ export default function AssetsPage() {
 
   const handleCreateAsset = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem('docvault_token');
     try {
       const res = await fetch(`${API_BASE_URL}/api/assets`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify(assetForm)
       });
       const data = await res.json();
@@ -84,8 +91,12 @@ export default function AssetsPage() {
   const handleDeleteAsset = async (id, e) => {
     e.stopPropagation();
     if (!window.confirm('Delete this tracked asset?')) return;
+    const token = localStorage.getItem('docvault_token');
     try {
-      await fetch(`${API_BASE_URL}/api/assets/${id}`, { method: 'DELETE' });
+      await fetch(`${API_BASE_URL}/api/assets/${id}`, { 
+        method: 'DELETE',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+      });
       fetchAssets();
     } catch (err) {
       console.error(err);

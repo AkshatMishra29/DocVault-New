@@ -35,7 +35,10 @@ export default function AskAiPage() {
 
   useEffect(() => {
     if (linkedDocId) {
-      fetch(`${API_BASE_URL}/api/documents/${linkedDocId}`)
+      const token = localStorage.getItem('docvault_token');
+      fetch(`${API_BASE_URL}/api/documents/${linkedDocId}`, {
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+      })
         .then(res => res.json())
         .then(data => {
           if (data.success && data.data) {
