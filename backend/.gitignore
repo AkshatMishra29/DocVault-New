@@ -1,0 +1,15 @@
+# Environment Files
+.env
+.env.local
+.env.*.local
+
+# Private Keys & Service Account Credentials
+firebase-service-account.json
+*.pem
+*.key
+
+# Dependencies
+node_modules/
+dist/
+build/
+.DS_Store
