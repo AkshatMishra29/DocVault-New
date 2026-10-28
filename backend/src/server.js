@@ -4,25 +4,9 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import { config } from './config.js';
 import { uploadToFirebase, deleteFromFirebase } from './services/firebaseService.js';
-import { uploadToR2, deleteFromR2, isR2Configured } from './services/cloudflareR2Service.js';
 import { extractDocumentMetadata, answerDocumentQuery } from './services/groqService.js';
 import { generateEmbedding } from './services/huggingFaceService.js';
 import { Document, Asset, Deadline, User, AuditLog } from './models/index.js';
-
-// Unified Storage helper (Cloudflare R2 preferred, Firebase as fallback)
-async function uploadFile(buffer, destinationPath, mimetype) {
-  if (isR2Configured()) {
-    return await uploadToR2(buffer, destinationPath, mimetype);
-  }
-  return await uploadToFirebase(buffer, destinationPath, mimetype);
-}
-
-async function deleteFile(storagePath) {
-  if (isR2Configured()) {
-    return await deleteFromR2(storagePath);
-  }
-  return await deleteFromFirebase(storagePath);
-}
 
 const app = express();
 
@@ -49,7 +33,7 @@ app.get('/api/health', (req, res) => {
       mongodb: mongoose.connection.readyState === 1 ? 'Connected' : 'Connecting/Disconnected',
       groqApi: Boolean(config.groq.apiKey),
       huggingFaceApi: Boolean(config.huggingFace.apiKey),
-      storage: isR2Configured() ? 'Cloudflare R2' : Boolean(config.firebase.storageBucket) ? 'Firebase' : 'None',
+      firebaseStorage: Boolean(config.firebase.storageBucket),
     },
     timestamp: new Date().toISOString(),
   });
@@ -211,7 +195,8 @@ app.get('/api/documents', async (req, res) => {
       ];
     }
 
-    const docs = await Document.find(filter).sort({ createdAt: -1 });
+    // Exclude large fileData payload when listing documents for fast response
+    const docs = await Document.find(filter).select('-fileData').sort({ createdAt: -1 });
     res.json({ success: true, count: docs.length, data: docs });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -221,7 +206,7 @@ app.get('/api/documents', async (req, res) => {
 // GET /api/documents/:id - Single document details
 app.get('/api/documents/:id', async (req, res) => {
   try {
-    const doc = await Document.findById(req.params.id);
+    const doc = await Document.findById(req.params.id).select('-fileData');
     if (!doc) {
       return res.status(404).json({ success: false, error: 'Document not found' });
     }
@@ -244,17 +229,26 @@ app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
     const sizeBytes = req.file.size;
     const fileSizeFormatted = (sizeBytes / (1024 * 1024)).toFixed(1) + ' MB';
 
-    // 1. Upload to Object Storage (Cloudflare R2 or Firebase)
-    const timestamp = Date.now();
-    const destinationPath = `documents/${timestamp}_${originalName}`;
-    const { storagePath, downloadUrl } = await uploadFile(buffer, destinationPath, mimetype);
+    // 1. Process File Buffer & Convert to Base64 (Internal DB Storage)
+    const fileDataBase64 = buffer.toString('base64');
+    const storagePath = `db_${Date.now()}_${originalName}`;
 
     // 2. Extract metadata via Groq
-    const metadata = await extractDocumentMetadata('', originalName);
+    let metadata = { title: originalName, summary: '', tags: [], category: 'Other', keyDetails: {} };
+    try {
+      metadata = await extractDocumentMetadata('', originalName);
+    } catch (groqErr) {
+      console.warn('[Groq Warning] Metadata extraction fallback:', groqErr.message);
+    }
 
     // 3. Generate embedding via Hugging Face
-    const textToEmbed = `${metadata.title} ${metadata.summary} ${metadata.tags.join(' ')}`;
-    const embedding = await generateEmbedding(textToEmbed);
+    let embedding = [];
+    try {
+      const textToEmbed = `${metadata.title} ${metadata.summary} ${(metadata.tags || []).join(' ')}`;
+      embedding = await generateEmbedding(textToEmbed);
+    } catch (hfErr) {
+      console.warn('[HuggingFace Warning] Embedding fallback:', hfErr.message);
+    }
 
     // 4. Save to MongoDB
     const doc = new Document({
@@ -262,10 +256,11 @@ app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
       originalName,
       category: metadata.category || req.body.category || 'Other',
       format: mimetype.includes('pdf') ? 'PDF' : 'Image',
+      mimetype,
+      fileData: fileDataBase64,
       sizeBytes,
       fileSizeFormatted,
       storagePath,
-      downloadUrl,
       summary: metadata.summary,
       keyDetails: metadata.keyDetails || {},
       tags: metadata.tags || [],
@@ -273,6 +268,9 @@ app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
       isExpiringSoon: Boolean(metadata.expiryDate),
       embedding,
     });
+
+    // Generate self-hosted download URL
+    doc.downloadUrl = `/api/documents/${doc._id}/download`;
 
     await doc.save();
 
@@ -300,7 +298,26 @@ app.post('/api/documents/upload', upload.single('file'), async (req, res) => {
   }
 });
 
-// DELETE /api/documents/:id - Delete document from MongoDB & Firebase
+// GET /api/documents/:id/download - Stream/Download document binary from DB
+app.get('/api/documents/:id/download', async (req, res) => {
+  try {
+    const doc = await Document.findById(req.params.id);
+    if (!doc || !doc.fileData) {
+      return res.status(404).send('Document file not found.');
+    }
+
+    const fileBuffer = Buffer.from(doc.fileData, 'base64');
+    res.setHeader('Content-Type', doc.mimetype || 'application/octet-stream');
+    res.setHeader('Content-Disposition', `inline; filename="${doc.originalName}"`);
+    res.setHeader('Content-Length', fileBuffer.length);
+    res.send(fileBuffer);
+  } catch (err) {
+    console.error('[Download Error]:', err);
+    res.status(500).send('Error downloading file');
+  }
+});
+
+// DELETE /api/documents/:id - Delete document from MongoDB
 app.delete('/api/documents/:id', async (req, res) => {
   try {
     const doc = await Document.findById(req.params.id);
@@ -308,7 +325,6 @@ app.delete('/api/documents/:id', async (req, res) => {
       return res.status(404).json({ success: false, error: 'Document not found' });
     }
 
-    await deleteFile(doc.storagePath);
     await Document.findByIdAndDelete(req.params.id);
     await Deadline.deleteMany({ linkedDocId: req.params.id });
 

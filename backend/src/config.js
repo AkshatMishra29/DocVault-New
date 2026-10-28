@@ -24,13 +24,5 @@ export const config = {
     serviceAccountJson: process.env.FIREBASE_SERVICE_ACCOUNT_JSON || null,
     storageBucket: process.env.FIREBASE_STORAGE_BUCKET || 'docvault-app-f867f.firebasestorage.app',
   },
-  cloudflareR2: {
-    accountId: process.env.R2_ACCOUNT_ID,
-    accessKeyId: process.env.R2_ACCESS_KEY_ID,
-    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
-    bucketName: process.env.R2_BUCKET_NAME || 'docvault-storage',
-    endpoint: process.env.R2_ENDPOINT,
-    publicDomain: process.env.R2_PUBLIC_DOMAIN || '', // optional public URL if configured
-  },
   jwtSecret: process.env.JWT_SECRET || 'docvault_fallback_secret',
 };

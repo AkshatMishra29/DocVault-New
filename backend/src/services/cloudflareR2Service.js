@@ -82,3 +82,4 @@ export async function deleteFromR2(destinationPath) {
 export function isR2Configured() {
   return Boolean(s3Client && config.cloudflareR2.bucketName);
 }
+

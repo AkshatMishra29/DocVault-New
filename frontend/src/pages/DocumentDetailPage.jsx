@@ -141,7 +141,12 @@ export default function DocumentDetailPage() {
             className="detail-icon-btn" 
             title="Download Document"
             onClick={() => {
-              if (doc.downloadUrl) window.open(doc.downloadUrl, '_blank');
+              if (doc.downloadUrl) {
+                const fullUrl = doc.downloadUrl.startsWith('http') 
+                  ? doc.downloadUrl 
+                  : `${API_BASE_URL}${doc.downloadUrl}`;
+                window.open(fullUrl, '_blank');
+              }
             }}
           >
             <Download size={18} />
@@ -155,7 +160,7 @@ export default function DocumentDetailPage() {
         <h2 className="detail-main-title">{doc.title}</h2>
         <div className="detail-sec-pill">
           <ShieldCheck size={14} color="#10B981" />
-          <span>Verified Firebase Storage Hash</span>
+          <span>Encrypted Database Storage</span>
         </div>
       </div>
 

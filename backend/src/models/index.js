@@ -24,10 +24,12 @@ const DocumentSchema = new mongoose.Schema({
     default: 'Other'
   },
   format: { type: String, default: 'PDF' },
+  mimetype: { type: String },
+  fileData: { type: String }, // Base64 encoded file data
   sizeBytes: { type: Number },
   fileSizeFormatted: { type: String },
-  storagePath: { type: String, required: true },
-  downloadUrl: { type: String, required: true },
+  storagePath: { type: String, default: 'mongodb' },
+  downloadUrl: { type: String },
   summary: { type: String },
   keyDetails: { type: Map, of: String },
   tags: [{ type: String }],
