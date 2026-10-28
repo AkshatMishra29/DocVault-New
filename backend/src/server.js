@@ -301,17 +301,39 @@ app.post('/api/documents/upload', requireAuth, upload.single('file'), async (req
 
     // Extract text from PDF or OCR for images (JPG, PNG, WEBP)
     let extractedText = '';
+    let previewImageBase64 = null;
+
     if (mimetype.includes('pdf')) {
       try {
         const parser = new PDFParse({ data: buffer });
         const parsedResult = await parser.getText();
-        if (parsedResult && parsedResult.text) {
-          extractedText = parsedResult.text;
+        if (parsedResult && parsedResult.text && parsedResult.text.trim().length > 30) {
+          extractedText = parsedResult.text.trim();
+        } else {
+          // Scanned PDF detected (no digital text layer)
+          console.log(`[Scanned PDF Detected] No selectable text in ${originalName}. Converting page 1 for OCR...`);
+          try {
+            const pdfImg = await import('pdf-img-convert');
+            const pageImages = await pdfImg.default.convert(buffer, { page_numbers: [1], scale: 1.5 });
+            if (pageImages && pageImages.length > 0) {
+              const pageBuffer = Buffer.from(pageImages[0]);
+              previewImageBase64 = pageBuffer.toString('base64');
+              console.log(`[Tesseract OCR] Running local OCR on page 1 of scanned PDF...`);
+              const { data: { text } } = await Tesseract.recognize(pageBuffer, 'eng');
+              if (text && text.trim()) {
+                extractedText = text.trim();
+                console.log(`[Tesseract OCR Success] Extracted ${extractedText.length} characters from scanned PDF.`);
+              }
+            }
+          } catch (renderErr) {
+            console.warn('[PDF Render Warning]:', renderErr.message);
+          }
         }
       } catch (pdfErr) {
         console.warn('[PDFParse Warning]:', pdfErr.message);
       }
     } else if (mimetype.includes('image') || /\.(jpe?g|png|webp|bmp|tiff)$/i.test(originalName)) {
+      previewImageBase64 = fileDataBase64;
       try {
         console.log(`[Tesseract OCR] Running optical character recognition on image: ${originalName}...`);
         const { data: { text } } = await Tesseract.recognize(buffer, 'eng');
@@ -324,10 +346,13 @@ app.post('/api/documents/upload', requireAuth, upload.single('file'), async (req
       }
     }
 
-    // 2. Extract metadata via Groq
+    // 2. Extract metadata via Groq (with Groq Vision fallback if local OCR extracted < 20 chars)
     let metadata = { title: originalName, summary: '', tags: [], category: 'Other', keyDetails: {} };
     try {
-      metadata = await extractDocumentMetadata(extractedText, originalName);
+      metadata = await extractDocumentMetadata(extractedText, originalName, previewImageBase64);
+      if (metadata.extractedText && !extractedText) {
+        extractedText = metadata.extractedText;
+      }
     } catch (groqErr) {
       console.warn('[Groq Warning] Metadata extraction fallback:', groqErr.message);
     }

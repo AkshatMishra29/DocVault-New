@@ -8,7 +8,54 @@ const groq = new Groq({
 /**
  * Extract structured metadata, entity fields, and expiry dates from document text
  */
-export async function extractDocumentMetadata(rawText, filename) {
+export async function extractDocumentMetadata(rawText, filename, imageBase64 = null) {
+  // If no text was extracted (e.g. heavily degraded scan/photo), use Groq Llama-3.2 Vision
+  if ((!rawText || rawText.trim().length < 20) && imageBase64) {
+    try {
+      console.log(`[Groq Vision OCR] Attempting visual multimodal extraction for: ${filename}...`);
+      const visionPrompt = `You are the DocVault AI Document Vision Engine.
+Analyze the provided document image and extract its complete content and metadata. Return ONLY a valid JSON object (no markdown, no backticks):
+{
+  "title": "A short, descriptive title for this document (e.g., 'Honda City Comprehensive Insurance Policy')",
+  "category": "One of: ['Insurance', 'Appliances', 'Identity', 'Property', 'Medical', 'Other']",
+  "summary": "A concise 2-3 sentence executive summary explaining what this document is and any critical policy numbers or conditions.",
+  "expiryDate": "YYYY-MM-DD format if an expiration, renewal, or warranty end date is present, otherwise null",
+  "keyDetails": {
+    "Key Name (e.g. Policy Number, Account Number, Serial Number, Date)": "Value"
+  },
+  "tags": ["array", "of", "3-5", "relevant", "search", "keywords"],
+  "extractedText": "Full readable transcription of all text detected in this document"
+}
+Filename: ${filename}`;
+
+      const visionResponse = await groq.chat.completions.create({
+        model: 'llama-3.2-11b-vision-preview',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: visionPrompt },
+              {
+                type: 'image_url',
+                image_url: {
+                  url: `data:image/jpeg;base64,${imageBase64}`
+                }
+              }
+            ]
+          }
+        ],
+        temperature: 0.1,
+        response_format: { type: 'json_object' }
+      });
+
+      const parsed = JSON.parse(visionResponse.choices[0].message.content);
+      console.log(`[Groq Vision Success] Successfully extracted metadata visually from ${filename}`);
+      return parsed;
+    } catch (visionErr) {
+      console.warn('[Groq Vision Warning] Vision fallback failed, proceeding with text-based model:', visionErr.message);
+    }
+  }
+
   const prompt = `You are the DocVault AI Extraction Engine.
 Analyze the following document text and return ONLY a valid JSON object (no markdown, no backticks, no commentary).
 
