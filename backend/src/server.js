@@ -430,20 +430,26 @@ app.post('/api/ai/query', async (req, res) => {
     }
 
     let contextDocs = [];
+    let contextAssets = [];
+    const userFilter = req.user?.userId ? { userId: req.user.userId } : {};
+
     if (docId) {
       const doc = await Document.findById(docId);
       if (doc) contextDocs = [doc];
     } else {
-      const queryFilter = req.user?.userId ? { userId: req.user.userId } : {};
-      contextDocs = await Document.find(queryFilter).sort({ createdAt: -1 }).limit(10);
+      contextDocs = await Document.find(userFilter).sort({ createdAt: -1 }).limit(10);
+      contextAssets = await Asset.find(userFilter).limit(20);
     }
 
-    const answer = await answerDocumentQuery(question, contextDocs);
+    const answer = await answerDocumentQuery(question, contextDocs, contextAssets);
 
     res.json({
       success: true,
       answer,
-      sources: contextDocs.map(d => ({ title: d.title, category: d.category })),
+      sources: [
+        ...contextDocs.map(d => ({ title: d.title, category: d.category, type: 'Document' })),
+        ...contextAssets.map(a => ({ title: a.name, category: a.category, type: 'Asset' })),
+      ],
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });

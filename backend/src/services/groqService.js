@@ -53,22 +53,36 @@ ${rawText ? rawText.slice(0, 4000) : 'No OCR text available. Infer from filename
 }
 
 /**
- * Answer questions based on retrieved document context (RAG Q&A)
+ * Answer questions based on retrieved document context and tracked assets (RAG Q&A)
  */
-export async function answerDocumentQuery(question, contextDocs) {
-  const contextString = contextDocs.map((doc, idx) => `
+export async function answerDocumentQuery(question, contextDocs = [], contextAssets = []) {
+  const docContextString = contextDocs.length > 0 ? contextDocs.map((doc, idx) => `
 [Document ${idx + 1}]: "${doc.title}" (Category: ${doc.category})
-Summary: ${doc.summary}
-Key Details: ${JSON.stringify(doc.keyDetails)}
-`).join('\n---\n');
+Summary: ${doc.summary || 'N/A'}
+Key Details: ${JSON.stringify(doc.keyDetails || {})}
+Expiry Date: ${doc.expiryDate || 'N/A'}
+`).join('\n---\n') : 'No documents found.';
+
+  const assetContextString = contextAssets.length > 0 ? contextAssets.map((asset, idx) => `
+[Asset ${idx + 1}]: "${asset.name}" (Category: ${asset.category})
+Estimated Value: ${asset.estimatedValue || 'N/A'}
+Status: ${asset.status || 'Active'}
+Purchase Date: ${asset.purchaseDate || 'N/A'}
+Warranty Expiry: ${asset.warrantyExpiry || 'N/A'}
+Insurance Expiry: ${asset.insuranceExpiry || 'N/A'}
+Next Scheduled Service: ${asset.nextService || 'N/A'}
+`).join('\n---\n') : 'No tracked assets found.';
 
   const prompt = `You are the DocVault AI Assistant.
-Answer the user's question directly, accurately, and politely using ONLY the provided document context below.
-If the documents don't provide the answer, say "I cannot find that in your currently uploaded documents."
-Always include specific numbers, dates, and name the source document when answering.
+Answer the user's question directly, accurately, and politely using the provided document records and tracked asset inventory below.
+If neither the documents nor the assets provide the answer, say "I cannot find that in your currently uploaded documents or tracked assets."
+Always include specific numbers, values, dates, and name the source document or asset when answering.
 
-CONTEXT DOCUMENTS:
-${contextString}
+CONTEXT - TRACKED ASSETS:
+${assetContextString}
+
+CONTEXT - STORED DOCUMENTS:
+${docContextString}
 
 USER QUESTION:
 ${question}
