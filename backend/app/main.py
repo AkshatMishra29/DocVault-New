@@ -1,4 +1,5 @@
 import time
+import json
 import datetime
 from typing import Optional
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Depends, Response
@@ -16,7 +17,16 @@ from app.services.huggingface_service import generate_embedding
 
 import bcrypt
 
-def hash_secret(secret_str: str) -> str:
+def sanitize_key_details(details: dict) -> dict:
+    """Sanitize keys for MongoDB Map storage.
+    Replaces spaces and dots with underscores and ensures all values are strings.
+    """
+    sanitized = {}
+    for k, v in details.items():
+        safe_key = k.replace(' ', '_').replace('.', '_')
+        sanitized[safe_key] = str(v)
+    return sanitized
+
     # Truncate to 72 bytes as per bcrypt specification
     secret_bytes = secret_str.encode('utf-8')[:72]
     salt = bcrypt.gensalt()
@@ -49,12 +59,44 @@ uploads_path.mkdir(exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=str(uploads_path)), name="uploads")
 
 # Helper to serialize Mongo docs
+
+# Dependency to extract current user from JWT
+from fastapi import Request, Depends, status
+from jose import JWTError
+
+def get_current_user(request: Request = Depends()):
+    auth: str = request.headers.get('Authorization')
+    if not auth or not auth.startswith('Bearer '):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Missing or invalid Authorization header')
+    token = auth.split(' ')[1]
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        return payload
+    except JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Invalid token')
 def serialize_mongo(doc):
     if not doc:
         return doc
     doc["id"] = str(doc.get("_id"))
     doc.pop("_id", None)
     return doc
+
+
+
+def health_check():
+    db = get_db()
+    mongo_status = "Connected" if db is not None else "Disconnected"
+    return {
+        "status": "ok",
+        "runtime": "Python FastAPI",
+        "services": {
+            "mongodb": mongo_status,
+            "groqApi": True,
+            "huggingFaceApi": True,
+            "firebaseStorage": True
+        },
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat()
+    }
 
 # ==============================================================================
 # Pydantic Schemas
@@ -81,8 +123,8 @@ class AIQueryRequest(BaseModel):
 # ==============================================================================
 # 1. Health & Status
 # ==============================================================================
-@app.get("/api/health")
-def health_check():
+
+
     db = get_db()
     mongo_status = "Connected" if db is not None else "Disconnected"
     return {
@@ -212,6 +254,25 @@ def verify_vault_pin(req: VerifyPinRequest):
 # 3. Documents API
 # ==============================================================================
 @app.get("/api/documents")
+def list_documents(category: Optional[str] = None, q: Optional[str] = None, user: dict = Depends(get_current_user)):
+    db = get_db()
+    query = {"ownerId": user.get("userId")}
+    if category and category != "All":
+        query["category"] = category
+
+    if q:
+        query["$or"] = [
+            {"title": {"$regex": q, "$options": "i"}},
+            {"tags": {"$in": [q]}},
+            {"summary": {"$regex": q, "$options": "i"}}
+        ]
+
+    docs = list(db.documents.find(query).sort("createdAt", -1))
+    return {
+        "success": True,
+        "count": len(docs),
+        "data": [serialize_mongo(d) for d in docs]
+    }
 def list_documents(category: Optional[str] = None, q: Optional[str] = None):
     db = get_db()
     query = {}
@@ -233,6 +294,15 @@ def list_documents(category: Optional[str] = None, q: Optional[str] = None):
     }
 
 @app.get("/api/documents/{doc_id}")
+def get_document(doc_id: str, user: dict = Depends(get_current_user)):
+    db = get_db()
+    try:
+        doc = db.documents.find_one({"_id": ObjectId(doc_id), "ownerId": user.get("userId")})
+        if not doc:
+            raise HTTPException(status_code=404, detail="Document not found")
+        return {"success": True, "data": serialize_mongo(doc)}
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid Document ID")
 def get_document(doc_id: str):
     db = get_db()
     try:
@@ -244,6 +314,92 @@ def get_document(doc_id: str):
         raise HTTPException(status_code=400, detail="Invalid Document ID")
 
 @app.post("/api/documents/upload", status_code=201)
+async def upload_document(file: UploadFile = File(...), category: Optional[str] = Form("Other"), user: dict = Depends(get_current_user)):
+    db = get_db()
+    content_bytes = await file.read()
+    original_name = file.filename
+    mimetype = file.content_type or "application/pdf"
+    size_bytes = len(content_bytes)
+    size_formatted = f"{(size_bytes / (1024 * 1024)):.1f} MB"
+
+    # 1. Upload to Firebase Storage
+    destination_path = f"documents/{int(time.time())}_{original_name}"
+    storage_res = upload_file_to_firebase(content_bytes, destination_path, mimetype)
+
+    # Extract real text from PDF or Image if available
+    extracted_text = ""
+    if "pdf" in mimetype.lower():
+        try:
+            import io
+            from pypdf import PdfReader
+            pdf_reader = PdfReader(io.BytesIO(content_bytes))
+            for page in pdf_reader.pages[:5]: # Extract first 5 pages max
+                txt = page.extract_text()
+                if txt:
+                    extracted_text += txt + "\n"
+        except Exception as e:
+            print(f"[PDF Extract Warning]: {e}")
+    elif any(img_ext in mimetype.lower() for img_ext in ["image", "jpeg", "jpg", "png", "webp"]):
+        try:
+            import io
+            from PIL import Image
+            import pytesseract
+            img = Image.open(io.BytesIO(content_bytes))
+            ocr_text = pytesseract.image_to_string(img)
+            if ocr_text:
+                extracted_text = ocr_text.strip()
+                print(f"[OCR Success]: Extracted {len(extracted_text)} characters from {original_name}")
+        except Exception as e:
+            print(f"[Image OCR Warning]: {e}")
+
+    # 2. Extract Metadata via Groq
+    metadata = extract_document_metadata(extracted_text, original_name)
+
+    # 3. Generate Vector Embedding via Hugging Face
+    text_to_embed = f"{metadata.get('title')} {metadata.get('summary')} {' '.join(metadata.get('tags', []))}"
+    embedding = generate_embedding(text_to_embed)
+
+    # 4. Save to MongoDB with ownerId
+    doc_record = {
+        "title": metadata.get("title") or original_name,
+        "originalName": original_name,
+        "category": metadata.get("category") or category,
+        "format": "PDF" if "pdf" in mimetype.lower() else "Image",
+        "sizeBytes": size_bytes,
+        "fileSizeFormatted": size_formatted,
+        "storagePath": storage_res["storage_path"],
+        "downloadUrl": storage_res["download_url"],
+        "summary": metadata.get("summary"),
+        "keyDetails": sanitize_key_details(metadata.get('keyDetails', {})),
+        "tags": metadata.get("tags", []),
+        "expiryDate": metadata.get("expiryDate"),
+        "isExpiringSoon": bool(metadata.get("expiryDate")),
+        "embedding": embedding,
+        "ownerId": user.get("userId"),
+        "createdAt": datetime.datetime.now(datetime.timezone.utc)
+    }
+
+    insert_res = db.documents.insert_one(doc_record)
+    doc_record["id"] = str(insert_res.inserted_id)
+
+    # If expiry detected, create reminder deadline
+    if metadata.get("expiryDate"):
+        try:
+            exp_date = datetime.date.fromisoformat(metadata["expiryDate"]) 
+            days_left = (exp_date - datetime.date.today()).days
+            db.deadlines.insert_one({
+                "title": f"{doc_record['title']} Expiry",
+                "date": metadata["expiryDate"],
+                "daysLeft": max(days_left, 0),
+                "severity": "urgent" if days_left < 30 else "upcoming",
+                "linkedDocId": insert_res.inserted_id,
+                "action": "Review / Renew Policy",
+                "createdAt": datetime.datetime.now(datetime.timezone.utc)
+            })
+        except Exception as e:
+            print(f"[Deadline] Expiry parse error: {e}")
+
+    return {"success": True, "data": serialize_mongo(doc_record)}
 async def upload_document(file: UploadFile = File(...), category: Optional[str] = Form("Other")):
     db = get_db()
     content_bytes = await file.read()
@@ -301,7 +457,7 @@ async def upload_document(file: UploadFile = File(...), category: Optional[str] 
         "storagePath": storage_res["storage_path"],
         "downloadUrl": storage_res["download_url"],
         "summary": metadata.get("summary"),
-        "keyDetails": metadata.get("keyDetails", {}),
+        "keyDetails": sanitize_key_details(metadata.get('keyDetails', {})),
         "tags": metadata.get("tags", []),
         "expiryDate": metadata.get("expiryDate"),
         "isExpiringSoon": bool(metadata.get("expiryDate")),
@@ -373,7 +529,29 @@ def update_document(doc_id: str, updates: dict):
 # ==============================================================================
 # 4. AI Query (Groq + RAG)
 # ==============================================================================
+# 4. AI Query (Groq + RAG)
 @app.post("/api/ai/query")
+def ask_vault_ai(req: AIQueryRequest, user: dict = Depends(get_current_user)):
+    db = get_db()
+    context_docs = []
+
+    if req.docId:
+        try:
+            d = db.documents.find_one({"_id": ObjectId(req.docId), "ownerId": user.get("userId")})
+            if d:
+                context_docs = [d]
+        except Exception:
+            pass
+    else:
+        context_docs = list(db.documents.find({"ownerId": user.get("userId")}).limit(5))
+
+    answer = answer_document_query(req.question, context_docs)
+
+    return {
+        "success": True,
+        "answer": answer,
+        "sources": [{"title": d.get("title"), "category": d.get("category")} for d in context_docs]
+    }
 def ask_vault_ai(req: AIQueryRequest):
     db = get_db()
     context_docs = []
