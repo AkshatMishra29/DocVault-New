@@ -79,24 +79,7 @@ export default function EnterPinPage() {
           </p>
         </div>
 
-        {/* Toggle between 4-digit and 6-digit PIN on unlock screen if needed */}
-        <div className="pin-switch-row">
-          <button
-            type="button"
-            className={`pin-pill-opt ${targetLength === 4 ? 'active' : ''}`}
-            onClick={() => { setPinLength(4); setPin(''); setError(''); }}
-          >
-            4 Digits
-          </button>
-          <button
-            type="button"
-            className={`pin-pill-opt ${targetLength === 6 ? 'active' : ''}`}
-            onClick={() => { setPinLength(6); setPin(''); setError(''); }}
-          >
-            6 Digits
-          </button>
-        </div>
-
+        {/* Clean PIN prompt without confusing manual length toggle */}
         {error && (
           <div className="auth-error-banner">
             <AlertCircle size={16} />

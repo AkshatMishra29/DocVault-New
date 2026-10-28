@@ -588,6 +588,59 @@ app.get('/api/deadlines/calendar.ics', async (req, res) => {
 });
 
 /* ==========================================================================
+   6. Vault Export & Settings API
+   ========================================================================== */
+
+// GET /api/vault/export - Export full encrypted vault metadata & document inventory as JSON backup
+app.get('/api/vault/export', requireAuth, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const [user, docs, assets, deadlines] = await Promise.all([
+      User.findById(userId).select('-passwordHash -pinHash'),
+      Document.find({ userId }).select('-fileData'),
+      Asset.find({ userId }),
+      Deadline.find({ userId })
+    ]);
+
+    const backupBundle = {
+      vaultVersion: '2.4.0',
+      exportedAt: new Date().toISOString(),
+      user: {
+        id: user?._id,
+        name: user?.name,
+        email: user?.email,
+        tier: user?.tier || 'Encrypted Vault',
+      },
+      stats: {
+        totalDocuments: docs.length,
+        totalAssets: assets.length,
+        totalDeadlines: deadlines.length,
+      },
+      documents: docs,
+      assets: assets,
+      deadlines: deadlines,
+    };
+
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="docvault-backup-${Date.now()}.json"`);
+    res.send(JSON.stringify(backupBundle, null, 2));
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Failed to generate vault backup archive' });
+  }
+});
+
+// GET /api/vault/audit-trail - Fetch real audit records for user
+app.get('/api/vault/audit-trail', requireAuth, async (req, res) => {
+  try {
+    const logs = await AuditLog.find({ userId: req.user.userId }).sort({ timestamp: -1 }).limit(50);
+    const count = await AuditLog.countDocuments({ userId: req.user.userId });
+    res.json({ success: true, count, data: logs });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/* ==========================================================================
    Server Initialization
    ========================================================================== */
 async function startServer() {

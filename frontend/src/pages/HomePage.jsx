@@ -153,10 +153,10 @@ export default function HomePage() {
         <div className="categories-grid-home">
           {[
             { name: 'Insurance', icon: '🛡️', color: '#4338CA' },
-            { name: 'Finance', icon: '💳', color: '#10B981' },
             { name: 'Identity', icon: '🪪', color: '#F59E0B' },
-            { name: 'Vehicle', icon: '🚗', color: '#06B6D4' },
-            { name: 'Health', icon: '🏥', color: '#EF4444' },
+            { name: 'Medical', icon: '🏥', color: '#EF4444' },
+            { name: 'Property', icon: '🏠', color: '#10B981' },
+            { name: 'Appliances', icon: '🔌', color: '#06B6D4' },
             { name: 'Other', icon: '📁', color: '#6B7280' },
           ].map((cat) => {
             const count = documents.filter(d => (d.category || '').toLowerCase() === cat.name.toLowerCase()).length;

@@ -16,12 +16,21 @@ export default function DocumentsPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const initialQuery = searchParams.get('q') || '';
+  const initialCategory = searchParams.get('category') || 'All';
 
   const [query, setQuery] = useState(initialQuery);
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [sortBy, setSortBy] = useState('recent');
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Sync state if URL query params change (e.g. from Home category cards)
+  useEffect(() => {
+    const cat = searchParams.get('category');
+    if (cat) setSelectedCategory(cat);
+    const q = searchParams.get('q');
+    if (q !== null) setQuery(q);
+  }, [searchParams]);
 
   const categories = ['All', 'Insurance', 'Appliances', 'Identity', 'Property', 'Medical', 'Other'];
 
