@@ -43,6 +43,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { PDFParse } from 'pdf-parse';
 import Tesseract from 'tesseract.js';
+import sharp from 'sharp';
 
 // Helper to sanitize keys for MongoDB Map storage (no dots or special characters)
 function sanitizeKeyDetails(details) {
@@ -335,8 +336,22 @@ app.post('/api/documents/upload', requireAuth, upload.single('file'), async (req
     } else if (mimetype.includes('image') || /\.(jpe?g|png|webp|bmp|tiff)$/i.test(originalName)) {
       previewImageBase64 = fileDataBase64;
       try {
+        console.log(`[OCR Preprocessing] Optimizing image ${originalName} with Sharp for maximum text extraction...`);
+        // Preprocess image: convert to grayscale, normalize contrast, resize if small, sharpen edges
+        let optimizedBuffer = buffer;
+        try {
+          optimizedBuffer = await sharp(buffer)
+            .grayscale()
+            .normalize()
+            .sharpen()
+            .toBuffer();
+        } catch (sharpErr) {
+          console.warn('[Sharp Warning] Preprocessing bypassed, using raw buffer:', sharpErr.message);
+          optimizedBuffer = buffer;
+        }
+
         console.log(`[Tesseract OCR] Running optical character recognition on image: ${originalName}...`);
-        const { data: { text } } = await Tesseract.recognize(buffer, 'eng');
+        const { data: { text } } = await Tesseract.recognize(optimizedBuffer, 'eng');
         if (text && text.trim()) {
           extractedText = text.trim();
           console.log(`[Tesseract OCR Success] Extracted ${extractedText.length} characters from ${originalName}`);

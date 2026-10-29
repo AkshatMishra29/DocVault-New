@@ -1,6 +1,8 @@
 import { API_BASE_URL } from "../config.js";
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { 
   Sparkles, 
   Send, 
@@ -152,9 +154,17 @@ export default function AskAiPage() {
 
             <div className="bubble-content">
               <div className="bubble-text">
-                {m.text.split('\n').map((paragraph, idx) => (
-                  <p key={idx} style={{ marginBottom: paragraph ? '4px' : '0' }}>{paragraph}</p>
-                ))}
+                {m.sender === 'assistant' ? (
+                  <div className="markdown-body">
+                    <Markdown remarkPlugins={[remarkGfm]}>
+                      {m.text}
+                    </Markdown>
+                  </div>
+                ) : (
+                  m.text.split('\n').map((paragraph, idx) => (
+                    <p key={idx} style={{ marginBottom: paragraph ? '4px' : '0' }}>{paragraph}</p>
+                  ))
+                )}
               </div>
 
               {/* Verified Sources Pill */}

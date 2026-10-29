@@ -9,10 +9,10 @@ const groq = new Groq({
  * Extract structured metadata, entity fields, and expiry dates from document text
  */
 export async function extractDocumentMetadata(rawText, filename, imageBase64 = null) {
-  // If no text was extracted (e.g. heavily degraded scan/photo), use Groq Llama-3.2 Vision
+  // If no text was extracted (e.g. image document or scanned PDF), use Groq Multimodal Vision (Qwen 3.8 27B)
   if ((!rawText || rawText.trim().length < 20) && imageBase64) {
     try {
-      console.log(`[Groq Vision OCR] Attempting visual multimodal extraction for: ${filename}...`);
+      console.log(`[Groq Vision OCR] Attempting visual multimodal extraction for: ${filename} using qwen/qwen3.8-27b...`);
       const visionPrompt = `You are the DocVault AI Document Vision Engine.
 Analyze the provided document image and extract its complete content and metadata. Return ONLY a valid JSON object (no markdown, no backticks):
 {
@@ -29,7 +29,7 @@ Analyze the provided document image and extract its complete content and metadat
 Filename: ${filename}`;
 
       const visionResponse = await groq.chat.completions.create({
-        model: 'llama-3.2-11b-vision-preview',
+        model: 'qwen/qwen3.8-27b',
         messages: [
           {
             role: 'user',

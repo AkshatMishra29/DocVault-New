@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "../config.js";
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShieldCheck, KeyRound, ArrowRight, AlertCircle, Delete, Lock } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -16,15 +16,13 @@ export default function EnterPinPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleKeypadPress = (val) => {
-    if (pin.length < targetLength) {
-      setPin((prev) => prev + val);
-    }
-  };
+  const handleKeypadPress = useCallback((val) => {
+    setPin((prev) => (prev.length < targetLength ? prev + val : prev));
+  }, [targetLength]);
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     setPin((prev) => prev.slice(0, -1));
-  };
+  }, []);
 
   const handleVerifyPin = async (e) => {
     if (e) e.preventDefault();
@@ -59,6 +57,29 @@ export default function EnterPinPage() {
       setLoading(false);
     }
   };
+
+  // Keyboard and PC Numpad listener
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Numbers from top row (0-9) and PC Numpad (Numpad0 - Numpad9)
+      if (/^[0-9]$/.test(e.key)) {
+        handleKeypadPress(e.key);
+      } else if (e.code && e.code.startsWith('Numpad') && /^[0-9]$/.test(e.key)) {
+        handleKeypadPress(e.key);
+      } else if (e.key === 'Backspace') {
+        handleDelete();
+      } else if (e.key === 'Escape') {
+        setPin('');
+      } else if (e.key === 'Enter') {
+        if (pin.length === targetLength && !loading) {
+          handleVerifyPin();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [pin, targetLength, loading, handleKeypadPress, handleDelete]);
 
   return (
     <div className="auth-page">
