@@ -1,230 +1,219 @@
-import { API_BASE_URL } from '../../services/api';
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../auth/context/AuthContext";
+import { apiRequest } from "../../services/api";
 import { 
-  Search, 
-  Upload, 
-  AlertCircle, 
-  ChevronRight, 
-  ShieldCheck, 
-  FileText, 
-  Sparkles,
-  Clock,
-  ArrowUpRight
-} from 'lucide-react';
-import { useAuth } from '../auth/context/AuthContext';
-import './HomePage.css';
+  FileText, UploadCloud, Calendar, Sparkles, Layers, ArrowRight,
+  ShieldCheck, AlertTriangle, Clock, ChevronRight
+} from "lucide-react";
+
+import AppHeader from "../../components/layout/AppHeader/AppHeader";
+import Card from "../../components/common/Card/Card";
+import Button from "../../components/common/Button/Button";
+import Badge from "../../components/common/Badge/Badge";
+import EmptyState from "../../components/common/EmptyState/EmptyState";
+import emptyDocsImg from "../../assets/illustrations/empty-documents.svg";
+
+import "./HomePage.css";
 
 export default function HomePage() {
-  const navigate = useNavigate();
   const { user } = useAuth();
-  const [searchQuery, setSearchQuery] = useState('');
   const [documents, setDocuments] = useState([]);
   const [deadlines, setDeadlines] = useState([]);
+  const [assets, setAssets] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('docvault_token');
-    const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
+    async function fetchDashboardData() {
+      try {
+        setLoading(true);
+        const [docsRes, deadRes, assetsRes] = await Promise.all([
+          apiRequest("/api/documents"),
+          apiRequest("/api/deadlines"),
+          apiRequest("/api/assets"),
+        ]);
 
-    // Fetch live documents
-    fetch(`${API_BASE_URL}/api/documents`, { headers: authHeaders })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) setDocuments(data.data);
-      })
-      .catch(err => console.error(err));
-
-    // Fetch live deadlines
-    fetch(`${API_BASE_URL}/api/deadlines`, { headers: authHeaders })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) setDeadlines(data.data);
-      })
-      .catch(err => console.error(err));
+        if (docsRes.data) setDocuments(docsRes.data);
+        if (deadRes.data) setDeadlines(deadRes.data);
+        if (assetsRes.data) setAssets(assetsRes.data);
+      } catch (err) {
+        console.warn("[Dashboard] Error loading data:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchDashboardData();
   }, []);
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/documents?q=${encodeURIComponent(searchQuery)}`);
-    }
-  };
-
-  const displayName = user?.name || 'Vault User';
+  const urgentDeadlines = deadlines.filter((d) => d.severity === "urgent" || (d.daysLeft && d.daysLeft <= 15));
+  const recentDocs = documents.slice(0, 4);
 
   return (
-    <div className="home-page">
-      {/* Welcome & Storage Overview Banner */}
-      <section className="welcome-banner">
-        <div className="welcome-user">
-          <span className="user-greeting">Namaste,</span>
-          <h2 className="user-name">{displayName}</h2>
-        </div>
-        <div className="security-status-badge">
-          <ShieldCheck size={14} color="#10B981" />
-          <span>Encrypted Vault Active</span>
-        </div>
-      </section>
+    <div className="dv-dashboard">
+      <AppHeader
+        title={`Good morning, ${user?.name ? user.name.split(" ")[0] : "Vault Custodian"}`}
+        subtitle="Here is your personal document repository and active policy status."
+      />
 
-      {/* Instant Search Bar */}
-      <section className="search-section">
-        <form className="search-box" onSubmit={handleSearchSubmit}>
-          <Search size={18} className="search-icon" />
-          <input 
-            type="text" 
-            placeholder="Search policies, invoices, Aadhaar, RC..." 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </form>
-      </section>
-
-      {/* Urgent Expiry / Action Alert */}
-      {deadlines.length > 0 && (
-        <section className="urgent-card" onClick={() => navigate('/deadlines')}>
-          <div className="urgent-badge">
-            <AlertCircle size={15} color="#EF4444" />
-            <span>Action Required</span>
-          </div>
-          <div className="urgent-content">
-            <h4 className="urgent-title">{deadlines[0].title}</h4>
-            <p className="urgent-desc">Expires on {deadlines[0].date} ({deadlines[0].daysLeft} days remaining)</p>
-          </div>
-          <div className="urgent-action">
-            <span>Renew</span>
-            <ChevronRight size={16} />
-          </div>
-        </section>
-      )}
-
-      {/* Quick Action Matrix */}
-      <section className="quick-matrix">
-        <div className="matrix-btn" onClick={() => navigate('/upload')}>
-          <div className="matrix-icon bg-indigo">
-            <Upload size={20} color="#4338CA" />
-          </div>
-          <span className="matrix-label">Upload Doc</span>
-        </div>
-
-        <div className="matrix-btn" onClick={() => navigate('/ask-ai')}>
-          <div className="matrix-icon bg-cyan">
-            <Sparkles size={20} color="#06B6D4" />
-          </div>
-          <span className="matrix-label">Ask Vault AI</span>
-        </div>
-
-        <div className="matrix-btn" onClick={() => navigate('/deadlines')}>
-          <div className="matrix-icon bg-amber">
-            <Clock size={20} color="#F59E0B" />
-          </div>
-          <span className="matrix-label">Renewals</span>
-        </div>
-
-        <div className="matrix-btn" onClick={() => navigate('/assets')}>
-          <div className="matrix-icon bg-emerald">
-            <FileText size={20} color="#10B981" />
-          </div>
-          <span className="matrix-label">Track Assets</span>
-        </div>
-      </section>
-
-      {/* Ask AI Smart Prompt Box */}
-      <section className="ai-teaser-card" onClick={() => navigate('/ask-ai')}>
-        <div className="ai-teaser-header">
-          <div className="ai-teaser-pill">
-            <Sparkles size={14} color="#4338CA" />
-            <span>DocVault Intelligence</span>
-          </div>
-          <ArrowUpRight size={16} color="var(--text-muted)" />
-        </div>
-        <p className="ai-teaser-text">
-          "What is the claim process for my insurance policy or warranty coverage?"
-        </p>
-        <span className="ai-teaser-cta">Ask question from your documents →</span>
-      </section>
-
-      {/* Category Breakdown Matrix */}
-      <section className="section-block">
-        <div className="section-header">
-          <h3 className="section-title">Vault Categories</h3>
-          <span className="section-link">{documents.length} Total Docs</span>
-        </div>
-
-        <div className="categories-grid-home">
-          {[
-            { name: 'Insurance', icon: '🛡️', color: '#4338CA' },
-            { name: 'Identity', icon: '🪪', color: '#F59E0B' },
-            { name: 'Medical', icon: '🏥', color: '#EF4444' },
-            { name: 'Property', icon: '🏠', color: '#10B981' },
-            { name: 'Appliances', icon: '🔌', color: '#06B6D4' },
-            { name: 'Other', icon: '📁', color: '#6B7280' },
-          ].map((cat) => {
-            const count = documents.filter(d => (d.category || '').toLowerCase() === cat.name.toLowerCase()).length;
-            return (
-              <div 
-                key={cat.name} 
-                className="category-card-home"
-                onClick={() => navigate(`/documents?category=${cat.name}`)}
-              >
-                <div className="category-card-top">
-                  <span className="cat-emoji">{cat.icon}</span>
-                  <span className="cat-count-pill">{count}</span>
-                </div>
-                <span className="cat-name">{cat.name}</span>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Recent / Starred Documents */}
-      <section className="section-block">
-        <div className="section-header">
-          <h3 className="section-title">Recent Documents</h3>
-          <button className="section-link" onClick={() => navigate('/documents')}>
-            View All ({documents.length})
-          </button>
-        </div>
-
-        <div className="document-list">
-          {documents.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '24px 16px', background: '#fff', borderRadius: 'var(--radius-md)', border: '1px dashed var(--border-color)', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-              No documents in vault yet. Tap "Upload Doc" above to add your first document.
+      <div className="dv-dashboard__content">
+        {/* Urgent Renewal Alert Banner */}
+        {urgentDeadlines.length > 0 && (
+          <div className="dv-alert-banner">
+            <div className="dv-alert-banner__icon-box">
+              <AlertTriangle size={20} color="#DC2626" />
             </div>
-          ) : (
-            documents.slice(0, 4).map((doc) => (
-              <div 
-                key={doc.id || doc._id} 
-                className="doc-card"
-                onClick={() => navigate(`/documents/${doc.id || doc._id}`)}
-              >
-                <div className="doc-icon-wrap">
-                  <FileText size={20} color="var(--primary)" />
-                </div>
-                <div className="doc-info">
-                  <h4 className="doc-title">{doc.title}</h4>
-                  <div className="doc-meta">
-                    <span className="badge badge-muted">{doc.category || 'Other'}</span>
-                    {doc.fileSizeFormatted && (
-                      <>
-                        <span className="doc-dot">•</span>
-                        <span>{doc.fileSizeFormatted}</span>
-                      </>
-                    )}
-                    {doc.expiryDate && (
-                      <>
-                        <span className="doc-dot">•</span>
-                        <span className="badge badge-warning">Exp: {doc.expiryDate}</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <ChevronRight size={18} color="var(--text-muted)" />
-              </div>
-            ))
-          )}
+            <div className="dv-alert-banner__text">
+              <h4>Renewal Attention Required</h4>
+              <p>You have {urgentDeadlines.length} critical policy deadline(s) expiring within 15 days.</p>
+            </div>
+            <Link to="/deadlines">
+              <Button variant="danger" size="sm">Review Deadlines</Button>
+            </Link>
+          </div>
+        )}
+
+        {/* Core Vault Metrics */}
+        <div className="dv-stats-grid">
+          <Card padding="md" className="dv-stat-card">
+            <div className="dv-stat-card__icon-box dv-stat-card__icon-box--blue">
+              <FileText size={20} color="#2563EB" />
+            </div>
+            <div className="dv-stat-card__meta">
+              <span className="dv-stat-card__label">Total Documents</span>
+              <span className="dv-stat-card__val">{loading ? "..." : documents.length}</span>
+            </div>
+          </Card>
+
+          <Card padding="md" className="dv-stat-card">
+            <div className="dv-stat-card__icon-box dv-stat-card__icon-box--amber">
+              <Calendar size={20} color="#D97706" />
+            </div>
+            <div className="dv-stat-card__meta">
+              <span className="dv-stat-card__label">Active Deadlines</span>
+              <span className="dv-stat-card__val">{loading ? "..." : deadlines.length}</span>
+            </div>
+          </Card>
+
+          <Card padding="md" className="dv-stat-card">
+            <div className="dv-stat-card__icon-box dv-stat-card__icon-box--emerald">
+              <Layers size={20} color="#059669" />
+            </div>
+            <div className="dv-stat-card__meta">
+              <span className="dv-stat-card__label">Tracked Assets</span>
+              <span className="dv-stat-card__val">{loading ? "..." : assets.length}</span>
+            </div>
+          </Card>
+
+          <Card padding="md" className="dv-stat-card">
+            <div className="dv-stat-card__icon-box dv-stat-card__icon-box--purple">
+              <Sparkles size={20} color="#7C3AED" />
+            </div>
+            <div className="dv-stat-card__meta">
+              <span className="dv-stat-card__label">AI Assistant</span>
+              <Link to="/ask-ai" className="dv-stat-card__link">
+                Ask Copilot <ArrowRight size={14} />
+              </Link>
+            </div>
+          </Card>
         </div>
-      </section>
+
+        {/* Dual Layout: Recent Documents & Upcoming Deadlines */}
+        <div className="dv-dash-dual-grid">
+          {/* Left: Recent Documents */}
+          <div className="dv-dash-pane">
+            <div className="dv-dash-pane__header">
+              <h2 className="dv-dash-pane__title">Recent Vault Documents</h2>
+              <Link to="/documents" className="dv-dash-pane__action">
+                View All <ChevronRight size={16} />
+              </Link>
+            </div>
+
+            {loading ? (
+              <Card padding="lg"><p className="dv-text-muted">Loading vault documents...</p></Card>
+            ) : recentDocs.length === 0 ? (
+              <EmptyState
+                illustration={emptyDocsImg}
+                title="Your vault is currently empty"
+                description="Upload your insurance policies, warranty cards, or identity proofs to enable automated OCR extraction."
+                actionLabel="Upload First Document"
+                onAction={() => window.location.href = "/upload"}
+              />
+            ) : (
+              <div className="dv-doc-list">
+                {recentDocs.map((doc) => (
+                  <Card key={doc._id} hover padding="sm" className="dv-doc-row">
+                    <Link to={`/documents/${doc._id}`} className="dv-doc-row__link">
+                      <div className="dv-doc-row__icon-box">
+                        <FileText size={18} color="#2563EB" />
+                      </div>
+                      <div className="dv-doc-row__info">
+                        <h4 className="dv-doc-row__title">{doc.title}</h4>
+                        <span className="dv-doc-row__sub">
+                          {doc.category} • {doc.format || "PDF"} • {doc.fileSizeFormatted || "Stored"}
+                        </span>
+                      </div>
+                      {doc.expiryDate && (
+                        <Badge variant={doc.isExpiringSoon ? "danger" : "default"} size="sm">
+                          Exp: {doc.expiryDate}
+                        </Badge>
+                      )}
+                    </Link>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Right: Upcoming Deadlines */}
+          <div className="dv-dash-pane">
+            <div className="dv-dash-pane__header">
+              <h2 className="dv-dash-pane__title">Upcoming Deadlines</h2>
+              <Link to="/deadlines" className="dv-dash-pane__action">
+                Calendar <ChevronRight size={16} />
+              </Link>
+            </div>
+
+            {loading ? (
+              <Card padding="lg"><p className="dv-text-muted">Loading renewal schedules...</p></Card>
+            ) : deadlines.length === 0 ? (
+              <Card padding="lg" className="dv-empty-dash-card">
+                <Clock size={32} color="#94A3B8" className="dv-empty-dash-icon" />
+                <h4>No pending renewal deadlines</h4>
+                <p>Deadlines are auto-created when policies with expiration dates are uploaded.</p>
+              </Card>
+            ) : (
+              <div className="dv-deadline-list">
+                {deadlines.slice(0, 4).map((d) => (
+                  <Card key={d._id} padding="sm" className="dv-deadline-row">
+                    <div className="dv-deadline-row__header">
+                      <h4 className="dv-deadline-row__title">{d.title}</h4>
+                      <Badge variant={d.severity === "urgent" ? "danger" : "warning"} size="sm">
+                        {d.daysLeft ? `${d.daysLeft}d left` : "Upcoming"}
+                      </Badge>
+                    </div>
+                    <p className="dv-deadline-row__action">{d.action || "Renewal required"}</p>
+                    <span className="dv-deadline-row__date">Due Date: {d.date}</span>
+                  </Card>
+                ))}
+              </div>
+            )}
+
+            {/* Quick Upload Action Widget */}
+            <Card padding="md" className="dv-quick-upload-card">
+              <div className="dv-quick-upload-card__content">
+                <UploadCloud size={24} color="#2563EB" />
+                <div>
+                  <h4>Need to add a new document?</h4>
+                  <p>Drag and drop files to initiate hybrid OCR parsing.</p>
+                </div>
+              </div>
+              <Link to="/upload">
+                <Button variant="outline" size="sm">Upload Document</Button>
+              </Link>
+            </Card>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

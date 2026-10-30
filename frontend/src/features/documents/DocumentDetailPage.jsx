@@ -1,311 +1,257 @@
-import { API_BASE_URL } from '../../services/api';
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { apiRequest, API_BASE_URL } from "../../services/api";
 import { 
-  ArrowLeft, 
-  Share2, 
-  Download, 
-  Trash2, 
-  ShieldCheck, 
-  Tag, 
-  Sparkles, 
-  ExternalLink, 
-  CheckCircle2, 
-  Copy,
-  RefreshCw,
-  Star
-} from 'lucide-react';
-import './DocumentDetailPage.css';
+  ArrowLeft, Download, Trash2, Calendar, FileText, CheckCircle2,
+  ShieldCheck, AlertTriangle, ExternalLink, Link2, Sparkles
+} from "lucide-react";
+
+import AppHeader from "../../components/layout/AppHeader/AppHeader";
+import Card from "../../components/common/Card/Card";
+import Button from "../../components/common/Button/Button";
+import Badge from "../../components/common/Badge/Badge";
+import Modal from "../../components/common/Modal/Modal";
+import "./DocumentDetailPage.css";
 
 export default function DocumentDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [doc, setDoc] = useState(null);
+  const [assets, setAssets] = useState([]);
+  const [selectedAssetId, setSelectedAssetId] = useState("");
   const [loading, setLoading] = useState(true);
-  const [copiedKey, setCopiedKey] = useState(null);
-  const [assetsList, setAssetsList] = useState([]);
+  const [deleting, setDeleting] = useState(false);
+  const [linking, setLinking] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchDoc = async () => {
-      setLoading(true);
-      const token = localStorage.getItem('docvault_token');
-      const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
-
+    async function loadDocAndAssets() {
       try {
+        setLoading(true);
         const [docRes, assetsRes] = await Promise.all([
-          fetch(`${API_BASE_URL}/api/documents/${id}`, { headers: authHeaders }),
-          fetch(`${API_BASE_URL}/api/assets`, { headers: authHeaders })
+          apiRequest(`/api/documents/${id}`),
+          apiRequest("/api/assets"),
         ]);
-        const docData = await docRes.json();
-        const assetsData = await assetsRes.json();
-        if (docData.success) {
-          setDoc(docData.data);
+
+        if (docRes.success && docRes.data) {
+          setDoc(docRes.data);
+        } else {
+          setError("Document not found in vault.");
         }
-        if (assetsData.success) {
-          setAssetsList(assetsData.data);
+
+        if (assetsRes.success && assetsRes.data) {
+          setAssets(assetsRes.data);
         }
       } catch (err) {
-        console.error('Failed to load document details:', err);
+        setError("Failed to retrieve document details.");
       } finally {
         setLoading(false);
       }
-    };
-    fetchDoc();
+    }
+    loadDocAndAssets();
   }, [id]);
 
-  const handleCopy = (key, val) => {
-    navigator.clipboard?.writeText(val);
-    setCopiedKey(key);
-    setTimeout(() => setCopiedKey(null), 2000);
-  };
-
   const handleDelete = async () => {
-    if (!window.confirm('Are you sure you want to delete this document from your vault?')) return;
-    const token = localStorage.getItem('docvault_token');
     try {
-      const res = await fetch(`${API_BASE_URL}/api/documents/${id}`, {
-        method: 'DELETE',
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
-      });
-      const data = await res.json();
-      if (data.success) {
-        navigate('/documents');
+      setDeleting(true);
+      const res = await apiRequest(`/api/documents/${id}`, { method: "DELETE" });
+      if (res.success) {
+        navigate("/documents");
       } else {
-        alert(data.error || 'Failed to delete document');
+        alert(res.error || "Failed to delete document.");
       }
     } catch (err) {
-      alert('Error deleting document: ' + err.message);
+      alert("Error deleting document.");
+    } finally {
+      setDeleting(false);
+      setShowDeleteModal(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="doc-detail-page" style={{ alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-        <RefreshCw size={32} className="spin-icon" color="var(--primary)" />
-        <p style={{ marginTop: '12px', color: 'var(--text-secondary)' }}>Decrypting document data...</p>
-      </div>
-    );
-  }
+  const handleLinkAsset = async () => {
+    if (!selectedAssetId) return;
+    try {
+      setLinking(true);
+      const res = await apiRequest(`/api/documents/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ assetId: selectedAssetId }),
+      });
+      if (res.success && res.data) {
+        setDoc(res.data);
+      }
+    } catch (err) {
+      console.warn("Link asset failed:", err.message);
+    } finally {
+      setLinking(false);
+    }
+  };
 
-  if (!doc) {
-    return (
-      <div className="doc-detail-page">
-        <button className="back-btn" onClick={() => navigate('/documents')}>
-          <ArrowLeft size={20} />
-          <span>Back to Documents</span>
-        </button>
-        <p style={{ marginTop: '20px' }}>Document not found.</p>
-      </div>
-    );
-  }
+  const token = localStorage.getItem("token");
+  const downloadUrl = `${API_BASE_URL}/api/documents/${id}/download?token=${token}`;
 
   return (
-    <div className="doc-detail-page">
-      {/* Detail Top Navigation */}
-      <div className="detail-header-nav">
-        <button className="back-btn" onClick={() => navigate(-1)}>
-          <ArrowLeft size={20} />
-          <span>Back</span>
-        </button>
+    <div className="dv-doc-detail-page">
+      <AppHeader
+        title={doc ? doc.title : "Document Inspection"}
+        subtitle="Verified metadata, structured key-value entities, and direct download stream."
+      />
 
-        <div className="detail-action-icons">
-          <button 
-            className={`detail-icon-btn ${doc.isFavorite ? 'active-fav' : ''}`}
-            title={doc.isFavorite ? "Remove Star" : "Star Document"}
-            onClick={async () => {
-              const updatedFav = !doc.isFavorite;
-              setDoc({ ...doc, isFavorite: updatedFav });
-              const token = localStorage.getItem('docvault_token');
-              try {
-                await fetch(`${API_BASE_URL}/api/documents/${id}`, {
-                  method: 'PATCH',
-                  headers: { 
-                    'Content-Type': 'application/json',
-                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-                  },
-                  body: JSON.stringify({ isFavorite: updatedFav })
-                });
-              } catch (e) {
-                console.error(e);
-              }
-            }}
-          >
-            <Star size={18} color={doc.isFavorite ? "#F59E0B" : "currentColor"} fill={doc.isFavorite ? "#F59E0B" : "none"} />
-          </button>
+      <div className="dv-doc-detail-content">
+        <div className="dv-detail-top-nav">
+          <Link to="/documents" className="dv-back-btn">
+            <ArrowLeft size={16} /> Back to Repository
+          </Link>
 
-          <button 
-            className="detail-icon-btn" 
-            title="Share Document"
-            onClick={() => {
-              if (navigator.share) {
-                navigator.share({ title: doc.title, url: doc.downloadUrl });
-              } else {
-                navigator.clipboard?.writeText(doc.downloadUrl);
-                alert('Secure download link copied to clipboard!');
-              }
-            }}
-          >
-            <Share2 size={18} />
-          </button>
-
-          <button 
-            className="detail-icon-btn" 
-            title="Download Document"
-            onClick={() => {
-              if (doc.downloadUrl) {
-                const token = localStorage.getItem('docvault_token');
-                let fullUrl = doc.downloadUrl.startsWith('http') 
-                  ? doc.downloadUrl 
-                  : `${API_BASE_URL}${doc.downloadUrl}`;
-                
-                // Attach security token for browser download request
-                if (token && !fullUrl.includes('token=')) {
-                  fullUrl += `${fullUrl.includes('?') ? '&' : '?'}token=${encodeURIComponent(token)}`;
-                }
-                window.open(fullUrl, '_blank');
-              }
-            }}
-          >
-            <Download size={18} />
-          </button>
-        </div>
-      </div>
-
-      {/* Main Document Title & Status */}
-      <div className="detail-title-card">
-        <span className="badge badge-primary">{doc.category || 'Other'}</span>
-        <h2 className="detail-main-title">{doc.title}</h2>
-        <div className="detail-sec-pill">
-          <ShieldCheck size={14} color="#10B981" />
-          <span>Encrypted Database Storage</span>
-        </div>
-      </div>
-
-      {/* AI Smart Summary Card */}
-      <div className="detail-ai-summary-card">
-        <div className="summary-card-header">
-          <div className="ai-label">
-            <Sparkles size={16} color="#4338CA" />
-            <span>AI Executive Summary</span>
-          </div>
-          <span className="ai-confidence-tag">Groq Llama-3.3</span>
-        </div>
-        <p className="summary-content">{doc.summary || 'Summary indexed and analyzed.'}</p>
-        <button 
-          className="ask-this-doc-btn"
-          onClick={() => navigate(`/ask-ai?docId=${doc.id || doc._id}`)}
-        >
-          <Sparkles size={14} />
-          <span>Ask AI about this specific document</span>
-        </button>
-      </div>
-
-      {/* Extracted Key-Value Entity Fields */}
-      {doc.keyDetails && Object.keys(doc.keyDetails).length > 0 && (
-        <div className="detail-fields-section">
-          <h3 className="section-subheading">Key Extracted Details</h3>
-          <div className="entity-list">
-            {Object.entries(doc.keyDetails).map(([key, val]) => (
-              <div key={key} className="entity-row">
-                <div className="entity-info">
-                  <span className="entity-label">{key}</span>
-                  <span className="entity-value">{val}</span>
-                </div>
-                <button 
-                  className="copy-field-btn" 
-                  onClick={() => handleCopy(key, val)}
-                  title="Copy Value"
-                >
-                  {copiedKey === key ? (
-                    <CheckCircle2 size={16} color="#10B981" />
-                  ) : (
-                    <Copy size={16} color="var(--text-muted)" />
-                  )}
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Tags and Metadata */}
-      {doc.tags && doc.tags.length > 0 && (
-        <div className="tags-section">
-          <h3 className="section-subheading">Tags</h3>
-          <div className="tags-wrap">
-            {doc.tags.map(t => (
-              <span key={t} className="doc-tag-pill">
-                <Tag size={12} />
-                <span>{t}</span>
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Link to Household & Vehicle Asset */}
-      <div className="detail-asset-link-card">
-        <div className="asset-link-header">
-          <div className="asset-link-title">
-            <span style={{ fontSize: '1.1rem' }}>🚗</span>
-            <span>Link to Family Asset</span>
-          </div>
-          {doc.assetId && (
-            <span className="badge badge-success">Linked</span>
+          {doc && (
+            <div className="dv-detail-actions">
+              <Link to={`/ask-ai?docId=${doc._id}`}>
+                <Button variant="secondary" size="sm" icon={Sparkles}>
+                  Ask Copilot About This Doc
+                </Button>
+              </Link>
+              <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
+                <Button variant="primary" size="sm" icon={Download}>
+                  Download Original
+                </Button>
+              </a>
+              <Button
+                variant="danger"
+                size="sm"
+                icon={Trash2}
+                onClick={() => setShowDeleteModal(true)}
+              >
+                Delete
+              </Button>
+            </div>
           )}
         </div>
-        <div className="asset-link-body">
-          <select 
-            className="custom-select"
-            value={doc.assetId || ''}
-            onChange={async (e) => {
-              const selectedAssetId = e.target.value;
-              const updatedDoc = { ...doc, assetId: selectedAssetId || null };
-              setDoc(updatedDoc);
-              try {
-                await fetch(`${API_BASE_URL}/api/documents/${id}`, {
-                  method: 'PATCH',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ assetId: selectedAssetId || null })
-                });
-              } catch (err) {
-                console.error('Error linking asset:', err);
-              }
-            }}
-          >
-            <option value="">-- No Asset Linked --</option>
-            {assetsList.map(a => (
-              <option key={a.id || a._id} value={a.id || a._id}>
-                {a.name} ({a.category})
-              </option>
-            ))}
-          </select>
-          <p className="asset-link-hint">
-            Tag this document to a tracked vehicle or appliance to automatically surface insurance & warranty terms.
-          </p>
-        </div>
+
+        {loading ? (
+          <div className="dv-docs-loading">
+            <div className="dv-btn__spinner" />
+            <span>Decrypting document metadata...</span>
+          </div>
+        ) : error || !doc ? (
+          <Card padding="lg">
+            <p className="dv-text-danger">{error || "Document not found."}</p>
+          </Card>
+        ) : (
+          <div className="dv-detail-grid">
+            {/* Left Column: Metadata & Extracted Key Details */}
+            <div className="dv-detail-col">
+              <Card padding="lg" className="dv-detail-summary-card">
+                <div className="dv-detail-card-header">
+                  <Badge variant="primary" size="md">{doc.category}</Badge>
+                  <span className="dv-text-muted">{doc.format} • {doc.fileSizeFormatted}</span>
+                </div>
+
+                <h2 className="dv-detail-heading">{doc.title}</h2>
+                <p className="dv-detail-summary-text">{doc.summary || "No automated summary generated."}</p>
+
+                {doc.expiryDate && (
+                  <div className="dv-detail-expiry-box">
+                    <Calendar size={18} color="#D97706" />
+                    <div>
+                      <strong>Renewal Expiry Date: {doc.expiryDate}</strong>
+                      <p>Tracked in your active deadlines calendar.</p>
+                    </div>
+                  </div>
+                )}
+              </Card>
+
+              {/* Extracted Key Details Map */}
+              <Card padding="lg" className="dv-detail-entities-card">
+                <h3 className="dv-entities-title">Structured Entity Fields (Extracted by AI)</h3>
+                <p className="dv-entities-sub">Parsed automatically from OCR text and multimodal analysis.</p>
+
+                {doc.keyDetails && Object.keys(doc.keyDetails).length > 0 ? (
+                  <div className="dv-entity-table">
+                    {Object.entries(doc.keyDetails).map(([key, val]) => (
+                      <div key={key} className="dv-entity-row">
+                        <span className="dv-entity-key">{key.replace(/_/g, " ")}</span>
+                        <span className="dv-entity-val">{String(val)}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="dv-text-muted">No specific keyDetails detected in this document.</p>
+                )}
+              </Card>
+            </div>
+
+            {/* Right Column: Asset Linkage & File Verification */}
+            <div className="dv-detail-col">
+              <Card padding="lg" className="dv-detail-sidebar-card">
+                <h3 className="dv-sidebar-section-title">Link to Household or Vehicle Asset</h3>
+                <p className="dv-sidebar-section-desc">Associate this policy or invoice with an asset in your registry.</p>
+
+                <div className="dv-link-asset-box">
+                  <select
+                    className="dv-select-control"
+                    value={selectedAssetId}
+                    onChange={(e) => setSelectedAssetId(e.target.value)}
+                  >
+                    <option value="">Select an Asset...</option>
+                    {assets.map((a) => (
+                      <option key={a._id} value={a._id}>{a.name} ({a.category})</option>
+                    ))}
+                  </select>
+
+                  <Button
+                    variant="secondary"
+                    size="md"
+                    icon={Link2}
+                    loading={linking}
+                    disabled={!selectedAssetId}
+                    onClick={handleLinkAsset}
+                  >
+                    Link Asset
+                  </Button>
+                </div>
+              </Card>
+
+              <Card padding="lg" className="dv-detail-sidebar-card">
+                <h3 className="dv-sidebar-section-title">Storage & Security Audit</h3>
+                <ul className="dv-detail-audit-list">
+                  <li>
+                    <ShieldCheck size={16} color="#059669" />
+                    <span>Database-backed binary file storage</span>
+                  </li>
+                  <li>
+                    <CheckCircle2 size={16} color="#2563EB" />
+                    <span>Tenant ID bound strictly to your account</span>
+                  </li>
+                  <li>
+                    <CheckCircle2 size={16} color="#2563EB" />
+                    <span>Hugging Face dense vector embedded</span>
+                  </li>
+                </ul>
+              </Card>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Action Buttons */}
-      <div className="detail-bottom-actions">
-        {doc.downloadUrl && (
-          <button 
-            className="btn-secondary" 
-            onClick={() => {
-              const token = localStorage.getItem('docvault_token');
-              const url = `${API_BASE_URL}${doc.downloadUrl}${token ? `?token=${token}` : ''}`;
-              window.open(url, '_blank');
-            }}
-          >
-            <ExternalLink size={16} />
-            <span>View Original File</span>
-          </button>
-        )}
-        <button className="btn-danger-outline" onClick={handleDelete}>
-          <Trash2 size={16} />
-          <span>Delete</span>
-        </button>
-      </div>
+      {/* Delete Confirmation Dialog */}
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        title="Delete Document"
+      >
+        <p className="dv-confirm-text">
+          Are you sure you want to permanently delete <strong>{doc?.title}</strong>? All associated deadline reminders and vector embeddings will also be removed.
+        </p>
+        <div className="dv-confirm-actions">
+          <Button variant="ghost" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" loading={deleting} onClick={handleDelete}>
+            Yes, Permanently Delete
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

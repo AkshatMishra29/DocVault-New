@@ -1,0 +1,18 @@
+.dv-card {
+  background-color: var(--color-surface-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  transition: all var(--transition-normal);
+}
+
+.dv-card--p-none { padding: 0; }
+.dv-card--p-sm { padding: var(--space-3); }
+.dv-card--p-md { padding: var(--space-5); }
+.dv-card--p-lg { padding: var(--space-8); }
+
+.dv-card--hover:hover {
+  border-color: #CBD5E1;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}

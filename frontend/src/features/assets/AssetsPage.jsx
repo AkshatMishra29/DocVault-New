@@ -1,317 +1,261 @@
-import { API_BASE_URL } from '../../services/api';
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { 
-  Car, 
-  Wind, 
-  Laptop, 
-  Plus, 
-  ChevronRight, 
-  ShieldCheck, 
-  FileText,
-  Trash2,
-  X,
-  RefreshCw,
-  Home
-} from 'lucide-react';
-import './AssetsPage.css';
+import React, { useState, useEffect } from "react";
+import { apiRequest } from "../../services/api";
+import { Plus, Trash2, Calendar, FileText, Layers, ShieldCheck, AlertCircle } from "lucide-react";
+
+import AppHeader from "../../components/layout/AppHeader/AppHeader";
+import Card from "../../components/common/Card/Card";
+import Button from "../../components/common/Button/Button";
+import Badge from "../../components/common/Badge/Badge";
+import Input from "../../components/common/Input/Input";
+import Modal from "../../components/common/Modal/Modal";
+import EmptyState from "../../components/common/EmptyState/EmptyState";
+
+import emptyAssetsImg from "../../assets/illustrations/empty-assets.svg";
+import "./AssetsPage.css";
+
+const ASSET_CATEGORIES = ["Vehicle", "Home Appliances", "Electronics", "Real Estate", "Other"];
 
 export default function AssetsPage() {
-  const navigate = useNavigate();
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  // Form state
-  const [assetForm, setAssetForm] = useState({
-    name: '',
-    category: 'Vehicle',
-    estimatedValue: '',
-    status: 'Active',
-    warrantyExpiry: '',
-    insuranceExpiry: '',
-    nextService: '',
-    icon: 'Car'
+  const [formData, setFormData] = useState({
+    name: "",
+    category: "Vehicle",
+    estimatedValue: "",
+    purchaseDate: "",
+    warrantyExpiry: "",
+    insuranceExpiry: "",
+    nextService: "",
   });
-
-  const fetchAssets = async () => {
-    setLoading(true);
-    const token = localStorage.getItem('docvault_token');
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/assets`, {
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
-      });
-      const data = await res.json();
-      if (data.success) {
-        setAssets(data.data);
-      }
-    } catch (err) {
-      console.error('Failed to fetch assets:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     fetchAssets();
   }, []);
 
-  const handleCreateAsset = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('docvault_token');
+  async function fetchAssets() {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/assets`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-        },
-        body: JSON.stringify(assetForm)
-      });
-      const data = await res.json();
-      if (data.success) {
-        setShowAddModal(false);
-        setAssetForm({
-          name: '',
-          category: 'Vehicle',
-          estimatedValue: '',
-          status: 'Active',
-          warrantyExpiry: '',
-          insuranceExpiry: '',
-          nextService: '',
-          icon: 'Car'
-        });
-        fetchAssets();
+      setLoading(true);
+      setError("");
+      const res = await apiRequest("/api/assets");
+      if (res.success && res.data) {
+        setAssets(res.data);
+      } else {
+        setAssets([]);
       }
     } catch (err) {
-      alert('Error creating asset: ' + err.message);
+      setError("Failed to load asset inventory.");
+    } finally {
+      setLoading(false);
     }
+  }
+
+  const handleInputChange = (field, val) => {
+    setFormData((prev) => ({ ...prev, [field]: val }));
   };
 
-  const handleDeleteAsset = async (id, e) => {
-    e.stopPropagation();
-    if (!window.confirm('Delete this tracked asset?')) return;
-    const token = localStorage.getItem('docvault_token');
+  const handleCreateAsset = async (e) => {
+    e.preventDefault();
+    if (!formData.name) return;
+
+    setSubmitting(true);
     try {
-      await fetch(`${API_BASE_URL}/api/assets/${id}`, { 
-        method: 'DELETE',
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+      const res = await apiRequest("/api/assets", {
+        method: "POST",
+        body: JSON.stringify(formData),
       });
-      fetchAssets();
+
+      if (res.success && res.data) {
+        setAssets((prev) => [res.data, ...prev]);
+        setShowAddModal(false);
+        setFormData({
+          name: "",
+          category: "Vehicle",
+          estimatedValue: "",
+          purchaseDate: "",
+          warrantyExpiry: "",
+          insuranceExpiry: "",
+          nextService: "",
+        });
+      }
     } catch (err) {
-      console.error(err);
+      alert("Failed to create asset: " + err.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  const getAssetIcon = (iconName) => {
-    switch (iconName) {
-      case 'Car':
-        return <Car size={24} color="#4338CA" />;
-      case 'Wind':
-        return <Wind size={24} color="#06B6D4" />;
-      case 'Laptop':
-        return <Laptop size={24} color="#10B981" />;
-      case 'Home':
-        return <Home size={24} color="#F59E0B" />;
-      default:
-        return <FileText size={24} color="#4338CA" />;
+  const handleDeleteAsset = async (id) => {
+    if (!window.confirm("Are you sure you want to remove this tracked asset?")) return;
+    try {
+      const res = await apiRequest(`/api/assets/${id}`, { method: "DELETE" });
+      if (res.success) {
+        setAssets((prev) => prev.filter((a) => a._id !== id));
+      }
+    } catch (err) {
+      alert("Failed to delete asset: " + err.message);
     }
   };
 
   return (
-    <div className="assets-page">
-      {/* Header Banner */}
-      <div className="assets-banner">
-        <div className="assets-banner-text">
-          <h2>Household & Vehicle Assets</h2>
-          <p>Link invoices, warranties, and insurance policies to each family asset.</p>
-        </div>
-        <button className="add-asset-pill" onClick={() => setShowAddModal(true)}>
-          <Plus size={16} />
-          <span>New Asset</span>
-        </button>
-      </div>
+    <div className="dv-assets-page">
+      <AppHeader
+        title="Asset & Warranty Registry"
+        subtitle="Track vehicles, home appliances, and electronics with cross-linked insurance and invoices."
+      />
 
-      {/* Assets Grid / Cards */}
-      <div className="asset-stack">
+      <div className="dv-assets-content">
+        <div className="dv-assets-toolbar">
+          <div className="dv-assets-count">
+            <strong>{assets.length}</strong> Registered Asset(s)
+          </div>
+
+          <Button
+            variant="primary"
+            size="md"
+            icon={Plus}
+            onClick={() => setShowAddModal(true)}
+          >
+            Add Asset
+          </Button>
+        </div>
+
+        {error && (
+          <div className="dv-assets-error">
+            <AlertCircle size={16} />
+            <span>{error}</span>
+          </div>
+        )}
+
         {loading ? (
-          <div className="empty-state">
-            <RefreshCw size={28} className="spin-icon" color="var(--primary)" />
-            <p>Loading family assets...</p>
+          <div className="dv-docs-loading">
+            <div className="dv-btn__spinner" />
+            <span>Loading asset registry...</span>
           </div>
         ) : assets.length === 0 ? (
-          <div className="empty-state">
-            <Car size={48} color="var(--border-color)" />
-            <h3>No assets tracked yet</h3>
-            <p>Add your car, air conditioner, phone, or home appliances to link warranties and policies.</p>
-            <button className="btn-primary" style={{ marginTop: '12px' }} onClick={() => setShowAddModal(true)}>
-              <Plus size={16} />
-              <span>Add First Asset</span>
-            </button>
-          </div>
+          <EmptyState
+            illustration={emptyAssetsImg}
+            title="No tracked assets yet"
+            description="Add your car, laptop, air conditioner, or property deeds to cross-link warranties and policy schedules."
+            actionLabel="Add Your First Asset"
+            onAction={() => setShowAddModal(true)}
+          />
         ) : (
-          assets.map((asset) => (
-            <div key={asset.id || asset._id} className="asset-card">
-              <div className="asset-top">
-                <div className="asset-icon-box">
-                  {getAssetIcon(asset.icon)}
+          <div className="dv-assets-grid">
+            {assets.map((asset) => (
+              <Card key={asset._id} hover padding="md" className="dv-asset-card">
+                <div className="dv-asset-card__header">
+                  <Badge variant="primary" size="sm">{asset.category}</Badge>
+                  <button
+                    className="dv-asset-delete-btn"
+                    onClick={() => handleDeleteAsset(asset._id)}
+                    aria-label="Delete Asset"
+                  >
+                    <Trash2 size={16} />
+                  </button>
                 </div>
-                <div className="asset-header-meta">
-                  <span className="badge badge-muted">{asset.category}</span>
-                  <h3 className="asset-title">{asset.name}</h3>
+
+                <div className="dv-asset-card__body">
+                  <h3 className="dv-asset-card__title">{asset.name}</h3>
                   {asset.estimatedValue && (
-                    <span className="asset-val">Est. Value: {asset.estimatedValue}</span>
+                    <span className="dv-asset-card__val">Value: {asset.estimatedValue}</span>
                   )}
                 </div>
-                <button 
-                  className="delete-asset-btn"
-                  onClick={(e) => handleDeleteAsset(asset.id || asset._id, e)}
-                  title="Delete Asset"
-                >
-                  <Trash2 size={16} color="var(--danger)" />
-                </button>
-              </div>
 
-              <div className="asset-details-list">
-                <div className="asset-status-pill">
-                  <ShieldCheck size={14} color="#10B981" />
-                  <span>{asset.status || 'Active Asset'}</span>
+                <div className="dv-asset-card__dates">
+                  {asset.warrantyExpiry && (
+                    <div className="dv-asset-date-row">
+                      <span className="dv-text-muted">Warranty Expiry:</span>
+                      <strong>{asset.warrantyExpiry}</strong>
+                    </div>
+                  )}
+                  {asset.insuranceExpiry && (
+                    <div className="dv-asset-date-row">
+                      <span className="dv-text-muted">Insurance Expiry:</span>
+                      <strong>{asset.insuranceExpiry}</strong>
+                    </div>
+                  )}
+                  {asset.nextService && (
+                    <div className="dv-asset-date-row">
+                      <span className="dv-text-muted">Next Service:</span>
+                      <strong>{asset.nextService}</strong>
+                    </div>
+                  )}
                 </div>
 
-                {asset.insuranceExpiry && (
-                  <div className="asset-info-row">
-                    <span className="info-key">Insurance Expiry</span>
-                    <span className="info-val text-warning">{asset.insuranceExpiry}</span>
-                  </div>
-                )}
-
-                {asset.warrantyExpiry && (
-                  <div className="asset-info-row">
-                    <span className="info-key">Warranty Valid Till</span>
-                    <span className="info-val text-success">{asset.warrantyExpiry}</span>
-                  </div>
-                )}
-
-                {asset.nextService && (
-                  <div className="asset-info-row">
-                    <span className="info-key">Upcoming Service</span>
-                    <span className="info-val">{asset.nextService}</span>
-                  </div>
-                )}
-              </div>
-
-              <div className="asset-footer">
-                <div className="linked-docs-tag">
-                  <FileText size={14} />
-                  <span>Linked Vault Documents</span>
+                <div className="dv-asset-card__footer">
+                  <span className="dv-asset-linked-count">
+                    <FileText size={13} /> {asset.linkedDocumentIds?.length || 0} Linked Document(s)
+                  </span>
                 </div>
-                <button 
-                  className="view-asset-btn"
-                  onClick={() => navigate(`/documents?q=${encodeURIComponent(asset.name.split(' ')[0])}`)}
-                >
-                  <span>Filter Docs</span>
-                  <ChevronRight size={16} />
-                </button>
-              </div>
-            </div>
-          ))
+              </Card>
+            ))}
+          </div>
         )}
       </div>
 
-      {/* Modal: Add New Asset */}
-      {showAddModal && (
-        <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
-          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Track New Asset</h3>
-              <button className="modal-close-btn" onClick={() => setShowAddModal(false)}>
-                <X size={20} />
-              </button>
-            </div>
+      {/* Add Asset Modal */}
+      <Modal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        title="Register New Household or Vehicle Asset"
+      >
+        <form onSubmit={handleCreateAsset} className="dv-asset-form">
+          <Input
+            label="Asset Name"
+            placeholder="e.g. 2024 Honda City, MacBook Pro 16"
+            value={formData.name}
+            onChange={(e) => handleInputChange("name", e.target.value)}
+            required
+          />
 
-            <form onSubmit={handleCreateAsset} className="asset-modal-form">
-              <div className="form-group">
-                <label className="input-label">Asset Name</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Honda City ZX / Daikin Split AC"
-                  value={assetForm.name}
-                  onChange={(e) => setAssetForm({ ...assetForm, name: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="form-row-2">
-                <div className="form-group">
-                  <label className="input-label">Category</label>
-                  <select
-                    className="custom-select"
-                    value={assetForm.category}
-                    onChange={(e) => {
-                      const cat = e.target.value;
-                      let icon = 'FileText';
-                      if (cat === 'Vehicle') icon = 'Car';
-                      else if (cat === 'Home Appliances') icon = 'Wind';
-                      else if (cat === 'Electronics') icon = 'Laptop';
-                      else if (cat === 'Real Estate') icon = 'Home';
-                      setAssetForm({ ...assetForm, category: cat, icon });
-                    }}
-                  >
-                    <option value="Vehicle">Vehicle</option>
-                    <option value="Home Appliances">Home Appliances</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Real Estate">Real Estate / Property</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label className="input-label">Estimated Value</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. ₹ 9,50,000"
-                    value={assetForm.estimatedValue}
-                    onChange={(e) => setAssetForm({ ...assetForm, estimatedValue: e.target.value })}
-                  />
-                </div>
-              </div>
-
-              <div className="form-row-2">
-                <div className="form-group">
-                  <label className="input-label">Insurance Expiry</label>
-                  <input
-                    type="date"
-                    value={assetForm.insuranceExpiry}
-                    onChange={(e) => setAssetForm({ ...assetForm, insuranceExpiry: e.target.value })}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label className="input-label">Warranty Expiry</label>
-                  <input
-                    type="date"
-                    value={assetForm.warrantyExpiry}
-                    onChange={(e) => setAssetForm({ ...assetForm, warrantyExpiry: e.target.value })}
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="input-label">Next Service Note / Date</label>
-                <input
-                  type="text"
-                  placeholder="e.g. 2026-11-15 (40,000 km Service)"
-                  value={assetForm.nextService}
-                  onChange={(e) => setAssetForm({ ...assetForm, nextService: e.target.value })}
-                />
-              </div>
-
-              <button type="submit" className="btn-primary" style={{ width: '100%', marginTop: '10px' }}>
-                Save Asset to Vault
-              </button>
-            </form>
+          <div className="dv-form-group">
+            <label className="dv-input-label">Category</label>
+            <select
+              className="dv-select-control"
+              value={formData.category}
+              onChange={(e) => handleInputChange("category", e.target.value)}
+            >
+              {ASSET_CATEGORIES.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
           </div>
-        </div>
-      )}
+
+          <Input
+            label="Estimated Value / Purchase Price"
+            placeholder="e.g. $2,400 or ₹14,50,000"
+            value={formData.estimatedValue}
+            onChange={(e) => handleInputChange("estimatedValue", e.target.value)}
+          />
+
+          <Input
+            label="Warranty Expiry Date"
+            type="date"
+            value={formData.warrantyExpiry}
+            onChange={(e) => handleInputChange("warrantyExpiry", e.target.value)}
+          />
+
+          <Input
+            label="Insurance Expiry Date"
+            type="date"
+            value={formData.insuranceExpiry}
+            onChange={(e) => handleInputChange("insuranceExpiry", e.target.value)}
+          />
+
+          <div className="dv-modal-form-actions">
+            <Button variant="ghost" type="button" onClick={() => setShowAddModal(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" type="submit" loading={submitting}>
+              Save Asset
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }

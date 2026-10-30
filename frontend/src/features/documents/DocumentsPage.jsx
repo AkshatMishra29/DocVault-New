@@ -1,176 +1,183 @@
-import { API_BASE_URL } from '../../services/api';
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { apiRequest } from "../../services/api";
 import { 
-  Search, 
-  FileText, 
-  Star, 
-  Clock, 
-  ChevronRight,
-  ArrowUpDown,
-  RefreshCw
-} from 'lucide-react';
-import './DocumentsPage.css';
+  FileText, Search, Plus, Star, Filter, ArrowUpDown, Calendar,
+  Download, Eye, AlertCircle
+} from "lucide-react";
+
+import AppHeader from "../../components/layout/AppHeader/AppHeader";
+import Card from "../../components/common/Card/Card";
+import Button from "../../components/common/Button/Button";
+import Badge from "../../components/common/Badge/Badge";
+import Input from "../../components/common/Input/Input";
+import EmptyState from "../../components/common/EmptyState/EmptyState";
+
+import emptyDocsImg from "../../assets/illustrations/empty-documents.svg";
+import noSearchImg from "../../assets/illustrations/no-search-results.svg";
+import "./DocumentsPage.css";
+
+const CATEGORIES = ["All", "Insurance", "Identity", "Appliances", "Property", "Medical", "Other"];
 
 export default function DocumentsPage() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const initialQuery = searchParams.get('q') || '';
-  const initialCategory = searchParams.get('category') || 'All';
-
-  const [query, setQuery] = useState(initialQuery);
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
-  const [sortBy, setSortBy] = useState('recent');
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  // Sync state if URL query params change (e.g. from Home category cards)
-  useEffect(() => {
-    const cat = searchParams.get('category');
-    if (cat) setSelectedCategory(cat);
-    const q = searchParams.get('q');
-    if (q !== null) setQuery(q);
-  }, [searchParams]);
-
-  const categories = ['All', 'Insurance', 'Appliances', 'Identity', 'Property', 'Medical', 'Other'];
-
-  const fetchDocuments = async () => {
-    setLoading(true);
-    try {
-      let url = `${API_BASE_URL}/api/documents`;
-      const params = new URLSearchParams();
-      if (selectedCategory !== 'All') params.append('category', selectedCategory);
-      if (query) params.append('q', query);
-      if (params.toString()) url += `?${params.toString()}`;
-
-      const token = localStorage.getItem('docvault_token');
-      const res = await fetch(url, {
-        headers: {
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-        }
-      });
-      const data = await res.json();
-      if (data.success) {
-        setDocuments(data.data);
-      }
-    } catch (err) {
-      console.error('Failed to load documents:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const selectedCategory = searchParams.get("category") || "All";
+  const searchQuery = searchParams.get("q") || "";
 
   useEffect(() => {
     fetchDocuments();
-  }, [selectedCategory, query]);
+  }, [selectedCategory, searchQuery]);
 
-  const sortedDocs = [...documents].sort((a, b) => {
-    if (sortBy === 'name') {
-      return a.title.localeCompare(b.title);
+  async function fetchDocuments() {
+    try {
+      setLoading(true);
+      setError("");
+
+      const params = new URLSearchParams();
+      if (selectedCategory && selectedCategory !== "All") params.append("category", selectedCategory);
+      if (searchQuery) params.append("q", searchQuery);
+
+      const endpoint = `/api/documents${params.toString() ? `?${params.toString()}` : ""}`;
+      const res = await apiRequest(endpoint);
+
+      if (res.success && res.data) {
+        setDocuments(res.data);
+      } else {
+        setDocuments([]);
+      }
+    } catch (err) {
+      setError("Failed to fetch documents. Please refresh the page.");
+    } finally {
+      setLoading(false);
     }
-    return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
-  });
+  }
+
+  const handleCategorySelect = (cat) => {
+    const next = new URLSearchParams(searchParams);
+    if (cat === "All") next.delete("category");
+    else next.set("category", cat);
+    setSearchParams(next);
+  };
+
+  const handleSearchChange = (e) => {
+    const val = e.target.value;
+    const next = new URLSearchParams(searchParams);
+    if (val) next.set("q", val);
+    else next.delete("q");
+    setSearchParams(next);
+  };
 
   return (
-    <div className="documents-page">
-      {/* Search Header */}
-      <div className="doc-search-bar">
-        <Search size={18} className="search-icon" />
-        <input 
-          type="text" 
-          placeholder="Search your real uploaded documents..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        {query && (
-          <button className="clear-btn" onClick={() => setQuery('')}>✕</button>
-        )}
-      </div>
+    <div className="dv-docs-page">
+      <AppHeader
+        title="Document Repository"
+        subtitle="Manage, search, and inspect your structured personal policies and proofs."
+      />
 
-      {/* Horizontal Category Chips */}
-      <div className="category-scroll">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            className={`cat-chip ${selectedCategory === cat ? 'active' : ''}`}
-            onClick={() => setSelectedCategory(cat)}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      {/* Stats & Quick Filter Row */}
-      <div className="docs-meta-row">
-        <span className="docs-count">
-          Showing <strong>{sortedDocs.length}</strong> {sortedDocs.length === 1 ? 'document' : 'documents'}
-        </span>
-        <button 
-          className="sort-trigger" 
-          onClick={() => setSortBy(sortBy === 'recent' ? 'name' : 'recent')}
-        >
-          <ArrowUpDown size={14} />
-          <span>{sortBy === 'recent' ? 'Most Recent' : 'Name (A-Z)'}</span>
-        </button>
-      </div>
-
-      {/* Document Items List */}
-      <div className="doc-items-stack">
-        {loading ? (
-          <div className="empty-state">
-            <RefreshCw size={28} className="spin-icon" color="var(--primary)" />
-            <p>Loading documents from your vault...</p>
+      <div className="dv-docs-content">
+        {/* Top Controls: Search Bar & Upload CTA */}
+        <div className="dv-docs-toolbar">
+          <div className="dv-docs-search">
+            <Input
+              type="text"
+              icon={Search}
+              placeholder="Search by title, policy clauses, or tags..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
           </div>
-        ) : sortedDocs.length === 0 ? (
-          <div className="empty-state">
-            <FileText size={48} color="var(--border-color)" />
-            <h3>No documents in this view</h3>
-            <p>Upload a PDF policy, invoice, or ID to start building your vault.</p>
-            <button className="btn-primary" style={{ marginTop: '12px' }} onClick={() => navigate('/upload')}>
+
+          <Link to="/upload">
+            <Button variant="primary" size="md" icon={Plus}>
               Upload Document
-            </button>
-          </div>
-        ) : (
-          sortedDocs.map((doc) => (
-            <div 
-              key={doc.id || doc._id} 
-              className="doc-list-item"
-              onClick={() => navigate(`/documents/${doc.id || doc._id}`)}
+            </Button>
+          </Link>
+        </div>
+
+        {/* Category Filter Pills */}
+        <div className="dv-category-bar">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              className={`dv-cat-pill ${selectedCategory === cat ? "dv-cat-pill--active" : ""}`}
+              onClick={() => handleCategorySelect(cat)}
             >
-              <div className="item-icon-box">
-                <FileText size={22} color="var(--primary)" />
-              </div>
-              
-              <div className="item-details">
-                <div className="item-top-line">
-                  <h4 className="item-title">{doc.title}</h4>
-                  {doc.isFavorite && <Star size={14} color="#F59E0B" fill="#F59E0B" />}
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {error && (
+          <div className="dv-docs-error">
+            <AlertCircle size={16} />
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Documents Grid */}
+        {loading ? (
+          <div className="dv-docs-loading">
+            <div className="dv-btn__spinner" />
+            <span>Loading your vault documents...</span>
+          </div>
+        ) : documents.length === 0 ? (
+          searchQuery || selectedCategory !== "All" ? (
+            <EmptyState
+              illustration={noSearchImg}
+              title="No documents matched your filter"
+              description={`No documents found matching "${searchQuery || selectedCategory}". Try adjusting your keywords or clearing the filter.`}
+              actionLabel="Clear Filters"
+              onAction={() => setSearchParams({})}
+            />
+          ) : (
+            <EmptyState
+              illustration={emptyDocsImg}
+              title="Your document repository is empty"
+              description="Upload your vehicle insurance, health policies, passport copies, or appliance invoices to start tracking."
+              actionLabel="Upload First Document"
+              onAction={() => window.location.href = "/upload"}
+            />
+          )
+        ) : (
+          <div className="dv-docs-grid">
+            {documents.map((doc) => (
+              <Card key={doc._id} hover padding="md" className="dv-doc-card">
+                <div className="dv-doc-card__header">
+                  <Badge variant="primary" size="sm">{doc.category || "General"}</Badge>
+                  <span className="dv-doc-card__format">{doc.format || "PDF"}</span>
                 </div>
 
-                {doc.summary && (
-                  <p className="item-summary-snippet">
-                    {doc.summary.slice(0, 80)}...
+                <div className="dv-doc-card__body">
+                  <h3 className="dv-doc-card__title">
+                    <Link to={`/documents/${doc._id}`}>{doc.title}</Link>
+                  </h3>
+                  <p className="dv-doc-card__summary">
+                    {doc.summary || "Metadata extracted via Groq LPU multimodal analysis."}
                   </p>
+                </div>
+
+                {doc.expiryDate && (
+                  <div className="dv-doc-card__expiry">
+                    <Calendar size={13} />
+                    <span>Expires: <strong>{doc.expiryDate}</strong></span>
+                  </div>
                 )}
 
-                <div className="item-badges">
-                  <span className="badge badge-primary">{doc.category || 'Other'}</span>
-                  <span className="item-format">{doc.format || 'PDF'}</span>
-                  {doc.fileSizeFormatted && (
-                    <span className="item-format">• {doc.fileSizeFormatted}</span>
-                  )}
-                  {doc.expiryDate && (
-                    <span className="badge badge-warning">
-                      <Clock size={11} />
-                      <span>Expires {doc.expiryDate}</span>
-                    </span>
-                  )}
+                <div className="dv-doc-card__footer">
+                  <span className="dv-doc-card__filesize">{doc.fileSizeFormatted || "Stored"}</span>
+                  <div className="dv-doc-card__actions">
+                    <Link to={`/documents/${doc._id}`}>
+                      <Button variant="ghost" size="sm">Inspect</Button>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-
-              <ChevronRight size={18} color="var(--text-muted)" className="item-arrow" />
-            </div>
-          ))
+              </Card>
+            ))}
+          </div>
         )}
       </div>
     </div>

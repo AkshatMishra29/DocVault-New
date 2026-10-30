@@ -1,127 +1,116 @@
-import { API_BASE_URL } from '../../../services/api';
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { ShieldCheck, Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import './Auth.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { Mail, Lock, ShieldCheck, ArrowRight, AlertCircle } from "lucide-react";
+import logoLight from "../../../assets/brand/docvault-logo.svg";
+import Button from "../../../components/common/Button/Button";
+import Input from "../../../components/common/Input/Input";
+import Card from "../../../components/common/Card/Card";
+import "./Auth.css";
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-  const { user, isVaultUnlocked, handleLoginSuccess, logout } = useAuth();
-
-  React.useEffect(() => {
-    // If user is already fully authenticated with valid PIN unlocked:
-    if (user && isVaultUnlocked) {
-      navigate('/', { replace: true });
-    }
-  }, [user, isVaultUnlocked, navigate]);
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
+
+    if (!email || !password) {
+      setError("Please provide both email and password.");
+      return;
+    }
+
     setLoading(true);
+    const result = await login(email, password);
+    setLoading(false);
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.detail || data.error || 'Login failed. Please check your credentials.');
+    if (result.success) {
+      if (result.requiresPin) {
+        navigate("/enter-pin", { state: { email } });
+      } else {
+        navigate("/dashboard");
       }
-
-      // Step 1 Success: Route to Enter PIN screen
-      handleLoginSuccess(data.user, true);
-      navigate('/enter-pin');
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    } else {
+      setError(result.error || "Authentication failed. Please check your credentials.");
     }
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-card">
-        {/* Header Branding */}
-        <div className="auth-header">
-          <div className="auth-logo-box">
-            <ShieldCheck size={28} color="#fff" />
-          </div>
-          <h2 className="auth-title">Welcome to DocVault</h2>
-          <p className="auth-subtitle">Enter your email & master password to begin</p>
+    <div className="dv-auth-page">
+      <div className="dv-auth-container">
+        <div className="dv-auth-brand">
+          <Link to="/">
+            <img src={logoLight} alt="DocVault" height="38" />
+          </Link>
+          <p className="dv-auth-tagline">Access your private document vault</p>
         </div>
 
-        {error && (
-          <div className="auth-error-banner">
-            <AlertCircle size={16} />
-            <span>{error}</span>
+        <Card padding="lg" className="dv-auth-card">
+          <div className="dv-auth-card__header">
+            <h2 className="dv-auth-card__title">Welcome Back</h2>
+            <p className="dv-auth-card__subtitle">Step 1: Enter your registered credentials</p>
           </div>
-        )}
 
-        {/* Login Form */}
-        <form className="auth-form" onSubmit={handleSubmit} method="post" autoComplete="on">
-          <div className="form-group">
-            <label className="input-label" htmlFor="login-email">Email Address</label>
-            <div className="input-wrapper">
-              <Mail size={18} className="input-icon" />
-              <input
-                id="login-email"
-                type="email"
-                name="email"
-                autoComplete="username email"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+          {error && (
+            <div className="dv-auth-error">
+              <AlertCircle size={16} className="dv-auth-error__icon" />
+              <span>{error}</span>
             </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="dv-auth-form">
+            <Input
+              label="Email Address"
+              type="email"
+              icon={Mail}
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+
+            <Input
+              label="Password"
+              type="password"
+              icon={Lock}
+              placeholder="••••••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              loading={loading}
+              icon={ArrowRight}
+              iconPosition="right"
+              className="dv-auth-submit-btn"
+            >
+              Continue to PIN Unlock
+            </Button>
+          </form>
+
+          <div className="dv-auth-footer">
+            <p>
+              Don't have a vault yet?{" "}
+              <Link to="/register" className="dv-auth-link">
+                Create Account
+              </Link>
+            </p>
           </div>
+        </Card>
 
-          <div className="form-group">
-            <label className="input-label" htmlFor="login-password">Master Password</label>
-            <div className="input-wrapper">
-              <Lock size={18} className="input-icon" />
-              <input
-                id="login-password"
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                autoComplete="current-password"
-                placeholder="••••••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                className="toggle-pwd-btn"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            </div>
-          </div>
-
-          <button type="submit" className="btn-primary auth-btn" disabled={loading}>
-            <span>{loading ? 'Authenticating...' : 'Continue to Vault PIN'}</span>
-            <ArrowRight size={18} />
-          </button>
-        </form>
-
-        {/* Footer */}
-        <div className="auth-footer">
-          <span>Don't have a secure vault?</span>
-          <Link to="/register" className="auth-link">Create Account & PIN</Link>
+        <div className="dv-auth-security-notice">
+          <ShieldCheck size={16} color="#059669" />
+          <span>Strict Tenant Isolation • Password & Personal Vault PIN Protected</span>
         </div>
       </div>
     </div>

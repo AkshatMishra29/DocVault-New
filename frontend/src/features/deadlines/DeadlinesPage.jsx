@@ -1,140 +1,123 @@
-import { API_BASE_URL } from '../../services/api';
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { 
-  AlertTriangle, 
-  Calendar, 
-  Clock, 
-  ChevronRight, 
-  Bell,
-  RefreshCw,
-  Download,
-  CheckCircle2
-} from 'lucide-react';
-import './DeadlinesPage.css';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { apiRequest, API_BASE_URL } from "../../services/api";
+import { Calendar, Download, AlertTriangle, Clock, CheckCircle2, FileText } from "lucide-react";
+
+import AppHeader from "../../components/layout/AppHeader/AppHeader";
+import Card from "../../components/common/Card/Card";
+import Button from "../../components/common/Button/Button";
+import Badge from "../../components/common/Badge/Badge";
+import EmptyState from "../../components/common/EmptyState/EmptyState";
+
+import emptyDeadlinesImg from "../../assets/illustrations/empty-deadlines.svg";
+import "./DeadlinesPage.css";
 
 export default function DeadlinesPage() {
-  const navigate = useNavigate();
   const [deadlines, setDeadlines] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [syncDone, setSyncDone] = useState(false);
-
-  const fetchDeadlines = async () => {
-    setLoading(true);
-    const token = localStorage.getItem('docvault_token');
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/deadlines`, {
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
-      });
-      const data = await res.json();
-      if (data.success) {
-        setDeadlines(data.data);
-      }
-    } catch (err) {
-      console.error('Failed to fetch deadlines:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchDeadlines();
   }, []);
 
-  const handleDownloadCalendar = () => {
-    const token = localStorage.getItem('docvault_token');
-    const url = `${API_BASE_URL}/api/deadlines/calendar.ics${token ? `?token=${token}` : ''}`;
-    window.open(url, '_blank');
-    setSyncDone(true);
-    setTimeout(() => setSyncDone(false), 3000);
-  };
+  async function fetchDeadlines() {
+    try {
+      setLoading(true);
+      setError("");
+      const res = await apiRequest("/api/deadlines");
+      if (res.success && res.data) {
+        setDeadlines(res.data);
+      } else {
+        setDeadlines([]);
+      }
+    } catch (err) {
+      setError("Failed to retrieve deadline schedules.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const token = localStorage.getItem("token");
+  const calendarIcsUrl = `${API_BASE_URL}/api/deadlines/calendar.ics?token=${token}`;
 
   return (
-    <div className="deadlines-page">
-      <div className="deadlines-intro">
-        <h2>Expiry & Auto-Reminders</h2>
-        <p>Live alerts aggregated from your uploaded policies, warranties, and family assets.</p>
-      </div>
+    <div className="dv-deadlines-page">
+      <AppHeader
+        title="Renewal & Expiry Deadlines"
+        subtitle="Automated countdown schedules derived from policy and warranty expiration dates."
+      />
 
-      <div className="reminder-feed">
+      <div className="dv-deadlines-content">
+        <div className="dv-deadlines-toolbar">
+          <div className="dv-deadlines-count">
+            <strong>{deadlines.length}</strong> Scheduled Deadline(s)
+          </div>
+
+          <a href={calendarIcsUrl} download="docvault-deadlines.ics">
+            <Button variant="secondary" size="md" icon={Download}>
+              Export to Apple / Google Calendar (.ICS)
+            </Button>
+          </a>
+        </div>
+
+        {error && (
+          <div className="dv-deadlines-error">
+            <AlertTriangle size={16} />
+            <span>{error}</span>
+          </div>
+        )}
+
         {loading ? (
-          <div className="deadlines-empty">
-            <RefreshCw size={28} className="spin-icon" color="var(--primary)" />
-            <p>Scanning documents and assets for deadlines...</p>
+          <div className="dv-docs-loading">
+            <div className="dv-btn__spinner" />
+            <span>Syncing renewal schedules...</span>
           </div>
         ) : deadlines.length === 0 ? (
-          <div className="deadlines-empty">
-            <Calendar size={42} color="var(--border-color)" />
-            <h3>No upcoming deadlines</h3>
-            <p>Upload documents with expiry dates or track vehicle & household assets to generate reminders.</p>
-          </div>
+          <EmptyState
+            illustration={emptyDeadlinesImg}
+            title="No upcoming policy deadlines"
+            description="When you upload documents containing expiration dates, DocVault automatically creates tracked reminders."
+            actionLabel="Upload Document to Schedule"
+            onAction={() => window.location.href = "/upload"}
+          />
         ) : (
-          deadlines.map((dl) => (
-            <div key={dl.id} className={`reminder-card ${dl.severity}`}>
-              <div className="reminder-header">
-                <div className="severity-badge">
-                  {dl.severity === 'urgent' ? (
-                    <AlertTriangle size={14} color="#EF4444" />
-                  ) : (
-                    <Clock size={14} color="#F59E0B" />
+          <div className="dv-deadlines-list">
+            {deadlines.map((d) => {
+              const isUrgent = d.severity === "urgent" || (d.daysLeft && d.daysLeft <= 15);
+              return (
+                <Card key={d._id} hover padding="md" className="dv-deadline-card">
+                  <div className="dv-deadline-card__left">
+                    <div className={`dv-dicon-box ${isUrgent ? "dv-dicon-box--urgent" : "dv-dicon-box--normal"}`}>
+                      <Calendar size={20} />
+                    </div>
+                    <div className="dv-deadline-card__info">
+                      <div className="dv-deadline-card__title-row">
+                        <h3 className="dv-deadline-card__title">{d.title}</h3>
+                        <Badge variant={isUrgent ? "danger" : "warning"} size="sm">
+                          {d.daysLeft ? `${d.daysLeft} days remaining` : "Upcoming"}
+                        </Badge>
+                      </div>
+                      <p className="dv-deadline-card__action">{d.action || "Renewal required"}</p>
+                      <span className="dv-deadline-card__date">Expiration: <strong>{d.date}</strong></span>
+                    </div>
+                  </div>
+
+                  {d.linkedDocId && (
+                    <div className="dv-deadline-card__right">
+                      <Link to={`/documents/${typeof d.linkedDocId === "object" ? d.linkedDocId._id : d.linkedDocId}`}>
+                        <Button variant="ghost" size="sm" icon={FileText}>
+                          View Policy
+                        </Button>
+                      </Link>
+                    </div>
                   )}
-                  <span>{dl.daysLeft} Days Remaining</span>
-                </div>
-                <span className="due-date">{dl.date}</span>
-              </div>
-
-              <h3 className="reminder-title">{dl.title}</h3>
-              
-              <div className="reminder-action-bar">
-                <span className="recommended-action">{dl.action}</span>
-                {dl.linkedDocId ? (
-                  <button 
-                    className="view-doc-link"
-                    onClick={() => navigate(`/documents/${dl.linkedDocId}`)}
-                  >
-                    <span>View Attached Policy</span>
-                    <ChevronRight size={14} />
-                  </button>
-                ) : dl.linkedAssetId ? (
-                  <button 
-                    className="view-doc-link"
-                    onClick={() => navigate('/assets')}
-                  >
-                    <span>View Tracked Asset</span>
-                    <ChevronRight size={14} />
-                  </button>
-                ) : null}
-              </div>
-            </div>
-          ))
+                </Card>
+              );
+            })}
+          </div>
         )}
-      </div>
-
-      {/* Sync Reminders Box */}
-      <div className="sync-box">
-        <Bell size={24} color="var(--primary)" />
-        <div className="sync-info">
-          <h4>Google Calendar & Apple iCal Sync</h4>
-          <p>Export all upcoming renewals to your phone calendar in one click.</p>
-        </div>
-        <button 
-          className="sync-btn" 
-          onClick={handleDownloadCalendar}
-        >
-          {syncDone ? (
-            <>
-              <CheckCircle2 size={14} />
-              <span>Exported</span>
-            </>
-          ) : (
-            <>
-              <Download size={14} />
-              <span>Export .ICS</span>
-            </>
-          )}
-        </button>
       </div>
     </div>
   );
 }
-

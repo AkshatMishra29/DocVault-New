@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" width="280" height="200" fill="none">
+  <defs>
+    <linearGradient id="emptyCalGrad" x1="40" y1="20" x2="240" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F8FAFC" />
+      <stop offset="100%" stop-color="#FEF2F2" />
+    </linearGradient>
+  </defs>
+  <rect x="20" y="10" width="240" height="180" rx="16" fill="url(#emptyCalGrad)" stroke="#E2E8F0" stroke-width="1.5" />
+  
+  <!-- Calendar Icon with Checkmark -->
+  <g transform="translate(90, 45)">
+    <rect x="10" y="15" width="80" height="80" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5" />
+    <path d="M10 32H90" stroke="#EF4444" stroke-width="2" />
+    <circle cx="28" cy="22" r="3" fill="#EF4444" />
+    <circle cx="72" cy="22" r="3" fill="#EF4444" />
+    
+    <circle cx="50" cy="62" r="16" fill="#DCFCE7" />
+    <path d="M42 62L47 67L58 56" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>
