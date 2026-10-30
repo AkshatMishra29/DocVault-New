@@ -1,534 +1,507 @@
 /* ==========================================================================
-   DOCVAULT PREMIUM AUTHENTICATION PAGES (SPLIT SCREEN & RESPONSIVE)
+   DRIBBLE / ARCANA MINIMALIST SIGN IN (EXACT DESIGN REPLICA)
    ========================================================================== */
 
-.dv-auth-page {
+.arcana-auth-page {
   min-height: 100vh;
-  display: flex;
-  background-color: var(--color-bg);
-}
-
-.dv-auth-split {
-  display: flex;
-  width: 100%;
-  min-height: 100vh;
-}
-
-/* --------------------------------------------------------------------------
-   BRAND PANEL (LEFT SIDE)
-   -------------------------------------------------------------------------- */
-.brand-panel,
-.dv-auth-banner {
-  flex: 1.15;
-  background:
-    radial-gradient(ellipse at 85% 20%, #247c5b70, transparent 40%),
-    radial-gradient(ellipse at 15% 85%, #087f5b55, transparent 45%),
-    linear-gradient(135deg, #092c24, #104a38 60%, #082a22);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 64px;
-  color: #FFFFFF;
-}
-
-.brand-panel__header,
-.dv-auth-banner__header {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.brand-content,
-.dv-auth-banner__content {
-  position: relative;
-  z-index: 2;
-  max-width: 540px;
-}
-
-.brand-content__badge,
-.dv-auth-banner__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 16px;
-  border-radius: 9999px;
-  background: rgba(66, 200, 142, 0.15);
-  border: 1px solid rgba(138, 240, 188, 0.35);
-  font-size: 13px;
-  font-weight: 700;
-  color: #8af0bc;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-}
-
-.brand-content h1,
-.dv-auth-banner__title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: clamp(42px, 5vw, 66px);
-  line-height: 1.08;
-  letter-spacing: -3.5px;
-  font-weight: 800;
-  color: #FFFFFF;
-  margin-bottom: 24px;
-}
-
-.brand-content h1 span,
-.dv-auth-banner__title-accent {
-  background: linear-gradient(90deg, #8af0bc, #42c88e);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  display: inline-block;
-}
-
-.dv-logo-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 15px;
-  background: linear-gradient(145deg, #24966a, #087f5b);
-  box-shadow: 0 8px 25px #00000025;
+  width: 100vw;
+  background-color: #F8F9FA;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  padding: 8px;
+  padding: 40px 24px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
 }
 
-.dv-logo-icon img {
+.arcana-auth-wrapper {
   width: 100%;
-  height: 100%;
+  max-width: 1240px;
+  min-height: 820px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+/* --------------------------------------------------------------------------
+   LEFT FORM SIDE (CLEAN, MINIMALIST, HIGH-CONTRAST)
+   -------------------------------------------------------------------------- */
+.arcana-form-side {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.arcana-form-content {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+}
+
+.arcana-brand-logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 40px;
+  text-decoration: none;
+}
+
+.arcana-brand-logo__img {
+  width: 36px;
+  height: 36px;
   object-fit: contain;
 }
 
-.dv-logo-text {
+.arcana-brand-logo__text {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 29px;
-  letter-spacing: -1.6px;
-  font-weight: 800;
-  color: #FFFFFF;
-}
-
-.dv-logo-text span {
-  color: #42c88e;
-}
-
-.brand-content p,
-.dv-auth-banner__desc {
-  font-size: 17px;
-  color: #c9eed9;
-  line-height: 1.6;
-  margin-bottom: 36px;
-  opacity: 0.9;
-}
-
-.brand-features,
-.dv-auth-banner__features {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.brand-feature,
-.dv-auth-banner__feature {
-  display: flex;
-  align-items: center;
-  gap: 14px;
   font-size: 15px;
-  font-weight: 500;
-  color: #f1fdf6;
+  font-weight: 700;
+  color: #0F172A;
+  letter-spacing: -0.02em;
 }
 
-.brand-feature__icon,
-.dv-auth-banner__feature-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 9999px;
-  background: rgba(66, 200, 142, 0.22);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #8af0bc;
-  flex-shrink: 0;
-}
-
-.brand-footer,
-.dv-auth-banner__footer {
-  position: relative;
-  z-index: 2;
-  font-size: 13px;
-  color: #83b6a0;
-}
-
-/* --------------------------------------------------------------------------
-   FORM PANEL (RIGHT SIDE)
-   -------------------------------------------------------------------------- */
-.form-panel,
-.dv-auth-main {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 32px;
-  background:
-    radial-gradient(circle at 90% 10%, #dff5e8 0, transparent 30%),
-    radial-gradient(circle at 5% 95%, #e7f6ec 0, transparent 32%),
-    #f9fbf9;
-}
-
-.login-card,
-.dv-auth-box {
-  width: 100%;
-  max-width: 440px;
-}
-
-.login-card {
-  max-width: 440px;
-  padding: 40px;
-  border: 1px solid #ffffff;
-  border-radius: 25px;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow:
-    0 25px 70px rgba(21, 65, 45, 0.09),
-    0 3px 12px rgba(21, 65, 45, 0.04);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-.form-heading {
-  margin-bottom: 28px;
-}
-
-.form-heading-top {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 12px;
-}
-
-.form-icon {
-  width: 55px;
-  height: 55px;
-  border-radius: 17px;
-  background: linear-gradient(145deg, #e5f8ed, #c9eed9);
-  box-shadow: inset 0 0 0 1px #c9e8d5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #087f5b;
-  flex-shrink: 0;
-}
-
-.form-heading h2,
-.dv-auth-card__title {
+.arcana-title {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 32px;
-  letter-spacing: -1.5px;
   font-weight: 800;
+  letter-spacing: -0.04em;
   color: #0F172A;
-  margin: 0;
-  line-height: 1.15;
+  margin: 0 0 28px 0;
 }
 
-.form-heading p,
-.dv-auth-card__subtitle {
-  font-size: 14.5px;
-  color: #64748B;
-  margin: 4px 0 0;
-}
-
-.dv-auth-error {
+.arcana-alert-error {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 16px;
-  border-radius: 12px;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
   background-color: #FEF2F2;
-  border: 1px solid rgba(220, 38, 38, 0.25);
+  border: 1px solid rgba(220, 38, 38, 0.2);
   color: #DC2626;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
   margin-bottom: 20px;
 }
 
-.login-form,
-.dv-auth-form {
+.arcana-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
-.input-field-group {
+.arcana-field {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.input-field-group label {
-  font-size: 13px;
-  font-weight: 700;
-  color: #334155;
-  letter-spacing: -0.2px;
+.arcana-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #1E293B;
+  letter-spacing: -0.01em;
 }
 
-.input-wrapper {
-  min-height: 55px;
-  border-radius: 12px;
-  background: #fbfdfb;
-  border: 1.5px solid #E2E8F0;
+.arcana-input-wrap {
+  height: 44px;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
   display: flex;
   align-items: center;
-  padding: 0 16px;
-  gap: 12px;
+  padding: 0 14px;
+  gap: 10px;
   transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
-.input-wrapper:focus-within {
-  border-color: #087f5b;
-  box-shadow: 0 0 0 4px #087f5b12;
-  background: white;
+.arcana-input-wrap:focus-within {
+  border-color: #0F172A;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
 }
 
-.input-wrapper input {
+.arcana-input-icon {
+  color: #94A3B8;
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.arcana-input-wrap:focus-within .arcana-input-icon {
+  color: #0F172A;
+}
+
+.arcana-input-wrap input {
   width: 100%;
   height: 100%;
   border: none;
   background: transparent;
   outline: none;
-  font-family: 'Inter', sans-serif;
-  font-size: 15px;
+  font-size: 13.5px;
   color: #0F172A;
+  font-family: 'Inter', sans-serif;
 }
 
-.input-wrapper input::placeholder {
+.arcana-input-wrap input::placeholder {
   color: #94A3B8;
 }
 
-.input-wrapper svg {
-  color: #64748B;
-  flex-shrink: 0;
-  transition: color 0.2s ease;
+/* Custom Checkbox */
+.arcana-remember-wrap {
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
+  margin-bottom: 8px;
 }
 
-.input-wrapper:focus-within svg {
-  color: #087f5b;
+.arcana-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
 }
 
-.login-button {
-  min-height: 56px;
-  border-radius: 13px;
-  background: linear-gradient(110deg, #087f5b, #12a675);
-  box-shadow: 0 9px 22px #087f5b30;
-  transition: all 0.25s ease;
-  border: none;
+.arcana-checkbox-label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.arcana-custom-checkbox {
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid #CBD5E1;
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  display: inline-block;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.arcana-checkbox-label input:checked ~ .arcana-custom-checkbox {
+  background-color: #0F172A;
+  border-color: #0F172A;
+}
+
+.arcana-checkbox-label input:checked ~ .arcana-custom-checkbox::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.arcana-checkbox-text {
+  font-size: 12px;
+  color: #475569;
+  font-weight: 500;
+}
+
+/* Big Black Solid Button */
+.arcana-submit-btn {
+  height: 46px;
+  background-color: #171717;
   color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin-top: 6px;
 }
 
-.login-button:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 28px #087f5b40;
+.arcana-submit-btn:hover:not(:disabled) {
+  background-color: #000000;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
 }
 
-.login-button:disabled {
+.arcana-submit-btn:disabled {
   opacity: 0.65;
   cursor: not-allowed;
 }
 
-.login-button svg {
-  transition: transform 0.25s ease;
-}
-
-.login-button:hover:not(:disabled) svg {
-  transform: translateX(5px);
-}
-
-.auth-divider {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin: 16px 0;
-  color: #94A3B8;
+.arcana-links-row {
+  margin-top: 18px;
   font-size: 12px;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.05em;
 }
 
-.auth-divider::before,
-.auth-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background-color: #E2E8F0;
+.arcana-links-row.forgot {
+  margin-top: 4px;
 }
 
-.google-button {
-  min-height: 55px;
-  border-radius: 12px;
-  transition: all 0.2s ease;
-  border: 1.5px solid #E2E8F0;
-  background: #FFFFFF;
-  color: #1E293B;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 14.5px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  cursor: pointer;
-}
-
-.google-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 7px 18px #142c2010;
-  border-color: #CBD5E1;
-}
-
-.form-footer,
-.dv-auth-card__footer {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid #F1F5F9;
-  text-align: center;
-  font-size: 13.5px;
+.arcana-links-text {
   color: #64748B;
 }
 
-.form-footer a,
-.dv-auth-link {
-  color: #087f5b;
+.arcana-link-bold {
+  color: #0F172A;
   font-weight: 700;
   text-decoration: none;
-  margin-left: 6px;
 }
 
-.form-footer a:hover,
-.dv-auth-link:hover {
+.arcana-link-bold:hover {
   text-decoration: underline;
 }
 
-/* --------------------------------------------------------------------------
-   PIN VERIFICATION SCREEN STYLES
-   -------------------------------------------------------------------------- */
-.dv-auth-page-centered {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 32px 16px;
-  background:
-    radial-gradient(ellipse at 50% 10%, rgba(8, 127, 91, 0.12) 0%, transparent 60%),
-    #f9fbf9;
+.arcana-link-muted {
+  color: #64748B;
+  text-decoration: none;
 }
 
-.dv-auth-container--pin {
-  width: 100%;
-  max-width: 440px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.arcana-link-muted:hover {
+  color: #0F172A;
+  text-decoration: underline;
 }
 
-.dv-pin-display {
+/* Circular Social Buttons */
+.arcana-socials {
   display: flex;
-  justify-content: center;
+  align-items: center;
   gap: 14px;
-  margin: 24px 0 28px;
+  margin-top: 32px;
 }
 
-.dv-pin-slot {
-  width: 18px;
-  height: 18px;
-  border-radius: 9999px;
-  border: 2px solid #CBD5E1;
-  background-color: #FFFFFF;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dv-pin-slot--filled {
-  background: #087f5b;
-  border-color: #087f5b;
-  transform: scale(1.15);
-  box-shadow: 0 0 14px rgba(8, 127, 91, 0.5);
-}
-
-.dv-pin-keypad {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.dv-keypad-btn {
-  height: 56px;
-  font-size: 19px;
-  font-weight: 700;
-  border-radius: 14px;
+.arcana-social-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   background-color: #FFFFFF;
   border: 1px solid #E2E8F0;
-  color: #0F172A;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
-  user-select: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-.dv-keypad-btn:hover {
-  background-color: #F0FDF5;
-  border-color: #087f5b;
-  color: #087f5b;
+.arcana-social-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(8, 127, 91, 0.15);
-}
-
-.dv-keypad-btn:active {
-  transform: translateY(0);
-}
-
-.dv-keypad-btn--action {
-  font-size: 13px;
-  font-weight: 600;
-  color: #64748B;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  border-color: #CBD5E1;
 }
 
 /* --------------------------------------------------------------------------
-   RESPONSIVE
+   RIGHT SIDE: DEEP PITCH-BLACK ROUNDED CARD WITH 3D MONOLITH
+   -------------------------------------------------------------------------- */
+.arcana-hero-side {
+  flex: 1.15;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.arcana-black-card {
+  width: 100%;
+  max-width: 540px;
+  min-height: 760px;
+  background-color: #060606;
+  border-radius: 40px;
+  padding: 48px 48px 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 30px 80px -20px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Diagonal Light Streak across top right */
+.arcana-light-streak {
+  position: absolute;
+  top: -60px;
+  right: -80px;
+  width: 480px;
+  height: 300px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 70%);
+  transform: rotate(38deg);
+  pointer-events: none;
+}
+
+/* 3D Geometric Monolith Artwork */
+.arcana-monolith-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.arcana-monolith-svg {
+  width: 240px;
+  height: 210px;
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.9));
+}
+
+.arcana-card-copy {
+  position: relative;
+  z-index: 2;
+  margin: 24px 0 32px;
+}
+
+.arcana-brand-pill {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+  display: block;
+  letter-spacing: -0.01em;
+}
+
+.arcana-welcome-heading {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  margin: 0 0 10px 0;
+}
+
+.arcana-welcome-desc {
+  font-size: 13px;
+  color: #94A3B8;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+  max-width: 440px;
+}
+
+.arcana-stats-line {
+  font-size: 12.5px;
+  color: #64748B;
+  display: block;
+}
+
+/* Dark Floating Bottom Card Bubble */
+.arcana-bottom-bubble {
+  background-color: #242426;
+  border-radius: 24px;
+  padding: 24px 24px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.arcana-bubble-left {
+  flex: 1;
+}
+
+.arcana-bubble-left h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.arcana-bubble-left p {
+  font-size: 12.5px;
+  color: #94A3B8;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Stacked Members */
+.arcana-avatar-stack {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.arcana-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #242426;
+  margin-left: -8px;
+}
+
+.arcana-avatar-img:first-child {
+  margin-left: 0;
+}
+
+.arcana-avatar-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #172554;
+  color: #60A5FA;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #242426;
+  margin-left: -8px;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE BREAKPOINTS
    -------------------------------------------------------------------------- */
 @media (max-width: 1024px) {
-  .brand-panel,
-  .dv-auth-banner {
-    display: none;
+  .arcana-auth-wrapper {
+    flex-direction: column-reverse;
+    justify-content: center;
+    gap: 32px;
+  }
+
+  .arcana-hero-side {
+    width: 100%;
+  }
+
+  .arcana-black-card {
+    max-width: 480px;
+    min-height: auto;
+    padding: 36px 32px 32px;
+    border-radius: 28px;
+  }
+
+  .arcana-monolith-svg {
+    width: 180px;
+    height: 150px;
   }
 }
 
-@media (max-width: 680px) {
-  .login-card {
-    padding: 27px 22px;
-    border-radius: 21px;
+@media (max-width: 480px) {
+  .arcana-auth-page {
+    padding: 20px 14px;
   }
 
-  .form-panel,
-  .dv-auth-main {
-    background: #f5faf6;
-    padding: 24px 16px;
+  .arcana-black-card {
+    padding: 28px 20px 24px;
   }
 
-  .form-heading h2 {
-    font-size: 26px;
+  .arcana-bottom-bubble {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
