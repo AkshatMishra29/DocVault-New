@@ -27,6 +27,63 @@ DocVault is an **air-tight, privacy-first personal document custodian** and **in
 
 ## 2. System Architecture & High-Level Topology
 
+### 2.1 Project Directory Structure (Modular Architecture)
+
+The codebase has been refactored into a **Feature-Based Modular Architecture** for the frontend and a **Layered Modular Architecture** for the backend:
+
+`
+DocVault-New/
+├── backend/
+│   ├── src/
+│   │   ├── config/              # Centralized environment & service configurations
+│   │   ├── middleware/          # Security, JWT auth guard, file upload limits
+│   │   ├── modules/             # Domain modules (routes, controllers, models, services)
+│   │   │   ├── auth/
+│   │   │   ├── documents/
+│   │   │   ├── assets/
+│   │   │   ├── deadlines/
+│   │   │   ├── ai/
+│   │   │   └── vault/
+│   │   ├── services/            # Infrastructure services
+│   │   │   ├── ai/              # Groq Cloud LLM & Hugging Face embeddings
+│   │   │   ├── ocr/             # Sharp + Tesseract.js image & PDF preprocessing
+│   │   │   └── storage/         # Cloudflare R2 & Firebase storage adapters
+│   │   ├── utils/               # Sanitizers, parsers, and helpers
+│   │   ├── app.js               # Express application initialization & middleware
+│   │   └── server.js            # Node HTTP server entry point & MongoDB lifecycle
+│   ├── .env.example
+│   └── package.json
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── app/                 # Application bootstrap, routing & context providers
+│   │   ├── assets/              # Static media (images, icons, illustrations, fonts)
+│   │   ├── components/          # Global layout & shared UI components
+│   │   ├── features/            # Feature-driven modules (pages, components, services)
+│   │   │   ├── auth/
+│   │   │   ├── dashboard/
+│   │   │   ├── documents/
+│   │   │   ├── upload/
+│   │   │   ├── assets/
+│   │   │   ├── deadlines/
+│   │   │   └── ai-assistant/
+│   │   ├── services/api/        # Centralized API client & HTTP abstractions
+│   │   ├── styles/              # Global stylesheet & design system
+│   │   ├── utils/               # Formatting, mock data & client helpers
+│   │   └── main.jsx             # React 19 entry point
+│   ├── .env.example
+│   ├── vite.config.js
+│   └── package.json
+│
+└── python-service/              # Standalone Python FastAPI microservice
+    ├── app/
+    │   ├── core/
+    │   ├── services/
+    │   └── main.py
+    └── requirements.txt
+`
+
 ```mermaid
 graph TD
     UserClient[Web / Mobile Client<br/>React 19 + Vite] -->|HTTPS / REST API| ExpressGateway[Express.js Production Gateway<br/>Port 5001]
