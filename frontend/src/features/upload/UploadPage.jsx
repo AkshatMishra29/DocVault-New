@@ -9,7 +9,6 @@ import {
 import AppHeader from "../../components/layout/AppHeader/AppHeader";
 import Card from "../../components/common/Card/Card";
 import Button from "../../components/common/Button/Button";
-import uploadIllustration from "../../assets/illustrations/document-upload.svg";
 import "./UploadPage.css";
 
 export default function UploadPage() {

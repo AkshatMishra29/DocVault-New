@@ -12,7 +12,6 @@ import Card from "../../components/common/Card/Card";
 import Button from "../../components/common/Button/Button";
 import Badge from "../../components/common/Badge/Badge";
 import EmptyState from "../../components/common/EmptyState/EmptyState";
-import emptyDocsImg from "../../assets/illustrations/empty-documents.svg";
 
 import "./HomePage.css";
 
@@ -150,7 +149,7 @@ export default function HomePage() {
               <Card padding="lg"><p className="dv-text-muted">Loading vault documents...</p></Card>
             ) : recentDocs.length === 0 ? (
               <EmptyState
-                illustration={emptyDocsImg}
+                
                 title="Your vault is currently empty"
                 description="Upload your insurance policies, warranty cards, or identity proofs to enable automated OCR extraction."
                 actionLabel="Upload First Document"

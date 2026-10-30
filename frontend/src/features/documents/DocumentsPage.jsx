@@ -13,8 +13,6 @@ import Badge from "../../components/common/Badge/Badge";
 import Input from "../../components/common/Input/Input";
 import EmptyState from "../../components/common/EmptyState/EmptyState";
 
-import emptyDocsImg from "../../assets/illustrations/empty-documents.svg";
-import noSearchImg from "../../assets/illustrations/no-search-results.svg";
 import "./DocumentsPage.css";
 
 const CATEGORIES = ["All", "Insurance", "Identity", "Appliances", "Property", "Medical", "Other"];
@@ -127,7 +125,7 @@ export default function DocumentsPage() {
         ) : documents.length === 0 ? (
           searchQuery || selectedCategory !== "All" ? (
             <EmptyState
-              illustration={noSearchImg}
+              
               title="No documents matched your filter"
               description={`No documents found matching "${searchQuery || selectedCategory}". Try adjusting your keywords or clearing the filter.`}
               actionLabel="Clear Filters"
@@ -135,7 +133,7 @@ export default function DocumentsPage() {
             />
           ) : (
             <EmptyState
-              illustration={emptyDocsImg}
+              
               title="Your document repository is empty"
               description="Upload your vehicle insurance, health policies, passport copies, or appliance invoices to start tracking."
               actionLabel="Upload First Document"

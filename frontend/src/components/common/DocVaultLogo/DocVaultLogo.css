@@ -1,0 +1,32 @@
+.dv-brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  user-select: none;
+}
+
+.dv-brand-logo__img {
+  object-fit: contain;
+  display: block;
+}
+
+.dv-brand-logo__text {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #0F172A;
+  line-height: 1;
+}
+
+.dv-brand-logo__accent {
+  color: #0F766E;
+}
+
+.dv-brand-logo--light .dv-brand-logo__text {
+  color: #FFFFFF;
+}
+
+.dv-brand-logo--light .dv-brand-logo__accent {
+  color: #2DD4BF;
+}

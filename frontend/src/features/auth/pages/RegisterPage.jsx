@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { User, Mail, Lock, Phone, KeyRound, ShieldCheck, ArrowRight, AlertCircle, Sparkles, CheckCircle2 } from "lucide-react";
-import logoLight from "../../../assets/brand/docvault-logo.svg";
-import logoDark from "../../../assets/brand/docvault-logo-dark.svg";
+import DocVaultLogo from "../../../components/common/DocVaultLogo/DocVaultLogo";
 import Button from "../../../components/common/Button/Button";
 import Input from "../../../components/common/Input/Input";
 import Card from "../../../components/common/Card/Card";
@@ -59,7 +58,7 @@ export default function RegisterPage() {
         <div className="dv-auth-banner">
           <div className="dv-auth-banner__header">
             <Link to="/">
-              <img src={logoDark} alt="DocVault" height="42" />
+              <DocVaultLogo height={38} variant="light" />
             </Link>
           </div>
 
@@ -107,7 +106,7 @@ export default function RegisterPage() {
           <div className="dv-auth-box dv-auth-box--wide">
             <div className="dv-auth-box__mobile-header">
               <Link to="/">
-                <img src={logoLight} alt="DocVault" height="38" />
+                <DocVaultLogo height={36} />
               </Link>
             </div>
 

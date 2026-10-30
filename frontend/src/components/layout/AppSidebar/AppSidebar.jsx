@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, FileText, UploadCloud, Layers, Calendar, Sparkles, Settings } from 'lucide-react';
-import logoLight from '../../../assets/brand/docvault-logo.svg';
+import DocVaultLogo from '../../common/DocVaultLogo/DocVaultLogo';
 import './AppSidebar.css';
 
 const navItems = [
@@ -19,7 +19,7 @@ export default function AppSidebar() {
     <aside className="dv-sidebar">
       <div className="dv-sidebar__header">
         <NavLink to="/dashboard">
-          <img src={logoLight} alt="DocVault" height="32" />
+          <DocVaultLogo height={30} />
         </NavLink>
       </div>
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import brandLogo from '../../../assets/images/docvault-brand-logo.png';
-import logoLight from '../../../assets/brand/docvault-logo.svg';
+import DocVaultLogo from '../../common/DocVaultLogo/DocVaultLogo';
 import './PublicFooter.css';
 
 export default function PublicFooter() {
@@ -9,14 +8,9 @@ export default function PublicFooter() {
     <footer className="dv-public-footer">
       <div className="dv-public-footer__container">
         <div className="dv-public-footer__brand">
-          <img 
-            src={brandLogo} 
-            alt="DocVault" 
-            height="28" 
-            onError={(e) => { e.target.src = logoLight; }} 
-          />
+          <DocVaultLogo height={28} />
           <p className="dv-public-footer__tagline">
-            Secure, Organize, Stay Ahead.
+            Secure, Organize, Stay Ahead. Your sovereign intelligent personal document vault.
           </p>
         </div>
 
@@ -25,6 +19,7 @@ export default function PublicFooter() {
             <h4>Product</h4>
             <a href="#features">Features</a>
             <a href="#how-it-works">How It Works</a>
+            <a href="#security">Security</a>
             <a href="#pricing">Pricing</a>
           </div>
 

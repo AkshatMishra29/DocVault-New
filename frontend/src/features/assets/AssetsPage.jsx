@@ -10,7 +10,6 @@ import Input from "../../components/common/Input/Input";
 import Modal from "../../components/common/Modal/Modal";
 import EmptyState from "../../components/common/EmptyState/EmptyState";
 
-import emptyAssetsImg from "../../assets/illustrations/empty-assets.svg";
 import "./AssetsPage.css";
 
 const ASSET_CATEGORIES = ["Vehicle", "Home Appliances", "Electronics", "Real Estate", "Other"];
@@ -137,7 +136,7 @@ export default function AssetsPage() {
           </div>
         ) : assets.length === 0 ? (
           <EmptyState
-            illustration={emptyAssetsImg}
+            
             title="No tracked assets yet"
             description="Add your car, laptop, air conditioner, or property deeds to cross-link warranties and policy schedules."
             actionLabel="Add Your First Asset"

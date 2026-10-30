@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ShieldCheck, Delete, AlertCircle, ArrowLeft, KeyRound } from "lucide-react";
-import logoLight from "../../../assets/brand/docvault-logo.svg";
+import DocVaultLogo from "../../../components/common/DocVaultLogo/DocVaultLogo";
 import Card from "../../../components/common/Card/Card";
 import Button from "../../../components/common/Button/Button";
 import "./Auth.css";
@@ -81,7 +81,7 @@ export default function EnterPinPage() {
       <div className="dv-auth-container--pin">
         <div className="dv-auth-brand" style={{ textAlign: "center", marginBottom: "24px" }}>
           <Link to="/">
-            <img src={logoLight} alt="DocVault" height="42" />
+            <DocVaultLogo height={42} />
           </Link>
           <p className="dv-auth-tagline" style={{ color: "var(--color-text-secondary)", fontSize: "14px", marginTop: "8px" }}>
             Step 2: Vault Security Challenge

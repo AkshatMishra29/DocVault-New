@@ -9,7 +9,6 @@ import Button from "../../components/common/Button/Button";
 import Badge from "../../components/common/Badge/Badge";
 import EmptyState from "../../components/common/EmptyState/EmptyState";
 
-import emptyDeadlinesImg from "../../assets/illustrations/empty-deadlines.svg";
 import "./DeadlinesPage.css";
 
 export default function DeadlinesPage() {
@@ -75,7 +74,7 @@ export default function DeadlinesPage() {
           </div>
         ) : deadlines.length === 0 ? (
           <EmptyState
-            illustration={emptyDeadlinesImg}
+            
             title="No upcoming policy deadlines"
             description="When you upload documents containing expiration dates, DocVault automatically creates tracked reminders."
             actionLabel="Upload Document to Schedule"

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import brandLogo from '../../../assets/images/docvault-brand-logo.png';
-import logoLight from '../../../assets/brand/docvault-logo.svg';
+import DocVaultLogo from '../../common/DocVaultLogo/DocVaultLogo';
 import { ArrowRight } from 'lucide-react';
 import './PublicNavbar.css';
 
@@ -10,12 +9,7 @@ export default function PublicNavbar() {
     <header className="dv-public-nav">
       <div className="dv-public-nav__container">
         <Link to="/" className="dv-public-nav__logo">
-          <img 
-            src={brandLogo} 
-            alt="DocVault" 
-            height="34" 
-            onError={(e) => { e.target.src = logoLight; }} 
-          />
+          <DocVaultLogo height={32} />
         </Link>
 
         <nav className="dv-public-nav__links">
