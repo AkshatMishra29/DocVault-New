@@ -83,6 +83,13 @@
   gap: 14px;
 }
 
+
+.arcana-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
 .arcana-field {
   display: flex;
   flex-direction: column;

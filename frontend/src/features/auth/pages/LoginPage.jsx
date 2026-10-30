@@ -146,47 +146,57 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Right Side: Deep Emerald & Slate Black Card with Realistic Folder Tab Shape */}
+        {/* Right Side: Deep Emerald & Slate Black Card with 3D Security Shield & Stepped Folder */}
         <div className="arcana-hero-side">
           <div className="arcana-black-card">
             {/* Ambient Lighting */}
             <div className="arcana-light-streak"></div>
 
-            {/* 3D Geometric Monolith Artwork in Emerald/Teal Shading */}
+            {/* 3D Bank-Grade Security Shield & Lock Artwork */}
             <div className="arcana-monolith-wrap">
               <svg className="arcana-monolith-svg" viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                  <linearGradient id="monolithEmeraldLeft" x1="160" y1="20" x2="60" y2="240" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="shieldEmeraldLeft" x1="160" y1="20" x2="60" y2="240" gradientUnits="userSpaceOnUse">
                     <stop offset="0%" stop-color="#047857" />
                     <stop offset="50%" stop-color="#015A47" />
                     <stop offset="100%" stop-color="#064E3B" />
                   </linearGradient>
-                  <linearGradient id="monolithEmeraldRight" x1="160" y1="20" x2="260" y2="240" gradientUnits="userSpaceOnUse">
+                  <linearGradient id="shieldEmeraldRight" x1="160" y1="20" x2="260" y2="240" gradientUnits="userSpaceOnUse">
                     <stop offset="0%" stop-color="#015A47" />
                     <stop offset="60%" stop-color="#064E3B" />
                     <stop offset="100%" stop-color="#022C22" />
                   </linearGradient>
-                  <linearGradient id="monolithInner" x1="160" y1="120" x2="160" y2="190" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="#34D399" stop-opacity="0.3" />
-                    <stop offset="100%" stop-color="#014D3D" stop-opacity="0.8" />
+                  <linearGradient id="lockGold" x1="140" y1="120" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#34D399" />
+                    <stop offset="100%" stop-color="#059669" />
                   </linearGradient>
-                  <filter id="monolithGlowGreen" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#01362B" flood-opacity="0.8" />
+                  <filter id="shieldGlowGreen" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="14" stdDeviation="20" flood-color="#01362B" flood-opacity="0.85" />
                   </filter>
                 </defs>
-                <g filter="url(#monolithGlowGreen)">
-                  <path d="M160 20L45 220H108L160 115L160 20Z" fill="url(#monolithEmeraldLeft)" />
-                  <path d="M160 20L275 220H212L160 115L160 20Z" fill="url(#monolithEmeraldRight)" />
-                  <path d="M88 185H232L212 220H108L88 185Z" fill="#022C22" />
-                  <polygon points="160,115 118,185 202,185" fill="url(#monolithInner)" />
-                  <polygon points="160,145 142,185 178,185" fill="#10B981" fill-opacity="0.55" />
+                <g filter="url(#shieldGlowGreen)">
+                  {/* Outer Shield Left Half */}
+                  <path d="M160 20L60 62V145C60 205 102 248 160 262V20Z" fill="url(#shieldEmeraldLeft)" />
+                  {/* Outer Shield Right Half */}
+                  <path d="M160 20L260 62V145C260 205 218 248 160 262V20Z" fill="url(#shieldEmeraldRight)" />
+                  {/* Inner Shield Inset */}
+                  <path d="M160 38L78 72V142C78 192 113 230 160 244C207 230 242 192 242 142V72L160 38Z" fill="#031F19" fill-opacity="0.75" />
+                  {/* Shield Center Divider */}
+                  <path d="M160 38V244" stroke="rgba(52, 211, 153, 0.25)" stroke-width="2" />
+                  {/* Floating Lock Shackle */}
+                  <path d="M136 128V106C136 93 146.5 82 160 82C173.5 82 184 93 184 106V128" stroke="url(#lockGold)" stroke-width="9" stroke-linecap="round" fill="none" />
+                  {/* Lock Body */}
+                  <rect x="124" y="124" width="72" height="58" rx="14" fill="url(#lockGold)" />
+                  {/* Lock Keyhole */}
+                  <circle cx="160" cy="148" r="5" fill="#022C22" />
+                  <path d="M157.5 151L156 166H164L162.5 151H157.5Z" fill="#022C22" />
                 </g>
               </svg>
             </div>
 
             {/* Middle Copy */}
             <div className="arcana-card-copy">
-              <span className="arcana-brand-pill">DocVault</span>
+              <span className="arcana-brand-pill">DocVault Sovereignty</span>
               <h2 className="arcana-welcome-heading">Welcome to DocVault</h2>
               <p className="arcana-welcome-desc">
                 DocVault helps individuals & teams build organized, bank-grade encrypted vaults with automated OCR extraction.
@@ -194,7 +204,7 @@ export default function LoginPage() {
               <span className="arcana-stats-line">More than 17k people joined us, it’s your turn</span>
             </div>
 
-            {/* Authentic Folder Silhouette (Single Path Stepped Tab Shape) */}
+            {/* Authentic Stepped Folder Silhouette */}
             <div className="arcana-authentic-folder">
               <div className="arcana-folder-content">
                 <div className="arcana-folder-left">
