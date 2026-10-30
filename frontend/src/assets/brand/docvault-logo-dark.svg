@@ -20,3 +20,4 @@
   <!-- Typography for Dark Backgrounds -->
   <text x="50" y="32" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5px">Doc<tspan fill="#60A5FA">Vault</tspan></text>
 </svg>
+

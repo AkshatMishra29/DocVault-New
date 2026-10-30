@@ -17,3 +17,4 @@ This manifest documents all original SVG and visual assets created for the DocVa
 | `frontend/src/assets/illustrations/empty-assets.svg` | Illustration | 280x200 | Empty state for assets inventory | Verified |
 | `frontend/src/assets/illustrations/empty-deadlines.svg` | Illustration | 280x200 | Empty state for deadlines calendar | Verified |
 | `frontend/src/assets/illustrations/no-search-results.svg` | Illustration | 280x200 | Empty search / filter results | Verified |
+

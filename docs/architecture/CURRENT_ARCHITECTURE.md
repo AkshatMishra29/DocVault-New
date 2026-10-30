@@ -21,3 +21,4 @@ Groq Cloud LPU (Qwen 3.8 27B)            Hugging Face Inference (Embeddings)
 - Ingested files have their base64 binary content saved in MongoDB Document records or delegated to Cloudflare R2 / Firebase Storage.
 - Direct downloads utilize `/api/documents/:id/download`.
 - Strict multi-tenancy ensures every query binds to `req.user.userId`.
+

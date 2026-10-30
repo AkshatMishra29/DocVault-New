@@ -38,3 +38,4 @@ The following features are actively implemented, verified, and strictly protecte
 7. **Vault Security & Governance**
    - Tamper-evident user audit trail (`VIEW`, `DOWNLOAD`, `UPLOAD`, `DELETE`).
    - Complete vault backup export as portable JSON archive.
+

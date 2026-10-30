@@ -20,3 +20,4 @@
 | `POST` | `/api/ai/query` | Ask AI over vault | `{ question, docId? }` | `{ success: true, data: { answer, confidence, referencedDocIds, actionItem } }` |
 | `GET` | `/api/vault/export` | Full vault backup | None | JSON file download (`docvault-backup-<timestamp>.json`) |
 | `GET` | `/api/vault/audit-trail` | Security audit trail | None | `{ success: true, count, data: AuditLog[] }` |
+

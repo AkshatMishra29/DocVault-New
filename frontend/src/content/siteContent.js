@@ -96,3 +96,4 @@ export const faqCopy = [
     a: "Yes. You can export a full, portable JSON backup of your document inventory, asset registry, and deadline schedule at any time from the Settings / More panel."
   }
 ];
+

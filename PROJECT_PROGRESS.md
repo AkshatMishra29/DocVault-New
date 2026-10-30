@@ -17,3 +17,4 @@
 - [ ] Phase 7: Polish authentication experiences (`/login`, `/register`, `/enter-pin`).
 - [ ] Phase 8-15: Implement modern dashboard, documents, upload, assets, deadlines, and Ask AI interfaces.
 - [ ] Phase 21: End-to-end verification and QA testing.
+

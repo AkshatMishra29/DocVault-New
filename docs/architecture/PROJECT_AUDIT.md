@@ -28,3 +28,4 @@ This document establishes the verified technical baseline of the DocVault applic
 - **Backend Entry Point**: `backend/src/server.js` (executes `node src/server.js`), connects to MongoDB Atlas cluster with DNS fallback. Verified working (`/api/health` -> 200 OK).
 - **Frontend Entry Point**: `frontend/src/main.jsx` -> mounts `frontend/src/app/App.jsx` with `AppProviders` and `AppRoutes`. Verified working (`npm run build` -> 0 errors).
 - **CORS Whitelist**: Whitelists `http://localhost:5173`, `http://localhost:3000`, `http://localhost:5001`, and production domains on Render.
+
