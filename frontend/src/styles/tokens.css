@@ -1,41 +1,51 @@
 :root {
-  /* AI-Native SaaS Brand Palette */
-  --color-primary: #6366F1;          /* Indigo */
-  --color-primary-hover: #4F46E5;
-  --color-secondary: #8B5CF6;        /* Purple */
-  --color-secondary-hover: #7C3AED;
-  --color-accent: #06B6D4;           /* Cyan */
-  --color-accent-hover: #0891B2;
+  /* DocVault Signature Brand Palette (Logo Emerald Green, Slate Black, White) */
+  --color-primary: #015A47;          /* Logo Deep Emerald Green */
+  --color-primary-hover: #014335;    /* Darker Emerald */
+  --color-primary-light: #01865A;    /* Vibrant Emerald */
+  --color-secondary: #0F172A;        /* Slate Black */
+  --color-secondary-hover: #020617;  /* Pitch Slate */
+  --color-accent: #10B981;           /* Bright Mint / Jade Accent */
+  --color-accent-hover: #059669;
+  --color-accent-subtle: #ECFDF5;
+  --color-primary-subtle: #F0FDF5;   /* Very Light Tint of Emerald */
   
   /* Foundation Surfaces */
-  --color-bg: #F8FAFC;
+  --color-bg: #FAFCFB;               /* Crisp Clean Off-White with faint mint hint */
+  --color-surface: #FFFFFF;          /* Pure White */
   --color-surface-white: #FFFFFF;
+  --color-surface-hover: #F8FAFC;
   --color-surface-secondary: #F1F5F9;
   --color-surface-tertiary: #E2E8F0;
+  --color-surface-dark: #0F172A;     /* Slate Black Surface */
+  --color-surface-dark-card: #0B1120;
 
   /* Typography Colors */
-  --color-text-primary: #0F172A;     /* Deep Slate */
-  --color-text-secondary: #64748B;
-  --color-text-muted: #94A3B8;
-  --color-text-inverse: #FFFFFF;
+  --color-text-primary: #0F172A;     /* Slate Black Primary */
+  --color-text-secondary: #475569;   /* Slate Medium */
+  --color-text-muted: #94A3B8;       /* Slate Light */
+  --color-text-inverse: #FFFFFF;     /* Pure White */
 
   /* Borders & Dividers */
   --color-border: #E2E8F0;
   --color-border-subtle: #F1F5F9;
-  --color-border-focus: #6366F1;
+  --color-border-focus: #015A47;
   --color-border-hover: #CBD5E1;
 
   /* Feedback Colors */
-  --color-success: #10B981;
+  --color-success: #059669;
   --color-success-bg: #ECFDF5;
+  --color-success-subtle: #ECFDF5;
   --color-success-border: #A7F3D0;
 
-  --color-warning: #F59E0B;
+  --color-warning: #D97706;
   --color-warning-bg: #FFFBEB;
+  --color-warning-subtle: #FFFBEB;
   --color-warning-border: #FDE68A;
 
-  --color-danger: #EF4444;
+  --color-danger: #DC2626;
   --color-danger-bg: #FEF2F2;
+  --color-danger-subtle: #FEF2F2;
   --color-danger-border: #FECACA;
 
   /* Spacing Scale (4px system) */
@@ -59,24 +69,24 @@
   --radius-2xl: 28px;
   --radius-full: 9999px;
 
-  /* Modern Glass & Depth Shadows */
-  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
-  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px 0 rgba(15, 23, 42, 0.04);
   --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
   --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
   --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 10px 10px -5px rgba(15, 23, 42, 0.02);
-  --shadow-glow: 0 0 24px -4px rgba(99, 102, 241, 0.25);
-  --shadow-glow-cyan: 0 0 20px -3px rgba(6, 182, 212, 0.25);
+  --shadow-glow: 0 0 24px -4px rgba(1, 90, 71, 0.25);
+  --shadow-glow-cyan: 0 0 20px -3px rgba(16, 185, 129, 0.25);
 
   /* Glassmorphism tokens */
-  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-bg: rgba(255, 255, 255, 0.88);
   --glass-border: rgba(255, 255, 255, 0.6);
   --glass-blur: blur(16px);
 
   /* Gradients */
-  --gradient-ai: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #06B6D4 100%);
-  --gradient-card: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
-  --gradient-hero: radial-gradient(circle at 50% 15%, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.06) 35%, transparent 70%);
+  --gradient-ai: linear-gradient(135deg, #015A47 0%, #01865A 60%, #10B981 100%);
+  --gradient-card: linear-gradient(180deg, #FFFFFF 0%, #FAFCFB 100%);
+  --gradient-hero: radial-gradient(circle at 50% 15%, rgba(1, 90, 71, 0.12) 0%, rgba(16, 185, 129, 0.05) 40%, transparent 70%);
 
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);

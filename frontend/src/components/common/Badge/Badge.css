@@ -28,35 +28,35 @@
 .dv-badge--primary {
   background-color: var(--color-primary-subtle);
   color: var(--color-primary);
-  border: 1px solid rgba(99, 102, 241, 0.25);
+  border: 1px solid rgba(1, 90, 71, 0.25);
 }
 
 .dv-badge--accent {
   background-color: var(--color-accent-subtle);
-  color: #0891B2;
-  border: 1px solid rgba(6, 182, 212, 0.25);
+  color: var(--color-primary-light);
+  border: 1px solid rgba(16, 185, 129, 0.25);
 }
 
 .dv-badge--ai {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.15) 100%);
+  background: linear-gradient(135deg, rgba(1, 90, 71, 0.1) 0%, rgba(16, 185, 129, 0.15) 100%);
   color: var(--color-primary);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  border: 1px solid rgba(1, 90, 71, 0.3);
 }
 
 .dv-badge--success {
   background-color: var(--color-success-subtle);
   color: var(--color-success);
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  border: 1px solid rgba(5, 150, 105, 0.25);
 }
 
 .dv-badge--warning {
   background-color: var(--color-warning-subtle);
   color: var(--color-warning);
-  border: 1px solid rgba(245, 158, 11, 0.25);
+  border: 1px solid rgba(217, 119, 6, 0.25);
 }
 
 .dv-badge--danger {
   background-color: var(--color-danger-subtle);
   color: var(--color-danger);
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  border: 1px solid rgba(220, 38, 38, 0.25);
 }

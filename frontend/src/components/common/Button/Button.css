@@ -46,14 +46,14 @@
 /* Variants */
 .dv-btn--primary {
   background: var(--gradient-ai);
-  color: var(--color-surface);
-  box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.35);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px 0 rgba(1, 90, 71, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 .dv-btn--primary:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px 0 rgba(99, 102, 241, 0.45);
-  filter: brightness(1.05);
+  box-shadow: 0 6px 20px 0 rgba(1, 90, 71, 0.45);
+  filter: brightness(1.08);
 }
 .dv-btn--primary:active:not(:disabled) {
   transform: translateY(0);
@@ -67,7 +67,8 @@
 }
 .dv-btn--secondary:hover:not(:disabled) {
   background-color: var(--color-surface-hover);
-  border-color: var(--color-border-hover);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
 }
@@ -93,11 +94,11 @@
 
 .dv-btn--danger {
   background-color: var(--color-danger);
-  color: var(--color-surface);
-  box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.3);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px 0 rgba(220, 38, 38, 0.3);
 }
 .dv-btn--danger:hover:not(:disabled) {
-  background-color: #DC2626;
+  background-color: #B91C1C;
   transform: translateY(-1px);
 }
 
