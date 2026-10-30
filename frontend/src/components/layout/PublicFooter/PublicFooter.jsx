@@ -8,7 +8,7 @@ export default function PublicFooter() {
     <footer className="dv-public-footer">
       <div className="dv-public-footer__container">
         <div className="dv-public-footer__brand">
-          <DocVaultLogo height={28} />
+          <DocVaultLogo height={38} />
           <p className="dv-public-footer__tagline">
             Secure, Organize, Stay Ahead. Your sovereign intelligent personal document vault.
           </p>
@@ -39,9 +39,9 @@ export default function PublicFooter() {
         </div>
 
         <div className="dv-public-footer__socials">
-          <span style={{ fontSize: '13px', color: '#64748B', fontWeight: 600 }}>𝕏</span>
-          <span style={{ fontSize: '13px', color: '#64748B', fontWeight: 600 }}>in</span>
-          <span style={{ fontSize: '13px', color: '#64748B', fontWeight: 600 }}>gh</span>
+          <span style={{ fontSize: '15px', color: '#64748B', fontWeight: 700 }}>𝕏</span>
+          <span style={{ fontSize: '15px', color: '#64748B', fontWeight: 700 }}>in</span>
+          <span style={{ fontSize: '15px', color: '#64748B', fontWeight: 700 }}>gh</span>
         </div>
       </div>
 

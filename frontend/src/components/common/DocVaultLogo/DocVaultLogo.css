@@ -1,7 +1,7 @@
 .dv-brand-logo {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   text-decoration: none;
   user-select: none;
 }
@@ -9,6 +9,11 @@
 .dv-brand-logo__img {
   object-fit: contain;
   display: block;
+  transition: transform 0.2s ease;
+}
+
+.dv-brand-logo:hover .dv-brand-logo__img {
+  transform: scale(1.05);
 }
 
 .dv-brand-logo__text {

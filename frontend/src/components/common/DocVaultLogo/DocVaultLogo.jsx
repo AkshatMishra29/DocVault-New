@@ -1,9 +1,9 @@
 import React from 'react';
-import LogoImg from '../../../assets/Logo.png';
+import LogoImg from '../../../assets/logoDV.png';
 import './DocVaultLogo.css';
 
 export default function DocVaultLogo({ 
-  height = 36, 
+  height = 46, 
   variant = 'default', // 'default' (dark text), 'light' (white text), 'icon-only'
   className = '' 
 }) {
@@ -16,7 +16,7 @@ export default function DocVaultLogo({
         className="dv-brand-logo__img" 
       />
       {variant !== 'icon-only' && (
-        <span className="dv-brand-logo__text" style={{ fontSize: `${Math.round(height * 0.62)}px` }}>
+        <span className="dv-brand-logo__text" style={{ fontSize: `${Math.round(height * 0.58)}px` }}>
           Doc<span className="dv-brand-logo__accent">Vault</span>
         </span>
       )}

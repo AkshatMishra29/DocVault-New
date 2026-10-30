@@ -9,7 +9,7 @@ export default function PublicNavbar() {
     <header className="dv-public-nav">
       <div className="dv-public-nav__container">
         <Link to="/" className="dv-public-nav__logo">
-          <DocVaultLogo height={32} />
+          <DocVaultLogo height={44} />
         </Link>
 
         <nav className="dv-public-nav__links">
@@ -26,7 +26,7 @@ export default function PublicNavbar() {
           </Link>
           <Link to="/register" className="dv-public-nav__btn-primary">
             <span>Get Started</span>
-            <ArrowRight size={15} />
+            <ArrowRight size={16} />
           </Link>
         </div>
       </div>
