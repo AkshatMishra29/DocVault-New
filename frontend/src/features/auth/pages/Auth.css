@@ -1,38 +1,43 @@
 /* ==========================================================================
-   DOCVAULT AUTHENTICATION (LANDING PALETTE: EMERALD GREEN, SLATE BLACK, WHITE)
+   DOCVAULT AUTHENTICATION (NO-SCROLL 100VH COMPACT FIT + AUTHENTIC FOLDER)
    ========================================================================== */
 
 .arcana-auth-page {
-  min-height: 100vh;
+  height: 100vh;
   width: 100vw;
   background-color: var(--color-bg); /* #FAFCFB */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 24px;
+  padding: 0;
+  margin: 0;
+  overflow: hidden; /* Prevents window scrollbar entirely */
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   box-sizing: border-box;
 }
 
 .arcana-auth-wrapper {
   width: 100%;
-  max-width: 1300px;
-  min-height: 820px;
+  max-width: 1360px;
+  height: 100vh;
+  max-height: 900px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 56px;
+  gap: 48px;
+  padding: 24px 48px;
+  box-sizing: border-box;
 }
 
 /* --------------------------------------------------------------------------
-   LEFT FORM SIDE (LANDING PAGE CLEAN PALETTE)
+   LEFT FORM SIDE (COMPACT, PRECISE ALIGNMENT)
    -------------------------------------------------------------------------- */
 .arcana-form-side {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 24px;
+  height: 100%;
 }
 
 .arcana-form-content {
@@ -45,43 +50,43 @@
 .arcana-brand-logo {
   display: inline-flex;
   align-items: center;
-  margin-bottom: 36px;
+  margin-bottom: 24px;
   text-decoration: none;
 }
 
 .arcana-title {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 34px;
+  font-size: 30px;
   font-weight: 800;
   letter-spacing: -0.04em;
-  color: var(--color-text-primary); /* Slate Black #0F172A */
-  margin: 0 0 28px 0;
+  color: var(--color-text-primary);
+  margin: 0 0 20px 0;
 }
 
 .arcana-alert-error {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 8px;
   background-color: var(--color-danger-subtle);
   border: 1px solid rgba(220, 38, 38, 0.25);
   color: var(--color-danger);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 .arcana-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .arcana-field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .arcana-label {
@@ -92,20 +97,20 @@
 }
 
 .arcana-input-wrap {
-  height: 48px;
-  background-color: var(--color-surface); /* Pure White */
+  height: 44px;
+  background-color: var(--color-surface);
   border: 1.5px solid var(--color-border);
   border-radius: 10px;
   display: flex;
   align-items: center;
-  padding: 0 16px;
-  gap: 12px;
+  padding: 0 14px;
+  gap: 10px;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .arcana-input-wrap:focus-within {
-  border-color: var(--color-primary); /* #015A47 */
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(1, 90, 71, 0.15);
 }
 
@@ -125,7 +130,7 @@
   border: none;
   background: transparent;
   outline: none;
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--color-text-primary);
   font-family: 'Inter', sans-serif;
 }
@@ -138,8 +143,7 @@
 .arcana-remember-wrap {
   display: flex;
   align-items: center;
-  margin-top: 2px;
-  margin-bottom: 6px;
+  margin: 2px 0 4px;
 }
 
 .arcana-checkbox-label {
@@ -160,8 +164,8 @@
 }
 
 .arcana-custom-checkbox {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   border: 1.5px solid #CBD5E1;
   border-radius: 4px;
   background-color: #FFFFFF;
@@ -171,15 +175,15 @@
 }
 
 .arcana-checkbox-label input:checked ~ .arcana-custom-checkbox {
-  background-color: var(--color-primary); /* Emerald Green */
+  background-color: var(--color-primary);
   border-color: var(--color-primary);
 }
 
 .arcana-checkbox-label input:checked ~ .arcana-custom-checkbox::after {
   content: "";
   position: absolute;
-  left: 4.5px;
-  top: 1.5px;
+  left: 4px;
+  top: 1px;
   width: 4px;
   height: 8px;
   border: solid white;
@@ -188,20 +192,20 @@
 }
 
 .arcana-checkbox-text {
-  font-size: 13px;
+  font-size: 12.5px;
   color: #475569;
   font-weight: 500;
 }
 
-/* Action Button: Emerald Green from Landing Page */
+/* Action Button */
 .arcana-submit-btn {
-  height: 48px;
-  background-color: var(--color-primary); /* #015A47 */
+  height: 44px;
+  background-color: var(--color-primary);
   color: #FFFFFF;
   border: none;
   border-radius: 10px;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -210,12 +214,13 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  margin-top: 4px;
 }
 
 .arcana-submit-btn:hover:not(:disabled) {
-  background-color: var(--color-primary-hover); /* #014335 */
+  background-color: var(--color-primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(1, 90, 71, 0.38);
+  box-shadow: 0 6px 18px rgba(1, 90, 71, 0.38);
 }
 
 .arcana-submit-btn:disabled {
@@ -224,12 +229,12 @@
 }
 
 .arcana-links-row {
-  margin-top: 20px;
-  font-size: 13px;
+  margin-top: 16px;
+  font-size: 12.5px;
 }
 
 .arcana-links-row.forgot {
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .arcana-links-text {
@@ -260,13 +265,13 @@
 .arcana-socials {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-top: 32px;
+  gap: 14px;
+  margin-top: 24px;
 }
 
 .arcana-social-btn {
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background-color: #FFFFFF;
   border: 1px solid var(--color-border);
@@ -275,7 +280,7 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
 .arcana-social-btn:hover {
@@ -285,22 +290,24 @@
 }
 
 /* --------------------------------------------------------------------------
-   RIGHT SIDE: DEEP SLATE BLACK CARD WITH STEPPED "FOLDER TAB" STRUCTURE
+   RIGHT SIDE: FIT CONTAINER WITH REAL AUTHENTIC FOLDER SILHOUETTE
    -------------------------------------------------------------------------- */
 .arcana-hero-side {
   flex: 1.15;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
 }
 
 .arcana-black-card {
   width: 100%;
-  max-width: 560px;
-  min-height: 780px;
+  max-width: 540px;
+  height: calc(100vh - 56px);
+  max-height: 800px;
   background: linear-gradient(170deg, #021a15 0%, #062b22 55%, #0B1120 100%);
-  border-radius: 40px;
-  padding: 48px 48px 44px;
+  border-radius: 36px;
+  padding: 36px 40px 32px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -308,18 +315,18 @@
   position: relative;
   overflow: hidden;
   box-shadow: 
-    0 30px 80px -20px rgba(1, 90, 71, 0.5),
+    0 25px 60px -15px rgba(1, 90, 71, 0.45),
     0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 /* Ambient Radial Emerald Light Streak */
 .arcana-light-streak {
   position: absolute;
-  top: -80px;
-  right: -80px;
-  width: 520px;
-  height: 380px;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.22) 0%, rgba(1, 90, 71, 0.08) 50%, transparent 70%);
+  top: -60px;
+  right: -60px;
+  width: 460px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, rgba(1, 90, 71, 0.08) 50%, transparent 70%);
   pointer-events: none;
 }
 
@@ -328,94 +335,89 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 0;
   position: relative;
   z-index: 2;
 }
 
 .arcana-monolith-svg {
-  width: 250px;
-  height: 220px;
-  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.9));
+  width: 210px;
+  height: 180px;
+  filter: drop-shadow(0 16px 25px rgba(0, 0, 0, 0.85));
 }
 
 .arcana-card-copy {
   position: relative;
   z-index: 2;
-  margin: 20px 0 28px;
+  margin: 12px 0 18px;
 }
 
 .arcana-brand-pill {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  color: #34D399; /* Mint Emerald */
-  margin-bottom: 12px;
+  color: #34D399;
+  margin-bottom: 8px;
   display: block;
   letter-spacing: -0.01em;
 }
 
 .arcana-welcome-heading {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 27px;
+  font-size: 24px;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: #FFFFFF;
-  margin: 0 0 10px 0;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
 }
 
 .arcana-welcome-desc {
-  font-size: 13.5px;
+  font-size: 13px;
   color: #94A3B8;
-  line-height: 1.6;
-  margin: 0 0 16px 0;
-  max-width: 460px;
+  line-height: 1.55;
+  margin: 0 0 12px 0;
+  max-width: 450px;
 }
 
 .arcana-stats-line {
-  font-size: 13px;
-  color: #6EE7B7; /* Light Mint */
+  font-size: 12px;
+  color: #6EE7B7;
   font-weight: 600;
   display: block;
 }
 
 /* --------------------------------------------------------------------------
-   STEPPED FOLDER-TAB LIKE BOTTOM STRUCTURE
+   AUTHENTIC FOLDER SILHOUETTE (INHERENT FOLDER TAB CUTOUT)
    -------------------------------------------------------------------------- */
-.arcana-folder-card {
+.arcana-authentic-folder {
   position: relative;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Folder tab notch at the top of the card */
-.arcana-folder-tab-notch {
-  width: 140px;
-  height: 14px;
-  background: #142E27;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+  width: 100%;
+  /* Folder tab notch at the top right/left */
+  clip-path: polygon(
+    0% 28px,
+    180px 28px,
+    215px 0%,
+    100% 0%,
+    100% 100%,
+    0% 100%
+  );
+  background: linear-gradient(145deg, #122822 0%, #0d1e19 100%);
+  border-radius: 20px;
+  padding: 38px 24px 22px; /* Top space for tab angle */
+  box-shadow: 
+    0 12px 30px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(52, 211, 153, 0.25);
+  box-sizing: border-box;
   border: 1px solid rgba(52, 211, 153, 0.2);
-  border-bottom: none;
-  margin-left: 20px;
-  position: relative;
-  bottom: -1px;
 }
 
 .arcana-folder-content {
-  background: linear-gradient(145deg, #122822 0%, #0d1e19 100%);
-  border: 1px solid rgba(52, 211, 153, 0.22);
-  border-radius: 22px;
-  border-top-left-radius: 0;
-  padding: 24px 24px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 20px;
-  box-shadow: 
-    0 12px 35px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  gap: 16px;
 }
 
 .arcana-folder-left {
@@ -424,19 +426,19 @@
 
 .arcana-folder-left h3 {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 17px;
+  font-size: 15.5px;
   font-weight: 800;
   color: #FFFFFF;
   letter-spacing: -0.02em;
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
   line-height: 1.3;
 }
 
 .arcana-folder-left p {
-  font-size: 12.5px;
-  color: #A7F3D0; /* Pale Mint */
+  font-size: 12px;
+  color: #A7F3D0;
   opacity: 0.85;
-  line-height: 1.5;
+  line-height: 1.45;
   margin: 0;
 }
 
@@ -448,12 +450,12 @@
 }
 
 .arcana-avatar-img {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #0d1e19;
-  margin-left: -10px;
+  margin-left: -9px;
 }
 
 .arcana-avatar-img:first-child {
@@ -461,56 +463,60 @@
 }
 
 .arcana-avatar-badge {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background-color: var(--color-primary);
   color: #34D399;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 2px solid #0d1e19;
-  margin-left: -10px;
+  margin-left: -9px;
 }
 
 /* --------------------------------------------------------------------------
-   RESPONSIVE BREAKPOINTS
+   RESPONSIVE BREAKPOINTS (NO-SCROLL PRESERVED)
    -------------------------------------------------------------------------- */
 @media (max-width: 1024px) {
+  .arcana-auth-page {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+    padding: 32px 20px;
+  }
+
   .arcana-auth-wrapper {
+    height: auto;
+    max-height: none;
     flex-direction: column-reverse;
     justify-content: center;
-    gap: 36px;
+    gap: 32px;
+    padding: 0;
   }
 
   .arcana-hero-side {
     width: 100%;
+    height: auto;
   }
 
   .arcana-black-card {
-    max-width: 500px;
-    min-height: auto;
-    padding: 36px 32px 32px;
-    border-radius: 28px;
+    height: auto;
+    max-height: none;
+    max-width: 480px;
+    padding: 32px 28px;
+    border-radius: 26px;
   }
 
   .arcana-monolith-svg {
-    width: 190px;
-    height: 160px;
+    width: 170px;
+    height: 145px;
   }
 }
 
 @media (max-width: 480px) {
-  .arcana-auth-page {
-    padding: 20px 14px;
-  }
-
-  .arcana-black-card {
-    padding: 28px 20px 24px;
-  }
-
   .arcana-folder-content {
     flex-direction: column;
     align-items: flex-start;

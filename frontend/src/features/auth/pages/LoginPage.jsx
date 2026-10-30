@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Mail, Lock, AlertCircle, ArrowRight, FolderLock } from "lucide-react";
+import { Mail, Lock, AlertCircle, ArrowRight } from "lucide-react";
 import DocVaultLogo from "../../../components/common/DocVaultLogo/DocVaultLogo";
 import "./Auth.css";
 
@@ -47,14 +47,14 @@ export default function LoginPage() {
           <div className="arcana-form-content">
             {/* Top Logo */}
             <Link to="/" className="arcana-brand-logo">
-              <DocVaultLogo height={44} />
+              <DocVaultLogo height={38} />
             </Link>
 
             <h1 className="arcana-title">Sign in</h1>
 
             {error && (
               <div className="arcana-alert-error">
-                <AlertCircle size={16} />
+                <AlertCircle size={15} />
                 <span>{error}</span>
               </div>
             )}
@@ -63,7 +63,7 @@ export default function LoginPage() {
               <div className="arcana-field">
                 <label className="arcana-label">Email Address</label>
                 <div className="arcana-input-wrap">
-                  <Mail size={16} className="arcana-input-icon" />
+                  <Mail size={15} className="arcana-input-icon" />
                   <input
                     type="email"
                     name="email"
@@ -78,7 +78,7 @@ export default function LoginPage() {
               <div className="arcana-field">
                 <label className="arcana-label">Password</label>
                 <div className="arcana-input-wrap">
-                  <Lock size={16} className="arcana-input-icon" />
+                  <Lock size={15} className="arcana-input-icon" />
                   <input
                     type="password"
                     name="password"
@@ -108,7 +108,7 @@ export default function LoginPage() {
                 disabled={loading}
               >
                 <span>{loading ? "Signing in..." : "Sign In"}</span>
-                <ArrowRight size={16} />
+                <ArrowRight size={15} />
               </button>
             </form>
 
@@ -123,7 +123,7 @@ export default function LoginPage() {
             {/* Social Logins */}
             <div className="arcana-socials">
               <button type="button" className="arcana-social-btn" aria-label="Google sign in">
-                <svg width="20" height="20" viewBox="0 0 24 24">
+                <svg width="18" height="18" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
@@ -132,13 +132,13 @@ export default function LoginPage() {
               </button>
 
               <button type="button" className="arcana-social-btn" aria-label="GitHub sign in">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#0F172A">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#0F172A">
                   <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
                 </svg>
               </button>
 
               <button type="button" className="arcana-social-btn" aria-label="Facebook sign in">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877F2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
               </button>
@@ -146,7 +146,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Right Side: Deep Emerald & Slate Black Card with 3D Monolith & Stepped Folder Card */}
+        {/* Right Side: Deep Emerald & Slate Black Card with Realistic Folder Tab Shape */}
         <div className="arcana-hero-side">
           <div className="arcana-black-card">
             {/* Ambient Lighting */}
@@ -171,19 +171,14 @@ export default function LoginPage() {
                     <stop offset="100%" stop-color="#014D3D" stop-opacity="0.8" />
                   </linearGradient>
                   <filter id="monolithGlowGreen" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="0" dy="16" stdDeviation="22" flood-color="#01362B" flood-opacity="0.8" />
+                    <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#01362B" flood-opacity="0.8" />
                   </filter>
                 </defs>
                 <g filter="url(#monolithGlowGreen)">
-                  {/* Left Facet */}
                   <path d="M160 20L45 220H108L160 115L160 20Z" fill="url(#monolithEmeraldLeft)" />
-                  {/* Right Facet */}
                   <path d="M160 20L275 220H212L160 115L160 20Z" fill="url(#monolithEmeraldRight)" />
-                  {/* Crossbar Platform */}
                   <path d="M88 185H232L212 220H108L88 185Z" fill="#022C22" />
-                  {/* Inner Triangle Core Glow */}
                   <polygon points="160,115 118,185 202,185" fill="url(#monolithInner)" />
-                  {/* Inner Accent Spark */}
                   <polygon points="160,145 142,185 178,185" fill="#10B981" fill-opacity="0.55" />
                 </g>
               </svg>
@@ -194,21 +189,19 @@ export default function LoginPage() {
               <span className="arcana-brand-pill">DocVault</span>
               <h2 className="arcana-welcome-heading">Welcome to DocVault</h2>
               <p className="arcana-welcome-desc">
-                DocVault helps individuals & teams build organized and bank-grade encrypted vaults full of automated OCR modules. Join us and start securing your documents today.
+                DocVault helps individuals & teams build organized, bank-grade encrypted vaults with automated OCR extraction.
               </p>
               <span className="arcana-stats-line">More than 17k people joined us, it’s your turn</span>
             </div>
 
-            {/* Stepped "Folder Tab" Like Bottom Structure */}
-            <div className="arcana-folder-card">
-              <div className="arcana-folder-tab-notch"></div>
+            {/* Authentic Folder Silhouette (Single Path Stepped Tab Shape) */}
+            <div className="arcana-authentic-folder">
               <div className="arcana-folder-content">
                 <div className="arcana-folder-left">
                   <h3>Get your private vault and right place for documents</h3>
-                  <p>Be among the first custodians to experience the easiest way to organize a life.</p>
+                  <p>Be among the first custodians to experience sovereign file organization.</p>
                 </div>
 
-                {/* Stacked Member Avatars */}
                 <div className="arcana-avatar-stack">
                   <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80" alt="Member" className="arcana-avatar-img" />
                   <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&q=80" alt="Member" className="arcana-avatar-img" />
