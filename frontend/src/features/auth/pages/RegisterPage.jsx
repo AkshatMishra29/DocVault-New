@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { User, Mail, Lock, Phone, KeyRound, ShieldCheck, ArrowRight, AlertCircle } from "lucide-react";
+import { User, Mail, Lock, Phone, KeyRound, ShieldCheck, ArrowRight, AlertCircle, Sparkles, CheckCircle2 } from "lucide-react";
 import logoLight from "../../../assets/brand/docvault-logo.svg";
+import logoDark from "../../../assets/brand/docvault-logo-dark.svg";
 import Button from "../../../components/common/Button/Button";
 import Input from "../../../components/common/Input/Input";
 import Card from "../../../components/common/Card/Card";
@@ -53,105 +54,153 @@ export default function RegisterPage() {
 
   return (
     <div className="dv-auth-page">
-      <div className="dv-auth-container">
-        <div className="dv-auth-brand">
-          <Link to="/">
-            <img src={logoLight} alt="DocVault" height="38" />
-          </Link>
-          <p className="dv-auth-tagline">Create your private document vault</p>
+      <div className="dv-auth-split">
+        {/* Left Side: Brand Value Proposition */}
+        <div className="dv-auth-banner">
+          <div className="dv-auth-banner__header">
+            <Link to="/">
+              <img src={logoDark} alt="DocVault" height="42" />
+            </Link>
+          </div>
+
+          <div className="dv-auth-banner__content">
+            <div className="dv-auth-banner__badge">
+              <Sparkles size={14} /> Instant Smart Provisioning
+            </div>
+            <h1 className="dv-auth-banner__title">
+              Your AI Custodian<br />
+              <span className="dv-auth-banner__title-accent">Ready in under 2 minutes.</span>
+            </h1>
+            <p className="dv-auth-banner__desc">
+              Create your sovereign personal vault. Organize legal certificates, tax forms, passports, and warranties with automated expiry alerts.
+            </p>
+
+            <div className="dv-auth-banner__features">
+              <div className="dv-auth-banner__feature">
+                <div className="dv-auth-banner__feature-icon">
+                  <CheckCircle2 size={16} />
+                </div>
+                <span>Two-factor vault architecture with secondary unlock PIN</span>
+              </div>
+              <div className="dv-auth-banner__feature">
+                <div className="dv-auth-banner__feature-icon">
+                  <CheckCircle2 size={16} />
+                </div>
+                <span>Auto-indexing OCR pipeline using Tesseract & Sharp</span>
+              </div>
+              <div className="dv-auth-banner__feature">
+                <div className="dv-auth-banner__feature-icon">
+                  <CheckCircle2 size={16} />
+                </div>
+                <span>Semantic AI Q&A powered by Groq LLaMA 3.3 70B</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="dv-auth-banner__footer">
+            DocVault Platform © 2026. AES-256 encrypted at rest & in transit.
+          </div>
         </div>
 
-        <Card padding="lg" className="dv-auth-card">
-          <div className="dv-auth-card__header">
-            <h2 className="dv-auth-card__title">Create Your Vault</h2>
-            <p className="dv-auth-card__subtitle">Zero-knowledge document management with dual-tier security</p>
-          </div>
-
-          {error && (
-            <div className="dv-auth-error">
-              <AlertCircle size={16} className="dv-auth-error__icon" />
-              <span>{error}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="dv-auth-form">
-            <Input
-              label="Full Name"
-              type="text"
-              icon={User}
-              placeholder="Alex Henderson"
-              value={formData.name}
-              onChange={(e) => handleChange("name", e.target.value)}
-              required
-            />
-
-            <Input
-              label="Email Address"
-              type="email"
-              icon={Mail}
-              placeholder="alex@example.com"
-              value={formData.email}
-              onChange={(e) => handleChange("email", e.target.value)}
-              required
-            />
-
-            <Input
-              label="Password"
-              type="password"
-              icon={Lock}
-              placeholder="Minimum 8 characters"
-              value={formData.password}
-              onChange={(e) => handleChange("password", e.target.value)}
-              required
-            />
-
-            <Input
-              label="Vault Unlock PIN (4 to 6 Digits)"
-              type="password"
-              inputMode="numeric"
-              maxLength={6}
-              icon={KeyRound}
-              placeholder="••••"
-              value={formData.pin}
-              onChange={(e) => handleChange("pin", e.target.value.replace(/\D/g, ""))}
-              required
-            />
-
-            <Input
-              label="Phone Number (Optional)"
-              type="tel"
-              icon={Phone}
-              placeholder="+1 (555) 000-0000"
-              value={formData.phone}
-              onChange={(e) => handleChange("phone", e.target.value)}
-            />
-
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              loading={loading}
-              icon={ArrowRight}
-              iconPosition="right"
-              className="dv-auth-submit-btn"
-            >
-              Initialize Vault
-            </Button>
-          </form>
-
-          <div className="dv-auth-footer">
-            <p>
-              Already registered?{" "}
-              <Link to="/login" className="dv-auth-link">
-                Sign In
+        {/* Right Side: Registration Form */}
+        <div className="dv-auth-main">
+          <div className="dv-auth-box dv-auth-box--wide">
+            <div className="dv-auth-box__mobile-header">
+              <Link to="/">
+                <img src={logoLight} alt="DocVault" height="38" />
               </Link>
-            </p>
-          </div>
-        </Card>
+            </div>
 
-        <div className="dv-auth-security-notice">
-          <ShieldCheck size={16} color="#059669" />
-          <span>Your PIN encrypts your quick-unlock session and is never stored in plain text.</span>
+            <Card padding="lg" className="dv-auth-card">
+              <div className="dv-auth-card__header">
+                <h2 className="dv-auth-card__title">Create Account</h2>
+                <p className="dv-auth-card__subtitle">Set up your credentials and secondary security PIN</p>
+              </div>
+
+              {error && (
+                <div className="dv-auth-error">
+                  <AlertCircle size={16} className="dv-auth-error__icon" />
+                  <span>{error}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="dv-auth-form">
+                <div className="dv-auth-form-row">
+                  <Input
+                    label="Full Name"
+                    name="name"
+                    value={formData.name}
+                    onChange={(e) => handleChange("name", e.target.value)}
+                    placeholder="Alex Hunter"
+                    icon={User}
+                    required
+                  />
+
+                  <Input
+                    label="Phone Number"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={(e) => handleChange("phone", e.target.value)}
+                    placeholder="+1 (555) 000-0000"
+                    icon={Phone}
+                  />
+                </div>
+
+                <Input
+                  label="Email Address"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={(e) => handleChange("email", e.target.value)}
+                  placeholder="alex.hunter@example.com"
+                  icon={Mail}
+                  required
+                />
+
+                <Input
+                  label="Master Password"
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={(e) => handleChange("password", e.target.value)}
+                  placeholder="Min 8 characters"
+                  icon={Lock}
+                  required
+                />
+
+                <Input
+                  label="Vault Security PIN (4-6 Digits)"
+                  type="password"
+                  name="pin"
+                  maxLength={6}
+                  value={formData.pin}
+                  onChange={(e) => handleChange("pin", e.target.value.replace(/\D/g, ""))}
+                  placeholder="••••"
+                  icon={KeyRound}
+                  required
+                />
+
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  loading={loading}
+                  icon={ArrowRight}
+                  iconPosition="right"
+                >
+                  Create Secure Vault
+                </Button>
+              </form>
+
+              <div className="dv-auth-card__footer">
+                <span>Already have an account?</span>
+                <Link to="/login" className="dv-auth-link">
+                  Sign In
+                </Link>
+              </div>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

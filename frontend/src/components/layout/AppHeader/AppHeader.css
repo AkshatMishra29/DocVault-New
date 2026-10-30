@@ -1,11 +1,16 @@
 .dv-app-header {
-  height: 68px;
-  background-color: var(--color-surface-white);
+  height: 72px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
   padding: 0 var(--space-8);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
 }
 
 .dv-app-header__title-group {
@@ -14,9 +19,11 @@
 }
 
 .dv-app-header__title {
+  font-family: var(--font-heading);
   font-size: var(--text-lg);
   font-weight: var(--font-bold);
   color: var(--color-text-primary);
+  letter-spacing: -0.02em;
 }
 
 .dv-app-header__subtitle {
@@ -35,12 +42,13 @@
   align-items: center;
   gap: var(--space-2);
   padding: 6px var(--space-3);
-  background-color: var(--color-surface-secondary);
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
 }
 
 .dv-app-header__shield-icon {
-  color: var(--color-primary-blue);
+  color: var(--color-primary);
 }
 
 .dv-app-header__user-email {
@@ -58,4 +66,3 @@
     display: none;
   }
 }
-
