@@ -43,7 +43,7 @@ export default function LandingPage() {
                 <ArrowRight size={16} />
               </Link>
               <Link to="/login" className="dv-m-btn-secondary">
-                <span>Unlock Vault</span>
+                <span>Sign In</span>
                 <KeyRound size={15} />
               </Link>
             </div>
@@ -467,6 +467,61 @@ export default function LandingPage() {
                   <p>Encrypted multi-region infrastructure</p>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. OPTIMIZED FAQS SECTION */}
+      <section className="dv-m-faq" id="faq" style={{ padding: "80px 24px", background: "#f8fafc", borderTop: "1px solid #e2e8f0" }}>
+        <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "#015A47", textTransform: "uppercase", letterSpacing: "1px" }}>
+              Frequently Asked Questions
+            </span>
+            <h2 style={{ fontSize: "32px", fontWeight: 800, color: "#0f172a", marginTop: "8px" }}>
+              Everything you need to know about DocVault
+            </h2>
+            <p style={{ color: "#64748b", fontSize: "16px", marginTop: "8px" }}>
+              Learn how our zero-knowledge architecture, OCR extraction, and biometric protection keep your records secure.
+            </p>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(420px, 1fr))", gap: "24px" }}>
+            <div style={{ background: "#ffffff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0", boxShadow: "0 2px 4px rgba(0,0,0,0.03)" }}>
+              <h4 style={{ fontSize: "17px", fontWeight: 700, color: "#0f172a", marginBottom: "8px" }}>
+                🔒 How does the Two-Tier Vault PIN security work?
+              </h4>
+              <p style={{ fontSize: "14px", color: "#475569", lineHeight: 1.6, margin: 0 }}>
+                DocVault uses a two-step defense: Step 1 verifies your master account credentials or Google OAuth. Step 2 requires your personal 4 or 6-digit Vault PIN or hardware biometrics (Touch ID / Fingerprint) before granting access to encrypted files.
+              </p>
+            </div>
+
+            <div style={{ background: "#ffffff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0", boxShadow: "0 2px 4px rgba(0,0,0,0.03)" }}>
+              <h4 style={{ fontSize: "17px", fontWeight: 700, color: "#0f172a", marginBottom: "8px" }}>
+                📄 What document formats are supported by automated OCR?
+              </h4>
+              <p style={{ fontSize: "14px", color: "#475569", lineHeight: 1.6, margin: 0 }}>
+                DocVault supports multi-page PDFs, scanned images, photos (PNG, JPG, WebP), and receipts. Our Sharp image normalization pipeline and fallback OCR extract text and detect renewal deadlines automatically.
+              </p>
+            </div>
+
+            <div style={{ background: "#ffffff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0", boxShadow: "0 2px 4px rgba(0,0,0,0.03)" }}>
+              <h4 style={{ fontSize: "17px", fontWeight: 700, color: "#0f172a", marginBottom: "8px" }}>
+                🛡️ What happens if someone tries to guess my PIN?
+              </h4>
+              <p style={{ fontSize: "14px", color: "#475569", lineHeight: 1.6, margin: 0 }}>
+                DocVault enforces an automated 5-minute brute-force lockout after 5 consecutive incorrect PIN attempts, disabling keypad inputs and logging the security event in your immutable audit trail.
+              </p>
+            </div>
+
+            <div style={{ background: "#ffffff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0", boxShadow: "0 2px 4px rgba(0,0,0,0.03)" }}>
+              <h4 style={{ fontSize: "17px", fontWeight: 700, color: "#0f172a", marginBottom: "8px" }}>
+                📱 Does DocVault automatically lock when my device sleeps?
+              </h4>
+              <p style={{ fontSize: "14px", color: "#475569", lineHeight: 1.6, margin: 0 }}>
+                Yes. If your phone sleeps, your laptop lid closes, or your session is left resting for over 10 minutes, the auto-lock engine returns the vault to the PIN challenge to protect against unauthorized physical access.
+              </p>
             </div>
           </div>
         </div>

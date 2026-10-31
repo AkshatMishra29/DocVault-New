@@ -348,18 +348,20 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('dv_last_activity_time');
   };
 
-  // Full Logout (clears all session & remembered credentials, returns to email/pass login)
+  // Full Logout (clears session, but stores last email so PIN / biometric flow functions properly)
   const logout = () => {
+    const lastEmail = user?.email || pendingEmail;
     setUser(null);
     setToken(null);
-    setPendingEmail('');
     setIsVaultUnlocked(false);
     localStorage.removeItem('docvault_user');
     localStorage.removeItem('docvault_token');
     localStorage.removeItem('token');
     sessionStorage.removeItem('docvault_unlocked');
-    sessionStorage.removeItem('docvault_pending_email');
-    sessionStorage.removeItem('docvault_pin_length');
+    if (lastEmail) {
+      setPendingEmail(lastEmail);
+      sessionStorage.setItem('docvault_pending_email', lastEmail);
+    }
   };
 
   return (

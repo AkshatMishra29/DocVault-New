@@ -163,6 +163,38 @@ export default function MorePage() {
               </span>
             </div>
 
+            {/* Dark Mode Theme Toggle */}
+            <div className="dv-setting-row dv-setting-row--toggle">
+              <div>
+                <span className="dv-setting-label" style={{ display: 'block', fontWeight: 'var(--font-medium)', color: 'var(--color-text-primary)' }}>
+                  Dark Mode Theme
+                </span>
+                <span className="dv-setting-sublabel" style={{ display: 'block', fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
+                  Switch between Dark and Light mode for mobile and desktop
+                </span>
+              </div>
+              <div className="dv-setting-val">
+                <button
+                  type="button"
+                  className={`dv-toggle-switch ${document.documentElement.getAttribute("data-theme") === "dark" ? "dv-toggle-switch--active" : ""}`}
+                  onClick={() => {
+                    const current = document.documentElement.getAttribute("data-theme");
+                    const next = current === "dark" ? "light" : "dark";
+                    document.documentElement.setAttribute("data-theme", next);
+                    localStorage.setItem("docvault_theme", next);
+                    // trigger re-render
+                    setSingleSession(s => !s);
+                    setTimeout(() => setSingleSession(s => !s), 0);
+                  }}
+                  role="switch"
+                  aria-checked={document.documentElement.getAttribute("data-theme") === "dark"}
+                  title="Toggle dark mode theme"
+                >
+                  <span className="dv-toggle-thumb" />
+                </button>
+              </div>
+            </div>
+
             {/* Single Session Only Toggle */}
             <div className="dv-setting-row dv-setting-row--toggle">
               <div>
@@ -248,23 +280,6 @@ export default function MorePage() {
                     Add Fingerprint
                   </Button>
                 )}
-              </div>
-            </div>
-
-            {/* DocVault Shield Link */}
-            <div className="dv-setting-row" style={{ marginTop: '0.75rem', padding: '0.75rem', background: 'rgba(56, 189, 248, 0.08)', borderRadius: '0.5rem', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
-              <div>
-                <span className="dv-setting-label" style={{ display: 'block', fontWeight: 'var(--font-medium)', color: '#38bdf8' }}>
-                  🛡️ DocVault Shield Security Center
-                </span>
-                <span className="dv-setting-sublabel" style={{ display: 'block', fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
-                  Check password entropy, HIBP breach detection, and evaluate 4/6-digit PIN strength locally.
-                </span>
-              </div>
-              <div className="dv-setting-val">
-                <Link to="/shield" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#38bdf8', fontSize: '0.875rem', textDecoration: 'none', fontWeight: 600 }}>
-                  Open Shield <ChevronRight size={16} />
-                </Link>
               </div>
             </div>
 

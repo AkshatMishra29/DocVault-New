@@ -5,6 +5,7 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   passwordHash: { type: String, required: true },
   pinHash: { type: String, required: true }, // 4-to-6 digit quick unlock PIN
+  pinLength: { type: Number, default: 4 },    // 4 or 6 digit preference
   failedAttempts: { type: Number, default: 0 },
   lockUntil: { type: Date, default: null },
   phone: { type: String },

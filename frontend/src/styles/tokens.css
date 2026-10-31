@@ -93,3 +93,21 @@
   --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+[data-theme="dark"] {
+  --color-bg: #090D16;
+  --color-surface: #0F172A;
+  --color-surface-white: #0F172A;
+  --color-surface-hover: #1E293B;
+  --color-surface-secondary: #1E293B;
+  --color-surface-tertiary: #334155;
+  --color-border: #1E293B;
+  --color-border-subtle: #1E293B;
+  --color-border-hover: #334155;
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
+  --glass-bg: rgba(15, 23, 42, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+

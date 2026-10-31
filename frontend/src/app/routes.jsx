@@ -16,7 +16,6 @@ import AssetsPage from "../features/assets/AssetsPage";
 import DeadlinesPage from "../features/deadlines/DeadlinesPage";
 import UploadPage from "../features/upload/UploadPage";
 import MorePage from "../features/dashboard/MorePage";
-import DocVaultShieldPage from "../features/shield/DocVaultShieldPage";
 
 export function AppRoutes() {
   return (
@@ -54,7 +53,6 @@ export function AppRoutes() {
         <Route path="/assets" element={<AssetsPage />} />
         <Route path="/deadlines" element={<DeadlinesPage />} />
         <Route path="/upload" element={<UploadPage />} />
-        <Route path="/shield" element={<DocVaultShieldPage />} />
         <Route path="/more" element={<MorePage />} />
       </Route>
 

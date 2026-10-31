@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { 
   getAuth, 
   GoogleAuthProvider, 
@@ -18,8 +18,8 @@ const firebaseConfig = {
   measurementId: "G-FR59SHRYDL"
 };
 
-// Initialize Firebase App
-const app = initializeApp(firebaseConfig);
+// Singleton App Initialization - guarantees default app exists across all modules
+export const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
 // Initialize Firebase Auth
 export const auth = getAuth(app);
@@ -79,4 +79,3 @@ export async function verifyEmailLinkSignIn() {
 }
 
 export default app;
-

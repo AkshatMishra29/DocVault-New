@@ -16,7 +16,6 @@ export default function PublicNavbar() {
           <a href="#features" className="dv-public-nav__link">Features</a>
           <a href="#how-it-works" className="dv-public-nav__link">How It Works</a>
           <a href="#security" className="dv-public-nav__link">Security</a>
-          <a href="#pricing" className="dv-public-nav__link">Pricing</a>
           <a href="#faq" className="dv-public-nav__link">FAQ</a>
         </nav>
 

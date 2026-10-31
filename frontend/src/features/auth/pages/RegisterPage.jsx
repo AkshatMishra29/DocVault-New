@@ -10,9 +10,11 @@ export default function RegisterPage() {
     name: "",
     email: "",
     password: "",
+    pinLength: 4, // 4 or 6 digits
     pin: "",
     phone: "",
   });
+  const [pinWarning, setPinWarning] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -21,6 +23,22 @@ export default function RegisterPage() {
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handlePinChange = (val) => {
+    const clean = val.replace(/\D/g, "").slice(0, Number(formData.pinLength));
+    handleChange("pin", clean);
+
+    // Heuristic warning (warns but does not block)
+    if (clean.length === Number(formData.pinLength)) {
+      if (["1234", "0000", "1111", "2580", "123456", "000000", "111111"].includes(clean)) {
+        setPinWarning("⚠️ Notice: This PIN is easily guessable. You can still proceed or choose a stronger PIN.");
+      } else {
+        setPinWarning("");
+      }
+    } else {
+      setPinWarning("");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -86,7 +104,7 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="arcana-field">
-                  <label className="arcana-label">Phone Number</label>
+                  <label className="arcana-label">Phone Number (Optional)</label>
                   <div className="arcana-input-wrap">
                     <Phone size={15} className="arcana-input-icon" />
                     <input
@@ -94,7 +112,7 @@ export default function RegisterPage() {
                       name="phone"
                       value={formData.phone}
                       onChange={(e) => handleChange("phone", e.target.value)}
-                      placeholder="+1 (555) 000-0000"
+                      placeholder="+1 (555) 000-0000 (optional)"
                     />
                   </div>
                 </div>
@@ -132,21 +150,56 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="arcana-field">
-                  <label className="arcana-label">Security PIN (4-6)</label>
-                  <div className="arcana-input-wrap">
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <label className="arcana-label" style={{ marginBottom: 0 }}>Security PIN</label>
+                    <select
+                      value={formData.pinLength}
+                      onChange={(e) => {
+                        const len = Number(e.target.value);
+                        setFormData(prev => ({ ...prev, pinLength: len, pin: prev.pin.slice(0, len) }));
+                      }}
+                      style={{
+                        background: "#0f172a",
+                        color: "#38bdf8",
+                        border: "1px solid #334155",
+                        borderRadius: "4px",
+                        fontSize: "11px",
+                        padding: "2px 6px",
+                        cursor: "pointer"
+                      }}
+                    >
+                      <option value={4}>4 Digits</option>
+                      <option value={6}>6 Digits</option>
+                    </select>
+                  </div>
+                  <div className="arcana-input-wrap" style={{ marginTop: "6px" }}>
                     <KeyRound size={15} className="arcana-input-icon" />
                     <input
                       type="password"
                       name="pin"
-                      maxLength={6}
+                      maxLength={formData.pinLength}
                       value={formData.pin}
-                      onChange={(e) => handleChange("pin", e.target.value.replace(/\D/g, ""))}
-                      placeholder="••••"
+                      onChange={(e) => handlePinChange(e.target.value)}
+                      placeholder={formData.pinLength === 6 ? "••••••" : "••••"}
                       required
                     />
                   </div>
                 </div>
               </div>
+
+              {pinWarning && (
+                <div style={{
+                  padding: "8px 12px",
+                  borderRadius: "6px",
+                  background: "rgba(234, 179, 8, 0.12)",
+                  border: "1px solid rgba(234, 179, 8, 0.3)",
+                  color: "#facc15",
+                  fontSize: "12px",
+                  marginBottom: "12px"
+                }}>
+                  {pinWarning}
+                </div>
+              )}
 
               <button
                 type="submit"

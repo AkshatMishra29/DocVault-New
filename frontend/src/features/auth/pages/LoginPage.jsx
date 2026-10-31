@@ -58,9 +58,9 @@ export default function LoginPage() {
 
     if (result.success) {
       if (result.requiresPin) {
-        navigate("/enter-pin", { state: { email } });
+        navigate("/enter-pin", { state: { email, pinLength: result.user?.pinLength || 4 } });
       } else {
-        navigate("/dashboard");
+        navigate("/enter-pin", { state: { email, pinLength: result.user?.pinLength || 4 } });
       }
     } else {
       setError(result.error || "Authentication failed. Please check your credentials.");
@@ -76,7 +76,8 @@ export default function LoginPage() {
       if (googleUser && googleUser.idToken) {
         const result = await loginWithFirebaseToken(googleUser.idToken);
         if (result.success) {
-          navigate("/enter-pin", { state: { email: googleUser.email } });
+          // ALWAYS ask for the PIN security challenge after Google OAuth
+          navigate("/enter-pin", { state: { email: googleUser.email, pinLength: result.user?.pinLength || 4 } });
         } else {
           setError(result.error || "Google sign-in succeeded, but vault sync failed.");
         }

@@ -20,7 +20,7 @@ export default function PublicFooter() {
             <a href="#features">Features</a>
             <a href="#how-it-works">How It Works</a>
             <a href="#security">Security</a>
-            <a href="#pricing">Pricing</a>
+            <a href="#faq">FAQ</a>
           </div>
 
           <div className="dv-public-footer__col">
