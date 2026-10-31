@@ -108,6 +108,7 @@ export async function answerDocumentQuery(question, contextDocs = [], contextAss
 Summary: ${doc.summary || 'N/A'}
 Key Details: ${JSON.stringify(doc.keyDetails || {})}
 Expiry Date: ${doc.expiryDate || 'N/A'}
+Full Extracted Content / Notes: ${doc.extractedText ? doc.extractedText.slice(0, 3000) : 'N/A'}
 `).join('\n---\n') : 'No documents found.';
 
   const assetContextString = contextAssets.length > 0 ? contextAssets.map((asset, idx) => `
@@ -140,15 +141,29 @@ ${question}
 `;
 
   try {
+    // Prefer powerful text model openai/gpt-oss-120b for Q&A, fallback to config model
+    const chatModel = 'openai/gpt-oss-120b';
     const response = await groq.chat.completions.create({
-      model: config.groq.model,
+      model: chatModel,
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.2,
+      max_tokens: 1000,
     });
 
     return response.choices[0].message.content;
   } catch (err) {
-    console.error('[Groq] Chat query failed:', err.message);
-    throw err;
+    console.warn(`[Groq] Chat query with primary model failed, trying fallback (${config.groq.model}):`, err.message);
+    try {
+      const response = await groq.chat.completions.create({
+        model: config.groq.model,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.2,
+        max_tokens: 600,
+      });
+      return response.choices[0].message.content;
+    } catch (fallbackErr) {
+      console.error('[Groq] Chat query failed:', fallbackErr.message);
+      throw fallbackErr;
+    }
   }
 }

@@ -126,6 +126,7 @@ router.post('/upload', requireAuth, upload.single('file'), async (req, res) => {
       sizeBytes: size,
       fileSizeFormatted: fileSizeFormatted,
       storagePath: 'mongodb-embedded',
+      extractedText: extractedText || '',
       summary: metadata.summary,
       keyDetails: sanitizeKeyDetails(metadata.keyDetails),
       tags: metadata.tags || [],

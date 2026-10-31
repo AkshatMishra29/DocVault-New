@@ -122,3 +122,45 @@
 .dv-audit-time {
   color: var(--color-text-muted);
 }
+
+/* Single Session Toggle Switch */
+.dv-setting-row--toggle {
+  align-items: center;
+  padding: var(--space-3) 0;
+}
+
+.dv-toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background-color: var(--color-border);
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  outline: none;
+  transition: background-color var(--transition-fast);
+  padding: 2px;
+}
+
+.dv-toggle-switch:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-primary-blue);
+}
+
+.dv-toggle-switch--active {
+  background-color: var(--color-primary-blue);
+}
+
+.dv-toggle-thumb {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: #FFFFFF;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform var(--transition-fast);
+}
+
+.dv-toggle-switch--active .dv-toggle-thumb {
+  transform: translateX(20px);
+}
+

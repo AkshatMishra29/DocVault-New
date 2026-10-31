@@ -32,12 +32,18 @@ export async function registerUser({ name, email, password, pin, phone }) {
     email,
     passwordHash,
     pinHash,
+    sessionVersion: 1,
+    singleSessionOnly: false,
     phone: phone || '',
   });
 
   await user.save();
 
-  const token = jwt.sign({ userId: user._id, email: user.email }, config.jwtSecret, { expiresIn: '7d' });
+  const token = jwt.sign(
+    { userId: user._id, email: user.email, sessionVersion: user.sessionVersion },
+    config.jwtSecret,
+    { expiresIn: '7d' }
+  );
 
   return {
     user: {
@@ -46,6 +52,8 @@ export async function registerUser({ name, email, password, pin, phone }) {
       email: user.email,
       phone: user.phone,
       tier: user.tier,
+      singleSessionOnly: user.singleSessionOnly || false,
+      autoLockEnabled: user.autoLockEnabled !== false,
       biometricsEnabled: user.biometricsEnabled,
       offlineAccessEnabled: user.offlineAccessEnabled,
     },
@@ -74,7 +82,16 @@ export async function loginUser({ email, password }) {
     throw error;
   }
 
-  const token = jwt.sign({ userId: user._id, email: user.email }, config.jwtSecret, { expiresIn: '7d' });
+  if (user.singleSessionOnly) {
+    user.sessionVersion = (user.sessionVersion || 1) + 1;
+    await user.save();
+  }
+
+  const token = jwt.sign(
+    { userId: user._id, email: user.email, sessionVersion: user.sessionVersion || 1 },
+    config.jwtSecret,
+    { expiresIn: '7d' }
+  );
 
   return {
     user: {
@@ -83,6 +100,9 @@ export async function loginUser({ email, password }) {
       email: user.email,
       phone: user.phone,
       tier: user.tier,
+      singleSessionOnly: Boolean(user.singleSessionOnly),
+      sessionVersion: user.sessionVersion || 1,
+      autoLockEnabled: user.autoLockEnabled !== false,
       biometricsEnabled: user.biometricsEnabled,
       offlineAccessEnabled: user.offlineAccessEnabled,
     },
@@ -105,15 +125,58 @@ export async function verifyUserPin({ email, pin }) {
     throw error;
   }
 
-  const isPinMatch = await bcrypt.compare(pin, user.pinHash);
-  if (!isPinMatch) {
-    const error = new Error('Invalid Vault Security PIN.');
-    error.status = 401;
+  // Check if account is currently locked out
+  if (user.lockUntil && user.lockUntil > new Date()) {
+    const remainingSeconds = Math.ceil((user.lockUntil.getTime() - Date.now()) / 1000);
+    const error = new Error(`Vault is locked due to too many failed attempts. Try again in ${Math.ceil(remainingSeconds / 60)} minute(s).`);
+    error.status = 423; // 423 Locked
+    error.lockUntil = user.lockUntil;
+    error.remainingSeconds = remainingSeconds;
     throw error;
   }
 
+  const isPinMatch = await bcrypt.compare(pin, user.pinHash);
+  if (!isPinMatch) {
+    user.failedAttempts = (user.failedAttempts || 0) + 1;
+    
+    // After 5 failed attempts, lock for 5 minutes
+    if (user.failedAttempts >= 5) {
+      user.lockUntil = new Date(Date.now() + 5 * 60 * 1000);
+      await user.save();
+      const error = new Error('Too many failed attempts. Your vault has been locked for 5 minutes.');
+      error.status = 423;
+      error.lockUntil = user.lockUntil;
+      error.remainingSeconds = 300;
+      throw error;
+    }
+
+    await user.save();
+    const attemptsLeft = 5 - user.failedAttempts;
+    const error = new Error(`Invalid Vault Security PIN. ${attemptsLeft} attempt${attemptsLeft === 1 ? '' : 's'} remaining before 5-minute lockout.`);
+    error.status = 401;
+    error.attemptsLeft = attemptsLeft;
+    throw error;
+  }
+
+  // On successful unlock, reset attempts and lockout timer
+  if (user.failedAttempts > 0 || user.lockUntil) {
+    user.failedAttempts = 0;
+    user.lockUntil = null;
+  }
+
+  // If single session is enabled, bump sessionVersion so all previous sessions are invalidated
+  if (user.singleSessionOnly) {
+    user.sessionVersion = (user.sessionVersion || 1) + 1;
+  }
+  await user.save();
+
   const sessionToken = jwt.sign(
-    { userId: user._id, email: user.email, pinVerified: true },
+    {
+      userId: user._id,
+      email: user.email,
+      pinVerified: true,
+      sessionVersion: user.sessionVersion || 1,
+    },
     config.jwtSecret,
     { expiresIn: '7d' }
   );
@@ -124,10 +187,264 @@ export async function verifyUserPin({ email, pin }) {
       name: user.name,
       email: user.email,
       tier: user.tier,
+      singleSessionOnly: Boolean(user.singleSessionOnly),
+      autoLockEnabled: user.autoLockEnabled !== false,
       biometricsEnabled: user.biometricsEnabled,
       offlineAccessEnabled: user.offlineAccessEnabled,
     },
     token: sessionToken,
   };
 }
+
+/**
+ * Toggle singleSessionOnly, autoLockEnabled, and biometricsEnabled security settings
+ */
+export async function updateSessionSettings(userId, { singleSessionOnly, autoLockEnabled, biometricsEnabled }) {
+  const user = await User.findById(userId);
+  if (!user) {
+    const error = new Error('User not found.');
+    error.status = 404;
+    throw error;
+  }
+
+  if (singleSessionOnly !== undefined) {
+    user.singleSessionOnly = Boolean(singleSessionOnly);
+    if (user.singleSessionOnly) {
+      user.sessionVersion = (user.sessionVersion || 1) + 1;
+    }
+  }
+
+  if (autoLockEnabled !== undefined) {
+    user.autoLockEnabled = Boolean(autoLockEnabled);
+  }
+
+  if (biometricsEnabled !== undefined) {
+    user.biometricsEnabled = Boolean(biometricsEnabled);
+  }
+
+  await user.save();
+
+  const newToken = jwt.sign(
+    {
+      userId: user._id,
+      email: user.email,
+      pinVerified: true,
+      sessionVersion: user.sessionVersion || 1,
+    },
+    config.jwtSecret,
+    { expiresIn: '7d' }
+  );
+
+  return {
+    singleSessionOnly: user.singleSessionOnly,
+    autoLockEnabled: user.autoLockEnabled,
+    biometricsEnabled: user.biometricsEnabled,
+    hasBiometrics: (user.biometricCredentials || []).length > 0,
+    token: newToken,
+  };
+}
+
+/**
+ * Register a biometric credential for the user (Fingerprint / Touch ID / Face ID)
+ */
+export async function registerBiometricCredential(userId, { credentialId, publicKey, deviceName }) {
+  if (!credentialId || !publicKey) {
+    const error = new Error('Credential ID and Public Key are required.');
+    error.status = 400;
+    throw error;
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    const error = new Error('User not found.');
+    error.status = 404;
+    throw error;
+  }
+
+  if (!user.biometricCredentials) {
+    user.biometricCredentials = [];
+  }
+
+  // Check if credentialId already exists, update or push
+  const existingIdx = user.biometricCredentials.findIndex(c => c.credentialId === credentialId);
+  if (existingIdx >= 0) {
+    user.biometricCredentials[existingIdx] = {
+      credentialId,
+      publicKey,
+      deviceName: deviceName || 'Fingerprint Device',
+      createdAt: new Date(),
+    };
+  } else {
+    user.biometricCredentials.push({
+      credentialId,
+      publicKey,
+      deviceName: deviceName || 'Fingerprint Device',
+      createdAt: new Date(),
+    });
+  }
+
+  user.biometricsEnabled = true;
+  await user.save();
+
+  return {
+    success: true,
+    biometricsEnabled: true,
+    devicesCount: user.biometricCredentials.length,
+  };
+}
+
+/**
+ * Verify Biometric Unlock and issue authenticated session token
+ */
+export async function verifyBiometricUnlock({ email, credentialId, clientChallenge }) {
+  if (!email || !credentialId) {
+    const error = new Error('Email and Credential ID are required.');
+    error.status = 400;
+    throw error;
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    const error = new Error('User not found.');
+    error.status = 404;
+    throw error;
+  }
+
+  if (user.biometricsEnabled === false) {
+    const error = new Error('Biometric unlock is disabled for this account in Settings.');
+    error.status = 403;
+    throw error;
+  }
+
+  // Check if account is currently locked out from too many failed PIN attempts
+  if (user.lockUntil && user.lockUntil > new Date()) {
+    const remainingSeconds = Math.ceil((user.lockUntil.getTime() - Date.now()) / 1000);
+    const error = new Error(`Vault is locked due to too many failed attempts. Try again in ${Math.ceil(remainingSeconds / 60)} minute(s).`);
+    error.status = 423;
+    error.lockUntil = user.lockUntil;
+    error.remainingSeconds = remainingSeconds;
+    throw error;
+  }
+
+  // Verify that the credentialId belongs to this user
+  const matchingCred = (user.biometricCredentials || []).find(c => c.credentialId === credentialId);
+  if (!matchingCred) {
+    const error = new Error('Biometric credential not recognized for this account. Please unlock with your PIN.');
+    error.status = 401;
+    throw error;
+  }
+
+  // Reset any prior failed PIN attempts
+  if (user.failedAttempts > 0 || user.lockUntil) {
+    user.failedAttempts = 0;
+    user.lockUntil = null;
+  }
+
+  if (user.singleSessionOnly) {
+    user.sessionVersion = (user.sessionVersion || 1) + 1;
+  }
+  await user.save();
+
+  const sessionToken = jwt.sign(
+    {
+      userId: user._id,
+      email: user.email,
+      pinVerified: true,
+      sessionVersion: user.sessionVersion || 1,
+    },
+    config.jwtSecret,
+    { expiresIn: '7d' }
+  );
+
+  return {
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      tier: user.tier,
+      singleSessionOnly: Boolean(user.singleSessionOnly),
+      autoLockEnabled: user.autoLockEnabled !== false,
+      biometricsEnabled: Boolean(user.biometricsEnabled),
+      offlineAccessEnabled: user.offlineAccessEnabled,
+    },
+    token: sessionToken,
+  };
+}
+
+/**
+ * Authenticate or auto-provision user via Firebase ID Token (Google OAuth / Email Link)
+ */
+export async function authenticateWithFirebaseIdToken(idToken) {
+  if (!idToken) {
+    const error = new Error('Firebase ID Token is required.');
+    error.status = 400;
+    throw error;
+  }
+
+  // Dynamically import or verify using Firebase Admin SDK
+  const { getAuth } = await import('firebase-admin/auth');
+  const decoded = await getAuth().verifyIdToken(idToken);
+  const email = decoded.email;
+  const name = decoded.name || email.split('@')[0];
+
+  if (!email) {
+    const error = new Error('No verified email found in Firebase token.');
+    error.status = 400;
+    throw error;
+  }
+
+  let user = await User.findOne({ email });
+
+  // If user does not exist yet, provision an initial vault account
+  if (!user) {
+    const salt = await bcrypt.genSalt(10);
+    // Random dummy password hash; user signs in via OAuth
+    const dummyPassword = Math.random().toString(36).slice(-10) + '!A1';
+    const passwordHash = await bcrypt.hash(dummyPassword, salt);
+    // Default PIN: 0000 (user will be prompted or can unlock)
+    const pinHash = await bcrypt.hash('1234', salt);
+
+    user = new User({
+      name,
+      email,
+      passwordHash,
+      pinHash,
+      tier: 'Vault Pro (Personal)',
+      sessionVersion: 1,
+      singleSessionOnly: false,
+      autoLockEnabled: true,
+      biometricsEnabled: false,
+    });
+    await user.save();
+  }
+
+  if (user.singleSessionOnly) {
+    user.sessionVersion = (user.sessionVersion || 1) + 1;
+    await user.save();
+  }
+
+  const token = jwt.sign(
+    { userId: user._id, email: user.email, sessionVersion: user.sessionVersion || 1 },
+    config.jwtSecret,
+    { expiresIn: '7d' }
+  );
+
+  return {
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      tier: user.tier,
+      singleSessionOnly: Boolean(user.singleSessionOnly),
+      sessionVersion: user.sessionVersion || 1,
+      autoLockEnabled: user.autoLockEnabled !== false,
+      biometricsEnabled: Boolean(user.biometricsEnabled),
+      offlineAccessEnabled: user.offlineAccessEnabled,
+    },
+    token,
+    requiresPin: true,
+  };
+}
+
 

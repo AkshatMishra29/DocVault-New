@@ -16,6 +16,7 @@ const DocumentSchema = new mongoose.Schema({
   fileSizeFormatted: { type: String },
   storagePath: { type: String, default: 'mongodb' },
   downloadUrl: { type: String },
+  extractedText: { type: String, default: '' },
   summary: { type: String },
   keyDetails: { type: mongoose.Schema.Types.Mixed, default: {} },
   tags: [{ type: String }],

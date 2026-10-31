@@ -23,7 +23,56 @@ export async function verifyPin(req, res) {
     const result = await authService.verifyUserPin(req.body);
     res.json({ success: true, ...result });
   } catch (err) {
+    res.status(err.status || 500).json({
+      success: false,
+      error: err.message,
+      lockUntil: err.lockUntil || null,
+      remainingSeconds: err.remainingSeconds || null,
+      attemptsLeft: err.attemptsLeft ?? null
+    });
+  }
+}
+
+export async function updateSessionSettings(req, res) {
+  try {
+    const result = await authService.updateSessionSettings(req.user.userId, req.body);
+    res.json({ success: true, ...result });
+  } catch (err) {
     res.status(err.status || 500).json({ success: false, error: err.message });
+  }
+}
+
+export async function registerBiometrics(req, res) {
+  try {
+    const result = await authService.registerBiometricCredential(req.user.userId, req.body);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    res.status(err.status || 500).json({ success: false, error: err.message });
+  }
+}
+
+export async function firebaseAuth(req, res) {
+  try {
+    const { idToken } = req.body;
+    const result = await authService.authenticateWithFirebaseIdToken(idToken);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    res.status(err.status || 500).json({ success: false, error: err.message });
+  }
+}
+
+export async function verifyBiometrics(req, res) {
+
+  try {
+    const result = await authService.verifyBiometricUnlock(req.body);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    res.status(err.status || 500).json({
+      success: false,
+      error: err.message,
+      lockUntil: err.lockUntil || null,
+      remainingSeconds: err.remainingSeconds || null,
+    });
   }
 }
 

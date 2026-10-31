@@ -9,9 +9,12 @@ import sharp from 'sharp';
 
 export async function extractTextFromPDF(buffer) {
   try {
-    const parser = new PDFParse();
-    const parsed = await parser.parse(buffer);
-    return parsed.text ? parsed.text.trim() : '';
+    const parser = new PDFParse({ data: buffer });
+    const result = await parser.getText();
+    if (result && typeof result.text === 'string') {
+      return result.text.trim();
+    }
+    return '';
   } catch (err) {
     console.warn('[OCR Service] PDF Parse error:', err.message);
     return '';
@@ -47,4 +50,3 @@ export async function convertPdfToImages(buffer) {
     return null;
   }
 }
-

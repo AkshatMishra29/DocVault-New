@@ -1,11 +1,16 @@
 import { Router } from 'express';
 import * as authController from './auth.controller.js';
+import { requireAuth } from '../../middleware/auth.middleware.js';
 
 const router = Router();
 
 router.post('/register', authController.register);
 router.post('/login', authController.login);
+router.post('/firebase', authController.firebaseAuth);
 router.post('/verify-pin', authController.verifyPin);
+router.post('/biometrics/verify', authController.verifyBiometrics);
+router.post('/biometrics/register', requireAuth, authController.registerBiometrics);
+router.patch('/session-settings', requireAuth, authController.updateSessionSettings);
 
 export default router;
 

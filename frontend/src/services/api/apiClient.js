@@ -25,6 +25,16 @@ export async function apiRequest(endpoint, options = {}) {
   const contentType = response.headers.get('content-type');
   if (contentType && contentType.includes('application/json')) {
     const data = await response.json();
+
+    // Detect session termination by another device
+    if (data.code === 'SESSION_TERMINATED' || (response.status === 401 && data.error?.includes('terminated'))) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('docvault_token');
+      sessionStorage.removeItem('docvault_unlocked');
+      alert('Your DocVault session was terminated because another device signed into your vault.');
+      window.location.href = '/login';
+    }
+
     return { status: response.status, ok: response.ok, ...data };
   }
 

@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { apiRequest } from '../../../services/api';
 
 const AuthContext = createContext(null);
+const INACTIVITY_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes at rest
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
@@ -8,8 +10,8 @@ export const AuthProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : null;
   });
 
-  const [token, setToken] = useState(() => localStorage.getItem('docvault_token') || null);
-  
+  const [token, setToken] = useState(() => localStorage.getItem('docvault_token') || localStorage.getItem('token') || null);
+
   // Track if vault PIN is currently unlocked for this active session
   const [isVaultUnlocked, setIsVaultUnlocked] = useState(() => {
     return sessionStorage.getItem('docvault_unlocked') === 'true';
@@ -23,7 +25,56 @@ export const AuthProvider = ({ children }) => {
     return parseInt(sessionStorage.getItem('docvault_pin_length') || '4', 10);
   });
 
-  // Step 1 Login Success -> Prompt for PIN
+  // Auto-Lock Vault: Detects 10-minute rest / inactivity AND mobile device sleep / backgrounding
+  useEffect(() => {
+    // Only monitor if vault is unlocked and user has autoLockEnabled (default true)
+    if (!isVaultUnlocked || user?.autoLockEnabled === false) return;
+
+    const recordActivity = () => {
+      localStorage.setItem('dv_last_activity_time', Date.now().toString());
+    };
+
+    const checkInactivity = () => {
+      const lastStr = localStorage.getItem('dv_last_activity_time');
+      if (!lastStr) {
+        recordActivity();
+        return;
+      }
+      const elapsed = Date.now() - parseInt(lastStr, 10);
+      if (elapsed >= INACTIVITY_TIMEOUT_MS) {
+        console.info('[Security Auto-Lock] 10 minutes elapsed at rest or in sleep. Locking vault.');
+        lockVault();
+      }
+    };
+
+    // User interaction listeners to keep session alive when actively using app
+    const activityEvents = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+    activityEvents.forEach((ev) => window.addEventListener(ev, recordActivity, { passive: true }));
+
+    // Periodic check every 15s to catch timer expiration while screen remains on
+    const interval = setInterval(checkInactivity, 15000);
+
+    // CRITICAL FOR MOBILE: When phone sleeps or tab is backgrounded, setTimeout freezes.
+    // When the user wakes phone up or switches back, visibilitychange & focus fire immediately.
+    const handleWakeup = () => {
+      if (document.visibilityState === 'visible') {
+        checkInactivity();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleWakeup);
+    window.addEventListener('focus', handleWakeup);
+
+    // Initial check on mount
+    checkInactivity();
+
+    return () => {
+      activityEvents.forEach((ev) => window.removeEventListener(ev, recordActivity));
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', handleWakeup);
+      window.removeEventListener('focus', handleWakeup);
+    };
+  }, [isVaultUnlocked, user?.autoLockEnabled]);
   const handleLoginSuccess = (userData, requiresPin = true) => {
     setUser(userData);
     setPendingEmail(userData.email);
@@ -31,7 +82,6 @@ export const AuthProvider = ({ children }) => {
     setPinLength(len);
     sessionStorage.setItem('docvault_pin_length', len.toString());
     sessionStorage.setItem('docvault_pending_email', userData.email);
-    // Don't auto-save as full verified user until PIN is successfully unlocked
     setIsVaultUnlocked(false);
     sessionStorage.removeItem('docvault_unlocked');
   };
@@ -47,15 +97,255 @@ export const AuthProvider = ({ children }) => {
     }
     setIsVaultUnlocked(true);
     localStorage.setItem('docvault_token', authToken);
+    localStorage.setItem('token', authToken);
     localStorage.setItem('docvault_user', JSON.stringify(userData));
     sessionStorage.setItem('docvault_unlocked', 'true');
     sessionStorage.setItem('docvault_pending_email', userData.email);
+    localStorage.setItem('dv_last_activity_time', Date.now().toString());
+  };
+
+  // Register function called by RegisterPage
+  const register = async (formData) => {
+    try {
+      const res = await apiRequest('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        return { success: false, error: res.error || res.message || 'Registration failed.' };
+      }
+
+      handlePinSuccess(res.token, res.user);
+      return { success: true, user: res.user, token: res.token };
+    } catch (err) {
+      return { success: false, error: err.message || 'Network error during registration.' };
+    }
+  };
+
+  // Login function (Step 1) called by LoginPage
+  const login = async (email, password) => {
+    try {
+      const res = await apiRequest('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        return { success: false, error: res.error || res.message || 'Invalid email or password.' };
+      }
+
+      handleLoginSuccess(res.user, res.requiresPin);
+      return { success: true, user: res.user, requiresPin: res.requiresPin };
+    } catch (err) {
+      return { success: false, error: err.message || 'Network error during login.' };
+    }
+  };
+
+  // Google OAuth / Firebase ID Token login
+  const loginWithFirebaseToken = async (idToken) => {
+    try {
+      const res = await apiRequest('/api/auth/firebase', {
+        method: 'POST',
+        body: JSON.stringify({ idToken }),
+      });
+
+      if (!res.ok) {
+        return { success: false, error: res.error || res.message || 'Firebase authentication failed.' };
+      }
+
+      handleLoginSuccess(res.user, res.requiresPin);
+      return { success: true, user: res.user, requiresPin: res.requiresPin };
+    } catch (err) {
+      return { success: false, error: err.message || 'Network error during Firebase authentication.' };
+    }
+  };
+
+  // Verify PIN function (Step 2) called by EnterPinPage
+  const verifyPin = async (email, pin) => {
+    try {
+      const res = await apiRequest('/api/auth/verify-pin', {
+        method: 'POST',
+        body: JSON.stringify({ email, pin }),
+      });
+
+      if (!res.ok) {
+        return {
+          success: false,
+          error: res.error || res.message || 'Incorrect Vault PIN.',
+          lockUntil: res.lockUntil || null,
+          remainingSeconds: res.remainingSeconds || null,
+          attemptsLeft: res.attemptsLeft ?? null,
+        };
+      }
+
+      handlePinSuccess(res.token, res.user);
+      return { success: true, user: res.user, token: res.token };
+    } catch (err) {
+      return { success: false, error: err.message || 'Network error during PIN verification.' };
+    }
+  };
+
+  // Update user session & security settings
+  const updateSessionPreference = async (settings) => {
+    try {
+      const payload = typeof settings === 'boolean' ? { singleSessionOnly: settings } : settings;
+      const res = await apiRequest('/api/auth/session-settings', {
+        method: 'PATCH',
+        body: JSON.stringify(payload),
+      });
+
+      if (res.success) {
+        if (res.token) {
+          setToken(res.token);
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('docvault_token', res.token);
+        }
+        setUser((prev) => {
+          const updated = {
+            ...prev,
+            ...(res.singleSessionOnly !== undefined ? { singleSessionOnly: res.singleSessionOnly } : {}),
+            ...(res.autoLockEnabled !== undefined ? { autoLockEnabled: res.autoLockEnabled } : {}),
+          };
+          localStorage.setItem('docvault_user', JSON.stringify(updated));
+          return updated;
+        });
+        return {
+          success: true,
+          singleSessionOnly: res.singleSessionOnly,
+          autoLockEnabled: res.autoLockEnabled,
+        };
+      }
+      return { success: false, error: res.error || 'Failed to update settings.' };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
+  };
+
+  // Register WebAuthn Biometric Credential on current device
+  const registerBiometrics = async (deviceName = 'My Device') => {
+    try {
+      if (!window.PublicKeyCredential) {
+        return { success: false, error: 'Biometrics / WebAuthn is not supported on this browser.' };
+      }
+
+      // Generate random challenge
+      const challenge = new Uint8Array(32);
+      window.crypto.getRandomValues(challenge);
+      const userIdBytes = new TextEncoder().encode(user?.id || 'docvault_user');
+
+      const credential = await navigator.credentials.create({
+        publicKey: {
+          challenge,
+          rp: { name: 'DocVault', id: window.location.hostname },
+          user: {
+            id: userIdBytes,
+            name: user?.email || 'user',
+            displayName: user?.name || 'Vault Custodian',
+          },
+          pubKeyCredParams: [{ alg: -7, type: 'public-key' }, { alg: -257, type: 'public-key' }],
+          authenticatorSelection: {
+            authenticatorAttachment: 'platform', // Built-in Touch ID / Face ID / Fingerprint
+            userVerification: 'required',
+          },
+          timeout: 60000,
+        },
+      });
+
+      if (!credential) {
+        return { success: false, error: 'Biometric registration cancelled.' };
+      }
+
+      // Convert raw ID to Base64
+      const credentialId = btoa(String.fromCharCode(...new Uint8Array(credential.rawId)));
+      const publicKey = btoa(String.fromCharCode(...new Uint8Array(credential.response.attestationObject)));
+
+      const res = await apiRequest('/api/auth/biometrics/register', {
+        method: 'POST',
+        body: JSON.stringify({ credentialId, publicKey, deviceName }),
+      });
+
+      if (res.success) {
+        localStorage.setItem(`dv_bio_cred_${user?.email}`, credentialId);
+        setUser((prev) => {
+          const updated = { ...prev, biometricsEnabled: true, hasBiometrics: true };
+          localStorage.setItem('docvault_user', JSON.stringify(updated));
+          return updated;
+        });
+        return { success: true };
+      }
+      return { success: false, error: res.error || 'Registration failed.' };
+    } catch (err) {
+      console.warn('[Biometrics Register]', err);
+      return { success: false, error: err.message || 'Sensor cancelled or unavailable.' };
+    }
+  };
+
+  // Verify WebAuthn Biometric and Unlock Vault
+  const unlockWithBiometrics = async (emailToUse) => {
+    try {
+      const activeEmail = emailToUse || pendingEmail || user?.email;
+      if (!activeEmail) {
+        return { success: false, error: 'No user email found.' };
+      }
+
+      if (!window.PublicKeyCredential) {
+        return { success: false, error: 'Biometrics is not supported on this device.' };
+      }
+
+      const storedCredId = localStorage.getItem(`dv_bio_cred_${activeEmail}`);
+      if (!storedCredId) {
+        return { success: false, error: 'No fingerprint registered on this browser yet. Please use your PIN and enable it in Settings.' };
+      }
+
+      const rawId = Uint8Array.from(atob(storedCredId), c => c.charCodeAt(0));
+      const challenge = new Uint8Array(32);
+      window.crypto.getRandomValues(challenge);
+
+      // Prompt device biometric sensor (Touch ID / Fingerprint)
+      const assertion = await navigator.credentials.get({
+        publicKey: {
+          challenge,
+          allowCredentials: [{ id: rawId, type: 'public-key' }],
+          userVerification: 'required',
+          timeout: 60000,
+        },
+      });
+
+      if (!assertion) {
+        return { success: false, error: 'Biometric verification cancelled.' };
+      }
+
+      const res = await apiRequest('/api/auth/biometrics/verify', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: activeEmail,
+          credentialId: storedCredId,
+        }),
+      });
+
+      if (!res.ok) {
+        return {
+          success: false,
+          error: res.error || 'Biometric authentication rejected.',
+          lockUntil: res.lockUntil || null,
+          remainingSeconds: res.remainingSeconds || null,
+        };
+      }
+
+      handlePinSuccess(res.token, res.user);
+      return { success: true, user: res.user, token: res.token };
+    } catch (err) {
+      console.warn('[Biometrics Verify]', err);
+      return { success: false, error: err.message || 'Biometric sensor error.' };
+    }
   };
 
   // Lock Vault (keeps user credentials saved, requires PIN to re-enter)
   const lockVault = () => {
     setIsVaultUnlocked(false);
     sessionStorage.removeItem('docvault_unlocked');
+    localStorage.removeItem('dv_last_activity_time');
   };
 
   // Full Logout (clears all session & remembered credentials, returns to email/pass login)
@@ -66,6 +356,7 @@ export const AuthProvider = ({ children }) => {
     setIsVaultUnlocked(false);
     localStorage.removeItem('docvault_user');
     localStorage.removeItem('docvault_token');
+    localStorage.removeItem('token');
     sessionStorage.removeItem('docvault_unlocked');
     sessionStorage.removeItem('docvault_pending_email');
     sessionStorage.removeItem('docvault_pin_length');
@@ -83,6 +374,13 @@ export const AuthProvider = ({ children }) => {
         setPendingEmail,
         handleLoginSuccess,
         handlePinSuccess,
+        register,
+        login,
+        loginWithFirebaseToken,
+        verifyPin,
+        updateSessionPreference,
+        registerBiometrics,
+        unlockWithBiometrics,
         lockVault,
         logout,
       }}

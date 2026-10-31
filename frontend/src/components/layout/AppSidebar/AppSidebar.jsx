@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, FileText, UploadCloud, Layers, Calendar, Sparkles, Settings } from 'lucide-react';
+import { LayoutDashboard, FileText, UploadCloud, Layers, Calendar, Sparkles, Settings, ShieldCheck } from 'lucide-react';
 import DocVaultLogo from '../../common/DocVaultLogo/DocVaultLogo';
 import './AppSidebar.css';
 
@@ -11,6 +11,7 @@ const navItems = [
   { to: '/assets', label: 'Asset Registry', icon: Layers },
   { to: '/deadlines', label: 'Deadlines', icon: Calendar },
   { to: '/ask-ai', label: 'Ask AI Copilot', icon: Sparkles, badge: 'RAG' },
+  { to: '/shield', label: 'DocVault Shield', icon: ShieldCheck, badge: 'Zero-K' },
   { to: '/more', label: 'Settings & Audit', icon: Settings },
 ];
 

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { requireAuth } from '../../middleware/auth.middleware.js';
 import { Document } from '../documents/document.model.js';
+import { Asset } from '../assets/asset.model.js';
 import { answerDocumentQuery } from '../../services/ai/groqService.js';
 import { generateEmbedding } from '../../services/ai/huggingFaceService.js';
 
@@ -53,21 +54,27 @@ router.post('/query', requireAuth, async (req, res) => {
       }
     }
 
-    const aiResult = await answerDocumentQuery(question, documents);
+    const assets = await Asset.find({ userId: req.user.userId }).catch(() => []);
+
+    const rawAnswer = await answerDocumentQuery(question, documents, assets);
+
+    // Format response cleanly for frontend
+    const answer = typeof rawAnswer === 'string' ? rawAnswer : (rawAnswer?.answer || JSON.stringify(rawAnswer));
+    const referencedDocIds = documents.map(d => d._id);
 
     res.json({
       success: true,
       data: {
-        answer: aiResult.answer,
-        confidence: aiResult.confidence,
-        referencedDocIds: aiResult.referencedDocIds,
-        actionItem: aiResult.actionItem,
+        answer,
+        confidence: documents.length > 0 ? 'high' : 'low',
+        referencedDocIds,
+        actionItem: null,
       },
     });
   } catch (err) {
+    console.error('[AI Assistant Query Error]', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
 
 export default router;
-

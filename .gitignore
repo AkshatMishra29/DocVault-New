@@ -26,6 +26,12 @@ __pycache__/
 backend/uploads/
 uploads/
 
+# Local Progress & AI Context Documentation (Do Not Commit)
+PROGRESS_REPORT.md
+progress-report.md
+PROGRESS_REPORT*
+progress_report*
+
 # OS Files & Logs
 .DS_Store
 *.log
