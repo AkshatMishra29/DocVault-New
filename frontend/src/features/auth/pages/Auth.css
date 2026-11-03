@@ -45,7 +45,7 @@
   width: 18px;
   height: 18px;
   border-radius: 6px;
-  border: 1.5px solid var(--color-auth-border, #D8CCC3);
+  border: 1.5px solid var(--color-auth-border, var(--color-border, #DCE2D9));
   background-color: var(--color-auth-input-bg, #FFFFFF);
   display: flex;
   align-items: center;
@@ -55,7 +55,7 @@
 }
 
 [data-theme="dark"] .dv-checkbox-custom {
-  background-color: var(--color-auth-input-bg, #1C1310);
+  background-color: var(--color-auth-input-bg, var(--color-text-primary, #101A17));
   border-color: var(--color-auth-border, #3D2F28);
 }
 
@@ -82,11 +82,11 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 13px;
   font-weight: 500;
-  color: var(--color-auth-text-dark, #1C1310);
+  color: var(--color-auth-text-dark, var(--color-text-primary, #101A17));
 }
 
 [data-theme="dark"] .dv-checkbox-text {
-  color: #F8F5F1;
+  color: var(--color-bg, #F5F5F0);
 }
 
 /* Primary Auth Submit Button */
@@ -149,7 +149,7 @@
 }
 
 .dv-auth-footer-link {
-  color: var(--color-auth-text-dark, #1C1310);
+  color: var(--color-auth-text-dark, var(--color-text-primary, #101A17));
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -157,7 +157,7 @@
 }
 
 [data-theme="dark"] .dv-auth-footer-link {
-  color: #F8F5F1;
+  color: var(--color-bg, #F5F5F0);
 }
 
 .dv-auth-footer-link:hover {
@@ -189,7 +189,7 @@
   gap: 8px;
   margin-top: 24px;
   padding-top: 16px;
-  border-top: 1px solid var(--color-auth-border, #D8CCC3);
+  border-top: 1px solid var(--color-auth-border, var(--color-border, #DCE2D9));
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 12px;
   color: var(--color-auth-muted, #766B65);
@@ -224,8 +224,8 @@
 .dv-pin-len-toggle {
   display: flex;
   align-items: center;
-  background-color: var(--color-auth-panel-light, #F2ECE6);
-  border: 1px solid var(--color-auth-border, #D8CCC3);
+  background-color: var(--color-auth-panel-light, var(--color-surface-hover, #EDF1EB));
+  border: 1px solid var(--color-auth-border, var(--color-border, #DCE2D9));
   border-radius: 8px;
   padding: 2px;
 }
@@ -275,7 +275,7 @@
 
 .dv-step-back-btn:hover {
   color: var(--color-auth-cta, #287A57);
-  background-color: var(--color-auth-panel-light, #F2ECE6);
+  background-color: var(--color-auth-panel-light, var(--color-surface-hover, #EDF1EB));
 }
 
 [data-theme="dark"] .dv-step-back-btn:hover {
@@ -324,8 +324,8 @@
   gap: 8px;
   padding: 6px 16px;
   border-radius: 9999px;
-  background-color: var(--color-auth-panel-light, #F2ECE6);
-  border: 1px solid var(--color-auth-border, #D8CCC3);
+  background-color: var(--color-auth-panel-light, var(--color-surface-hover, #EDF1EB));
+  border: 1px solid var(--color-auth-border, var(--color-border, #DCE2D9));
   margin-bottom: 18px;
   align-self: center;
 }
@@ -344,11 +344,11 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 12.5px;
   font-weight: 700;
-  color: var(--color-auth-text-dark, #1C1310);
+  color: var(--color-auth-text-dark, var(--color-text-primary, #101A17));
 }
 
 [data-theme="dark"] .dv-account-pill-email {
-  color: #F8F5F1;
+  color: var(--color-bg, #F5F5F0);
 }
 
 .dv-pin-entry-container {
@@ -415,12 +415,12 @@
   font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
   font-size: 20px;
   font-weight: 400;
-  color: var(--color-auth-text-dark, #1C1310);
+  color: var(--color-auth-text-dark, var(--color-text-primary, #101A17));
   margin-bottom: 4px;
 }
 
 [data-theme="dark"] .dv-biometric-title {
-  color: #F8F5F1;
+  color: var(--color-bg, #F5F5F0);
 }
 
 .dv-biometric-sub {
@@ -478,7 +478,7 @@
 }
 
 [data-theme="dark"] .dv-lockout-timer {
-  background-color: #1C1310;
+  background-color: var(--color-text-primary, #101A17);
   border-color: rgba(198, 59, 46, 0.4);
 }
 
@@ -492,8 +492,8 @@
   height: 46px;
   border-radius: 10px;
   background-color: var(--color-auth-surface, #FFFFFF);
-  border: 1px solid var(--color-auth-border, #D8CCC3);
-  color: var(--color-auth-text-dark, #1C1310);
+  border: 1px solid var(--color-auth-border, var(--color-border, #DCE2D9));
+  color: var(--color-auth-text-dark, var(--color-text-primary, #101A17));
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 14px;
   font-weight: 600;
@@ -509,14 +509,14 @@
 }
 
 [data-theme="dark"] .dv-auth-google-btn {
-  background-color: var(--color-auth-input-bg, #1C1310);
+  background-color: var(--color-auth-input-bg, var(--color-text-primary, #101A17));
   border-color: var(--color-auth-border, #3D2F28);
-  color: #F8F5F1;
+  color: var(--color-bg, #F5F5F0);
 }
 
 .dv-auth-google-btn:hover:not(:disabled) {
-  background-color: var(--color-auth-panel-light, #F2ECE6);
-  border-color: var(--color-auth-coral, #EB6C3B);
+  background-color: var(--color-auth-panel-light, var(--color-surface-hover, #EDF1EB));
+  border-color: var(--color-auth-coral, #C47B48);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(28, 19, 16, 0.08);
 }
@@ -546,7 +546,7 @@
 .dv-auth-divider-line {
   flex: 1;
   height: 1px;
-  background-color: var(--color-auth-border, #D8CCC3);
+  background-color: var(--color-auth-border, var(--color-border, #DCE2D9));
 }
 
 [data-theme="dark"] .dv-auth-divider-line {
@@ -651,7 +651,7 @@
   gap: 1px;
   padding: 1px 3px;
   border-radius: 6px;
-  background-color: var(--color-auth-panel-light, #F2ECE6);
+  background-color: var(--color-auth-panel-light, var(--color-surface-hover, #EDF1EB));
 }
 
 .dv-auth-form--register .dv-pin-len-btn {
@@ -673,7 +673,7 @@
   font-weight: 600 !important;
   letter-spacing: 0.01em;
   margin-bottom: 0 !important;
-  color: var(--color-auth-text-dark, #1C1310);
+  color: var(--color-auth-text-dark, var(--color-text-primary, #101A17));
 }
 
 [data-theme="dark"] .dv-auth-form--register .dv-auth-input-label {
@@ -783,7 +783,7 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 12px;
   font-weight: 600;
-  color: var(--color-auth-text, #1C1310);
+  color: var(--color-auth-text, var(--color-text-primary, #101A17));
   cursor: pointer;
   padding: 4px 8px;
   border-radius: 6px;

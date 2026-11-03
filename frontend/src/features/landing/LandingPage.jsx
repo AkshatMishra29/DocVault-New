@@ -3,7 +3,7 @@ import { Link, Navigate } from 'react-router-dom';
 import MobileAppAuthView from './MobileAppAuthView';
 import PublicNavbar from '../../components/layout/PublicNavbar/PublicNavbar';
 import PublicFooter from '../../components/layout/PublicFooter/PublicFooter';
-import heroArtwork from '../../assets/hero-landing.jpg';
+import VaultHeroGraphic from './VaultHeroGraphic';
 import { useAuth } from '../auth/context/AuthContext';
 
 import { 
@@ -167,13 +167,7 @@ export default function LandingPage() {
 
           {/* Right Column: Bespoke 3D Hero Artwork */}
           <div className="dv-lp-hero__right">
-            <div className="dv-lp-hero__art-frame">
-              <img 
-                src={heroArtwork} 
-                alt="DocVault 3D Ceramic Safe with Spoke Locker Wheel and Floating Documents" 
-                className="dv-lp-hero__art-img"
-              />
-            </div>
+            <VaultHeroGraphic />
           </div>
         </div>
 

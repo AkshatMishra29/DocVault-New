@@ -3,8 +3,8 @@
    ========================================================================== */
 
 .dv-landing-root {
-  background-color: #F8F5F1;
-  color: #1C1310;
+  background-color: var(--color-bg, #F5F5F0);
+  color: var(--color-text-primary, #101A17);
   font-family: var(--font-ui, 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif);
   min-height: 100vh;
   width: 100%;
@@ -31,7 +31,7 @@
   position: relative;
   background: radial-gradient(circle at 80% 20%, rgba(40, 122, 87, 0.04) 0%, transparent 60%),
               radial-gradient(circle at 10% 70%, rgba(208, 172, 154, 0.15) 0%, transparent 50%),
-              #F8F5F1;
+              var(--color-bg, #F5F5F0);
 }
 
 .dv-lp-hero__container {
@@ -58,7 +58,7 @@
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
   box-shadow: 0 2px 8px rgba(28, 19, 16, 0.04);
   margin-bottom: 20px;
   max-width: 100%;
@@ -80,7 +80,7 @@
   font-size: clamp(30px, 6vw, 58px);
   line-height: 1.15;
   font-weight: 400;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
   letter-spacing: -0.02em;
   margin: 0 0 18px 0;
 }
@@ -95,7 +95,7 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: clamp(14px, 3vw, 17.5px);
   line-height: 1.6;
-  color: #5C524C;
+  color: var(--color-text-secondary, #3D4F46);
   max-width: 580px;
   margin: 0 0 30px 0;
 }
@@ -180,7 +180,7 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 13.5px;
   font-weight: 600;
-  color: #5C524C;
+  color: var(--color-text-secondary, #3D4F46);
 }
 
 .dv-lp-trust-icon {
@@ -211,7 +211,7 @@
   border-radius: 26px;
   box-shadow: 0 28px 64px -12px rgba(28, 19, 16, 0.16),
               0 0 0 1px rgba(216, 204, 195, 0.6);
-  background-color: #F2ECE6;
+  background-color: var(--color-surface-hover, #EDF1EB);
   transition: transform 0.4s ease;
 }
 
@@ -293,7 +293,7 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 13.5px;
   font-weight: 800;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
 }
 
 .dv-lp-float-badge__info span {
@@ -322,7 +322,7 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   background-color: #FFFFFF;
-  border: 1px solid var(--color-border, #D8CCC3);
+  border: 1px solid var(--color-border, var(--color-border, #DCE2D9));
   border-radius: 20px;
   padding: 28px 32px;
   box-shadow: 0 10px 30px -4px rgba(28, 19, 16, 0.05);
@@ -351,7 +351,7 @@
 
 .dv-lp-pillar-icon--taupe {
   background-color: rgba(235, 108, 59, 0.1);
-  color: #EB6C3B;
+  color: #C47B48;
 }
 
 .dv-lp-pillar-icon--amber {
@@ -368,7 +368,7 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 14.5px;
   font-weight: 800;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
   margin: 0 0 4px 0;
 }
 
@@ -386,7 +386,7 @@
 
 .dv-lp-features {
   padding: 100px 0;
-  background-color: #F8F5F1;
+  background-color: var(--color-bg, #F5F5F0);
 }
 
 .dv-lp-section-header {
@@ -411,7 +411,7 @@
   font-size: 44px;
   line-height: 1.2;
   font-weight: 400;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
   letter-spacing: -0.01em;
   margin: 0 0 16px 0;
 }
@@ -420,7 +420,7 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 16.5px;
   line-height: 1.6;
-  color: #5C524C;
+  color: var(--color-text-secondary, #3D4F46);
   margin: 0;
 }
 
@@ -432,7 +432,7 @@
 
 .dv-lp-bento-card {
   background-color: #FFFFFF;
-  border: 1px solid var(--color-border, #D8CCC3);
+  border: 1px solid var(--color-border, var(--color-border, #DCE2D9));
   border-radius: 22px;
   padding: 36px 32px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -464,7 +464,7 @@
 
 .dv-lp-bento-icon--taupe {
   background-color: rgba(235, 108, 59, 0.1);
-  color: #EB6C3B;
+  color: #C47B48;
 }
 
 .dv-lp-bento-icon--amber {
@@ -484,14 +484,14 @@
 
 .dv-lp-bento-icon--dark {
   background-color: rgba(28, 19, 16, 0.08);
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
 }
 
 .dv-lp-bento-card h4 {
   font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
   font-size: 22px;
   font-weight: 400;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
   margin: 0 0 10px 0;
 }
 
@@ -499,7 +499,7 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 14.5px;
   line-height: 1.6;
-  color: #5C524C;
+  color: var(--color-text-secondary, #3D4F46);
   margin: 0;
 }
 
@@ -509,9 +509,9 @@
 
 .dv-lp-showcase {
   padding: 100px 0;
-  background-color: #F2ECE6;
-  border-top: 1px solid var(--color-border, #D8CCC3);
-  border-bottom: 1px solid var(--color-border, #D8CCC3);
+  background-color: var(--color-surface-hover, #EDF1EB);
+  border-top: 1px solid var(--color-border, var(--color-border, #DCE2D9));
+  border-bottom: 1px solid var(--color-border, var(--color-border, #DCE2D9));
 }
 
 .dv-lp-showcase__grid {
@@ -524,7 +524,7 @@
 /* Mockup Frame */
 .dv-lp-mockup-frame {
   background-color: #FFFFFF;
-  border: 1px solid var(--color-border, #D8CCC3);
+  border: 1px solid var(--color-border, var(--color-border, #DCE2D9));
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 24px 60px -12px rgba(28, 19, 16, 0.12);
@@ -535,8 +535,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 20px;
-  background-color: #F8F5F1;
-  border-bottom: 1px solid var(--color-border, #D8CCC3);
+  background-color: var(--color-bg, #F5F5F0);
+  border-bottom: 1px solid var(--color-border, var(--color-border, #DCE2D9));
   gap: 16px;
 }
 
@@ -563,7 +563,7 @@
   gap: 8px;
   padding: 6px 12px;
   background-color: #FFFFFF;
-  border: 1px solid var(--color-border, #D8CCC3);
+  border: 1px solid var(--color-border, var(--color-border, #DCE2D9));
   border-radius: 8px;
   font-size: 12px;
   color: #766B65;
@@ -573,7 +573,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background-color: #1C1310;
+  background-color: var(--color-text-primary, #101A17);
   color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -599,7 +599,7 @@
   font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
   font-size: 20px;
   margin: 0 0 4px 0;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
 }
 
 .dv-lp-mockup-banner p {
@@ -616,7 +616,7 @@
 .stat-pill {
   padding: 6px 12px;
   border-radius: 8px;
-  background-color: #F8F5F1;
+  background-color: var(--color-bg, #F5F5F0);
   border: 1px solid rgba(216, 204, 195, 0.7);
   display: flex;
   flex-direction: column;
@@ -626,7 +626,7 @@
 
 .stat-pill strong {
   font-size: 14px;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
 }
 
 .stat-pill span {
@@ -652,7 +652,7 @@
 }
 
 .dv-lp-mockup-panel {
-  background-color: #F8F5F1;
+  background-color: var(--color-bg, #F5F5F0);
   border: 1px solid rgba(216, 204, 195, 0.7);
   border-radius: 14px;
   padding: 16px;
@@ -668,7 +668,7 @@
 .panel-title-row h5 {
   font-size: 13px;
   font-weight: 700;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
   margin: 0;
 }
 
@@ -707,7 +707,7 @@
 .item-icon--pdf { background-color: rgba(26, 68, 206, 0.1); color: #1A44CE; }
 .item-icon--tax { background-color: rgba(40, 122, 82, 0.1); color: #287A52; }
 .item-icon--alert { background-color: rgba(217, 119, 6, 0.1); color: #D97706; }
-.item-icon--ai { background-color: rgba(235, 108, 59, 0.1); color: #EB6C3B; }
+.item-icon--ai { background-color: rgba(235, 108, 59, 0.1); color: #C47B48; }
 
 .item-meta {
   flex: 1;
@@ -719,7 +719,7 @@
 
 .item-meta strong {
   font-size: 12px;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -740,7 +740,7 @@
 
 .badge--success { background-color: rgba(40, 122, 82, 0.1); color: #287A52; }
 .badge--alert { background-color: rgba(40, 122, 87, 0.1); color: #287A57; }
-.badge--ai { background-color: rgba(235, 108, 59, 0.1); color: #EB6C3B; }
+.badge--ai { background-color: rgba(235, 108, 59, 0.1); color: #C47B48; }
 
 /* Right Narrative */
 .dv-lp-showcase__right {
@@ -772,14 +772,14 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 15px;
   font-weight: 700;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
   margin-bottom: 2px;
 }
 
 .dv-lp-check-item p {
   font-size: 13.5px;
   line-height: 1.5;
-  color: #5C524C;
+  color: var(--color-text-secondary, #3D4F46);
   margin: 0;
 }
 
@@ -789,7 +789,7 @@
 
 .dv-lp-process {
   padding: 100px 0;
-  background-color: #F8F5F1;
+  background-color: var(--color-bg, #F5F5F0);
 }
 
 .dv-lp-steps-grid {
@@ -800,7 +800,7 @@
 
 .dv-lp-step-card {
   background-color: #FFFFFF;
-  border: 1px solid var(--color-border, #D8CCC3);
+  border: 1px solid var(--color-border, var(--color-border, #DCE2D9));
   border-radius: 20px;
   padding: 32px 26px;
   position: relative;
@@ -812,7 +812,7 @@
 .dv-lp-step-number {
   font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
   font-size: 28px;
-  color: #D8CCC3;
+  color: var(--color-border, #DCE2D9);
   margin-bottom: 16px;
   line-height: 1;
 }
@@ -821,7 +821,7 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background-color: #F2ECE6;
+  background-color: var(--color-surface-hover, #EDF1EB);
   color: #287A57;
   display: flex;
   align-items: center;
@@ -832,14 +832,14 @@
 .dv-lp-step-card h4 {
   font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
   font-size: 20px;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
   margin: 0 0 8px 0;
 }
 
 .dv-lp-step-card p {
   font-size: 13.5px;
   line-height: 1.6;
-  color: #5C524C;
+  color: var(--color-text-secondary, #3D4F46);
   margin: 0;
 }
 
@@ -849,11 +849,11 @@
 
 .dv-lp-security {
   padding: 60px 0 100px 0;
-  background-color: #F8F5F1;
+  background-color: var(--color-bg, #F5F5F0);
 }
 
 .dv-lp-security-card {
-  background: linear-gradient(135deg, #1C1310 0%, #120B09 100%);
+  background: linear-gradient(135deg, var(--color-text-primary, #101A17) 0%, #120B09 100%);
   border-radius: 28px;
   padding: 64px 56px;
   color: #FFFFFF;
@@ -885,7 +885,7 @@
   font-size: 11.5px;
   font-weight: 800;
   letter-spacing: 0.08em;
-  color: #EB6C3B;
+  color: #C47B48;
   margin-bottom: 20px;
 }
 
@@ -946,8 +946,8 @@
 
 .dv-lp-faq {
   padding: 100px 0;
-  background-color: #F2ECE6;
-  border-top: 1px solid var(--color-border, #D8CCC3);
+  background-color: var(--color-surface-hover, #EDF1EB);
+  border-top: 1px solid var(--color-border, var(--color-border, #DCE2D9));
 }
 
 /* Category Filter Tabs (shadcn/ui Pill Style) */
@@ -964,9 +964,9 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 13.5px;
   font-weight: 700;
-  color: var(--color-text-secondary, #5C524C);
+  color: var(--color-text-secondary, var(--color-text-secondary, #3D4F46));
   background-color: #FFFFFF;
-  border: 1px solid var(--color-border, #D8CCC3);
+  border: 1px solid var(--color-border, var(--color-border, #DCE2D9));
   padding: 8px 18px;
   border-radius: 9999px;
   cursor: pointer;
@@ -975,15 +975,15 @@
 }
 
 .dv-lp-faq-tab:hover {
-  color: var(--color-text-primary, #1C1310);
-  border-color: #1C1310;
+  color: var(--color-text-primary, var(--color-text-primary, #101A17));
+  border-color: var(--color-text-primary, #101A17);
   transform: translateY(-1px);
 }
 
 .dv-lp-faq-tab--active {
-  background-color: #1C1310 !important;
+  background-color: var(--color-text-primary, #101A17) !important;
   color: #FFFFFF !important;
-  border-color: #1C1310 !important;
+  border-color: var(--color-text-primary, #101A17) !important;
   box-shadow: 0 4px 12px rgba(28, 19, 16, 0.18);
 }
 
@@ -997,7 +997,7 @@
 
 .dv-lp-accordion-item {
   background-color: #FFFFFF;
-  border: 1px solid var(--color-border, #D8CCC3);
+  border: 1px solid var(--color-border, var(--color-border, #DCE2D9));
   border-radius: 16px;
   overflow: hidden;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1041,7 +1041,7 @@
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background-color: #F8F5F1;
+  background-color: var(--color-bg, #F5F5F0);
   border: 1px solid rgba(216, 204, 195, 0.8);
   color: #287A57;
   display: flex;
@@ -1080,7 +1080,7 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 16.5px;
   font-weight: 700;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
   margin: 0;
   line-height: 1.35;
 }
@@ -1094,7 +1094,7 @@
   align-items: center;
   justify-content: center;
   color: #766B65;
-  background-color: #F8F5F1;
+  background-color: var(--color-bg, #F5F5F0);
   border: 1px solid rgba(216, 204, 195, 0.6);
   flex-shrink: 0;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, color 0.2s ease;
@@ -1130,14 +1130,14 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 15px;
   line-height: 1.7;
-  color: #5C524C;
+  color: var(--color-text-secondary, #3D4F46);
   margin: 0;
 }
 
 /* Still Have Questions Footer Card */
 .dv-lp-faq-footer-card {
   background-color: #FFFFFF;
-  border: 1px solid var(--color-border, #D8CCC3);
+  border: 1px solid var(--color-border, var(--color-border, #DCE2D9));
   border-radius: 20px;
   padding: 24px 30px;
   display: flex;
@@ -1169,7 +1169,7 @@
   font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 15.5px;
   font-weight: 800;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
   margin: 0 0 3px 0;
 }
 
@@ -1233,12 +1233,12 @@
 
 .dv-lp-cta-banner {
   padding: 80px 0 100px 0;
-  background-color: #F8F5F1;
+  background-color: var(--color-bg, #F5F5F0);
 }
 
 .dv-lp-banner-inner {
   background-color: #FFFFFF;
-  border: 1px solid var(--color-border, #D8CCC3);
+  border: 1px solid var(--color-border, var(--color-border, #DCE2D9));
   border-radius: 26px;
   padding: 60px 48px;
   text-align: center;
@@ -1248,13 +1248,13 @@
 .dv-lp-banner-title {
   font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
   font-size: 40px;
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
   margin: 0 0 14px 0;
 }
 
 .dv-lp-banner-sub {
   font-size: 16.5px;
-  color: #5C524C;
+  color: var(--color-text-secondary, #3D4F46);
   max-width: 600px;
   margin: 0 auto 32px auto;
 }
@@ -1377,7 +1377,7 @@
 
 /* Desktop Mode Indicator Bar for Mobile/Tablet users viewing desktop web */
 .dv-lp-desktop-bar {
-  background: #1C1310;
+  background: var(--color-text-primary, #101A17);
   color: #FFFFFF;
   padding: 8px 16px;
   font-family: var(--font-ui, 'Manrope', sans-serif);

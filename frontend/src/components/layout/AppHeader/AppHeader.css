@@ -3,7 +3,7 @@
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid var(--color-border, #DCE2D9);
   padding: 0 var(--space-8, 32px);
   display: flex;
   align-items: center;
@@ -40,7 +40,7 @@
   font-family: 'DM Serif Display', Georgia, serif;
   font-size: 20px;
   font-weight: 500;
-  color: #111827;
+  color: var(--color-text-primary, #101A17);
   letter-spacing: -0.01em;
   margin: 0;
   white-space: nowrap;
@@ -71,7 +71,7 @@
   gap: 6px;
   padding: 5px 12px;
   background-color: #F9FAFB;
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--color-border, #DCE2D9);
   border-radius: 9999px;
 }
 

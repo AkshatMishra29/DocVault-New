@@ -1,5 +1,6 @@
 /* ==========================================================================
-   DOCVAULT SYSTEM BUTTON COMPONENT (ENTERPRISE GEOMETRIC STANDARDIZATION)
+   DOCVAULT CUSTOM BUTTON SYSTEM (FOREST NOIR & COPPER PRIVATE BANKING)
+   Tactile micro-elevation, pure coded gradients, zero raster dependencies
    ========================================================================== */
 
 .dv-btn {
@@ -8,10 +9,10 @@
   justify-content: center;
   gap: 8px;
   font-family: var(--font-body, 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif);
-  font-weight: 600;
-  border-radius: 8px;
+  font-weight: 700;
+  border-radius: 10px;
   border: 1px solid transparent;
-  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
   user-select: none;
   cursor: pointer;
@@ -21,6 +22,7 @@
   line-height: 1;
   vertical-align: middle;
   text-decoration: none;
+  overflow: hidden;
 }
 
 .dv-btn:disabled,
@@ -28,30 +30,50 @@
   opacity: 0.55;
   cursor: not-allowed;
   pointer-events: none;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
-/* Sizes */
+/* Micro-sheen reflection on hover */
+.dv-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.dv-btn:hover::after {
+  left: 130%;
+}
+
+/* Sizing Scale */
 .dv-btn--sm {
-  height: 34px;
-  padding: 0 12px;
+  height: 36px;
+  padding: 0 14px;
   font-size: 13px;
-  border-radius: 7px;
-  letter-spacing: -0.01em;
-}
-
-.dv-btn--md {
-  height: 40px;
-  padding: 0 16px;
-  font-size: 14px;
   border-radius: 8px;
   letter-spacing: -0.01em;
 }
 
-.dv-btn--lg {
-  height: 46px;
-  padding: 0 22px;
-  font-size: 15px;
+.dv-btn--md {
+  height: 42px;
+  padding: 0 18px;
+  font-size: 14px;
   border-radius: 10px;
+  letter-spacing: -0.01em;
+}
+
+.dv-btn--lg {
+  height: 48px;
+  padding: 0 24px;
+  font-size: 15px;
+  border-radius: 12px;
   letter-spacing: -0.01em;
 }
 
@@ -62,6 +84,11 @@
   justify-content: center;
   flex-shrink: 0;
   vertical-align: middle;
+  transition: transform 0.2s ease;
+}
+
+.dv-btn:hover .dv-btn__icon {
+  transform: scale(1.08);
 }
 
 .dv-btn__text {
@@ -70,97 +97,166 @@
   line-height: 1;
 }
 
-/* Variants */
+/* ==========================================================================
+   VARIANTS (FOREST NOIR & COPPER)
+   ========================================================================== */
+
+/* 1. Primary: Rich Forest Green with Subtle Gradient & Inner Bevel */
 .dv-btn--primary {
-  background-color: #287A57;
+  background: linear-gradient(180deg, #2D8B63 0%, #226F4F 100%);
   color: #FFFFFF;
-  border-color: #287A57;
-  box-shadow: 0 2px 6px rgba(40, 122, 87, 0.22);
+  border: 1px solid #1C5A40;
+  box-shadow: 
+    0 2px 6px rgba(16, 26, 23, 0.12),
+    0 4px 14px rgba(40, 122, 87, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .dv-btn--primary:hover:not(:disabled) {
-  background-color: #1E6345;
-  border-color: #1E6345;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(40, 122, 87, 0.32);
+  background: linear-gradient(180deg, #329A6E 0%, #267A57 100%);
+  transform: translateY(-1.5px);
+  box-shadow: 
+    0 4px 10px rgba(16, 26, 23, 0.15),
+    0 8px 22px rgba(40, 122, 87, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .dv-btn--primary:active:not(:disabled) {
   transform: translateY(0);
+  background: #1C5A40;
+  box-shadow: 
+    0 1px 3px rgba(16, 26, 23, 0.2),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* 2. Copper Accent (Highlight Action CTA) */
+.dv-btn--copper,
+.dv-btn--highlight {
+  background: linear-gradient(180deg, #D48855 0%, #B86F3E 100%);
+  color: #FFFFFF;
+  border: 1px solid #A05C2E;
+  box-shadow: 
+    0 2px 6px rgba(16, 26, 23, 0.12),
+    0 4px 14px rgba(196, 123, 72, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.dv-btn--copper:hover:not(:disabled),
+.dv-btn--highlight:hover:not(:disabled) {
+  background: linear-gradient(180deg, #E29560 0%, #C47B48 100%);
+  transform: translateY(-1.5px);
+  box-shadow: 
+    0 4px 10px rgba(16, 26, 23, 0.15),
+    0 8px 22px rgba(196, 123, 72, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* 3. Secondary: Pure Surface with Hairline Border & Tactile Depth */
 .dv-btn--secondary {
   background-color: #FFFFFF;
-  color: #1F2937;
-  border: 1px solid #D1D5DB;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  color: #101A17;
+  border: 1px solid #DCE2D9;
+  box-shadow: 0 1px 3px rgba(16, 26, 23, 0.05);
 }
 
 .dv-btn--secondary:hover:not(:disabled) {
-  background-color: #F9FAFB;
-  border-color: #9CA3AF;
-  color: #111827;
+  background-color: #F5F5F0;
+  border-color: #287A57;
+  color: #287A57;
   transform: translateY(-1px);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 3px 8px rgba(16, 26, 23, 0.08);
 }
 
 .dv-btn--secondary:active:not(:disabled) {
   transform: translateY(0);
+  background-color: #EBF0E8;
 }
 
+/* 4. Outline: High-Trust Minimalist */
 .dv-btn--outline {
-  background-color: #FFFFFF;
-  color: #374151;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  background-color: transparent;
+  color: #1D3B30;
+  border: 1.5px solid #DCE2D9;
 }
 
 .dv-btn--outline:hover:not(:disabled) {
-  background-color: #F9FAFB;
-  border-color: #D1D5DB;
-  color: #111827;
+  background-color: rgba(40, 122, 87, 0.06);
+  border-color: #287A57;
+  color: #287A57;
   transform: translateY(-1px);
 }
 
+.dv-btn--outline:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* 5. Forest Noir Dark Button */
+.dv-btn--dark,
+.dv-btn--noir {
+  background: linear-gradient(180deg, #244438 0%, #172D25 100%);
+  color: #FFFFFF;
+  border: 1px solid #0E1C17;
+  box-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.dv-btn--dark:hover:not(:disabled),
+.dv-btn--noir:hover:not(:disabled) {
+  background: linear-gradient(180deg, #2C5244 0%, #1D3B30 100%);
+  border-color: #C47B48;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* 6. Ghost */
 .dv-btn--ghost {
   background-color: transparent;
-  color: #4B5563;
+  color: #3D4F46;
   border-color: transparent;
 }
 
 .dv-btn--ghost:hover:not(:disabled) {
-  background-color: rgba(17, 24, 39, 0.05);
-  color: #111827;
+  background-color: rgba(40, 122, 87, 0.08);
+  color: #101A17;
 }
 
+/* 7. Danger */
 .dv-btn--danger {
-  background-color: #DC2626;
+  background: linear-gradient(180deg, #CE4234 0%, #B9382C 100%);
   color: #FFFFFF;
-  border-color: #DC2626;
-  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+  border: 1px solid #99281E;
+  box-shadow: 0 2px 6px rgba(185, 56, 44, 0.25);
 }
 
 .dv-btn--danger:hover:not(:disabled) {
-  background-color: #B91C1C;
-  border-color: #B91C1C;
+  background: linear-gradient(180deg, #D94B3D 0%, #C43D30 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+  box-shadow: 0 4px 12px rgba(185, 56, 44, 0.35);
 }
 
-.dv-btn--full {
-  width: 100%;
-}
-
+/* Loading Spinner */
 .dv-btn__spinner {
   width: 16px;
   height: 16px;
   border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #FFFFFF;
   border-radius: 50%;
-  border-top-color: currentColor;
-  animation: dv-spin 0.8s linear infinite;
-  display: inline-block;
+  animation: dvBtnSpin 0.7s linear infinite;
 }
 
-@keyframes dv-spin {
+.dv-btn--secondary .dv-btn__spinner,
+.dv-btn--outline .dv-btn__spinner,
+.dv-btn--ghost .dv-btn__spinner {
+  border-color: rgba(40, 122, 87, 0.25);
+  border-top-color: #287A57;
+}
+
+@keyframes dvBtnSpin {
   to { transform: rotate(360deg); }
+}
+
+/* Focus Ring */
+.dv-btn:focus-visible {
+  box-shadow: 0 0 0 3px rgba(40, 122, 87, 0.35);
 }

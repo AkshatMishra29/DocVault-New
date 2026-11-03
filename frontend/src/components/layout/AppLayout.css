@@ -2,7 +2,7 @@
   display: flex;
   min-height: 100vh;
   min-height: 100dvh;
-  background-color: #FAF8F5;
+  background-color: var(--color-bg, #F5F5F0);
 }
 
 .dv-app-main {

@@ -36,7 +36,7 @@
 }
 
 [data-theme="dark"] .dv-auth-form-panel {
-  background-color: var(--color-auth-bg, #14100E);
+  background-color: var(--color-auth-bg, #101A17);
   scrollbar-color: #3D2F28 transparent;
 }
 

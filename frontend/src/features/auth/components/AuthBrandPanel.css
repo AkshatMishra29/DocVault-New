@@ -10,14 +10,14 @@
   background: 
     radial-gradient(ellipse at 20% 15%, rgba(255, 255, 255, 0.28) 0%, transparent 50%),
     radial-gradient(ellipse at 85% 85%, rgba(235, 108, 59, 0.15) 0%, transparent 60%),
-    linear-gradient(155deg, #DAC0B2 0%, #D0AC9A 40%, #C49B88 100%);
+    linear-gradient(155deg, #234437 0%, #1D3B30 40%, #101A17 100%);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 32px 40px 24px 40px;
   box-sizing: border-box;
   overflow: hidden;
-  color: var(--color-auth-text-dark, #1C1310);
+  color: var(--color-auth-text-dark, var(--color-text-primary, #101A17));
   border-right: 1px solid rgba(216, 204, 195, 0.45);
 }
 
@@ -27,7 +27,7 @@
     radial-gradient(ellipse at 85% 85%, rgba(208, 172, 154, 0.05) 0%, transparent 60%),
     linear-gradient(155deg, #2A1F1B 0%, #201714 50%, #17100D 100%);
   border-right-color: rgba(61, 47, 40, 0.6);
-  color: #F8F5F1;
+  color: var(--color-bg, #F5F5F0);
 }
 
 /* Subtle Film Grain Texture Overlay */
@@ -73,14 +73,14 @@
   border-radius: 9999px;
   background: rgba(255, 255, 255, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.75);
-  color: #1C1310;
+  color: var(--color-text-primary, #101A17);
   backdrop-filter: blur(8px);
 }
 
 [data-theme="dark"] .dv-editorial-tagline-pill {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.12);
-  color: #F8F5F1;
+  color: var(--color-bg, #F5F5F0);
 }
 
 /* 3D Visual Frame */
@@ -168,12 +168,12 @@
   line-height: 1.14;
   letter-spacing: -0.02em;
   font-weight: 400;
-  color: var(--color-auth-text-dark, #1C1310);
+  color: var(--color-auth-text-dark, var(--color-text-primary, #101A17));
   margin: 0;
 }
 
 [data-theme="dark"] .dv-editorial-title {
-  color: #F8F5F1;
+  color: var(--color-bg, #F5F5F0);
 }
 
 .dv-editorial-subtitle {
