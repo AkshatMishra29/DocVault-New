@@ -3,8 +3,8 @@
    ========================================================================== */
 
 .dv-public-footer {
-  background-color: #F2ECE6;
-  border-top: 1px solid var(--color-border, #D8CCC3);
+  background-color: #EBF0E8;
+  border-top: 1px solid var(--color-border, #DCE2D9);
   padding: 80px 0 0 0;
   width: 100%;
 }
@@ -64,7 +64,7 @@
 }
 
 .dv-footer-badge__icon {
-  color: var(--color-primary, #FD2B06);
+  color: var(--color-primary, #287A57);
 }
 
 /* Navigation Columns */
@@ -103,7 +103,7 @@
 }
 
 .dv-footer-links a:hover {
-  color: var(--color-primary, #FD2B06);
+  color: var(--color-primary, #287A57);
   transform: translateX(2px);
 }
 
@@ -182,8 +182,8 @@
 }
 
 .dv-footer-social-btn:hover {
-  color: var(--color-primary, #FD2B06);
-  border-color: var(--color-primary, #FD2B06);
+  color: var(--color-primary, #287A57);
+  border-color: var(--color-primary, #287A57);
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(253, 43, 6, 0.15);
 }

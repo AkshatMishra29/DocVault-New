@@ -72,17 +72,17 @@
 
 /* Variants */
 .dv-btn--primary {
-  background-color: #FD2B06;
+  background-color: #287A57;
   color: #FFFFFF;
-  border-color: #FD2B06;
-  box-shadow: 0 2px 6px rgba(253, 43, 6, 0.22);
+  border-color: #287A57;
+  box-shadow: 0 2px 6px rgba(40, 122, 87, 0.22);
 }
 
 .dv-btn--primary:hover:not(:disabled) {
-  background-color: #E02504;
-  border-color: #E02504;
+  background-color: #1E6345;
+  border-color: #1E6345;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(253, 43, 6, 0.32);
+  box-shadow: 0 4px 12px rgba(40, 122, 87, 0.32);
 }
 
 .dv-btn--primary:active:not(:disabled) {

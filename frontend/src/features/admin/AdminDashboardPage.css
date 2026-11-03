@@ -44,9 +44,9 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(253, 43, 6, 0.15);
-  border: 1px solid rgba(253, 43, 6, 0.35);
-  color: #FF6647;
+  background: rgba(40, 122, 87, 0.15);
+  border: 1px solid rgba(40, 122, 87, 0.35);
+  color: #C47B48;
   padding: 4px 12px;
   border-radius: 9999px;
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
@@ -61,8 +61,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: #FD2B06;
-  box-shadow: 0 0 10px #FD2B06;
+  background-color: #287A57;
+  box-shadow: 0 0 10px #287A57;
   animation: adminPulse 2s infinite ease-in-out;
 }
 
@@ -226,8 +226,8 @@
 }
 
 .dv-admin-kpi-icon--brand {
-  background: #FFF1EE;
-  color: #FD2B06;
+  background: #EDF6F1;
+  color: #287A57;
 }
 
 .dv-admin-kpi-icon--emerald {
@@ -365,9 +365,9 @@
 }
 
 .dv-admin-search-input:focus {
-  border-color: #FD2B06;
+  border-color: #287A57;
   background: #FFFFFF;
-  box-shadow: 0 0 0 3px rgba(253, 43, 6, 0.12);
+  box-shadow: 0 0 0 3px rgba(40, 122, 87, 0.12);
 }
 
 /* User Table */
@@ -421,9 +421,9 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #FFF1EE;
-  color: #FD2B06;
-  border: 1px solid #FFE4DF;
+  background: #EDF6F1;
+  color: #287A57;
+  border: 1px solid #DCE2D9;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -486,7 +486,7 @@
 .dv-admin-audit-icon--auth { background: #ECFDF5; color: #059669; }
 .dv-admin-audit-icon--upload { background: #EFF6FF; color: #2563EB; }
 .dv-admin-audit-icon--sec { background: #FEF3C7; color: #D97706; }
-.dv-admin-audit-icon--alert { background: #FEE2E2; color: #DC2626; }
+.dv-admin-audit-icon--alert { background: #EDF6F1; color: #DC2626; }
 
 .dv-admin-audit-details strong {
   display: block;

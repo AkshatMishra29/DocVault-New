@@ -90,12 +90,12 @@ export default function AuthVerifiedPage() {
               width: "64px",
               height: "64px",
               borderRadius: "50%",
-              background: "rgba(253, 43, 6, 0.08)",
+              background: "rgba(40, 122, 87, 0.08)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               margin: "0 auto 20px",
-              color: "var(--color-auth-cta, #FD2B06)",
+              color: "var(--color-auth-cta, #287A57)",
             }}
           >
             <Loader2 size={32} className="spin-animation" />

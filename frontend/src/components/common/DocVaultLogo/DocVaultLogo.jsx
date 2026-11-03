@@ -14,45 +14,45 @@ export function DocVaultLogoIcon({ size = 36, className = "" }) {
       aria-hidden="true"
     >
       <defs>
-        {/* Obsidian & Espresso Vault Tile */}
+        {/* Forest Noir & Deep Banking Tile */}
         <linearGradient id="dvVaultTileGrad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#2E1D17" />
-          <stop offset="50%" stopColor="#1C110D" />
-          <stop offset="100%" stopColor="#120A07" />
+          <stop offset="0%" stopColor="#1D3B30" />
+          <stop offset="60%" stopColor="#101A17" />
+          <stop offset="100%" stopColor="#0B1210" />
         </linearGradient>
 
-        {/* Dynamic Beveled Sunset Rim */}
+        {/* Dynamic Beveled Copper Rim */}
         <linearGradient id="dvTileBorderGrad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#FD2B06" stopOpacity="0.8" />
-          <stop offset="35%" stopColor="#EB6C3B" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="rgba(255, 255, 255, 0.12)" />
+          <stop offset="0%" stopColor="#C47B48" stopOpacity="0.85" />
+          <stop offset="45%" stopColor="#287A57" stopOpacity="0.5" />
+          <stop offset="100%" stopColor="rgba(220, 226, 217, 0.2)" />
         </linearGradient>
 
         {/* Vault Dial Track Gradient */}
-        <linearGradient id="dvRingSunset" x1="12" y1="12" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#FD2B06" />
-          <stop offset="50%" stopColor="#EB6C3B" />
-          <stop offset="100%" stopColor="#FFA07A" />
+        <linearGradient id="dvRingForest" x1="12" y1="12" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#287A57" />
+          <stop offset="50%" stopColor="#34966D" />
+          <stop offset="100%" stopColor="#C47B48" />
         </linearGradient>
 
         {/* Holographic Document Foil */}
         <linearGradient id="dvDocGrad" x1="16" y1="12" x2="32" y2="35" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="rgba(253, 43, 6, 0.28)" />
-          <stop offset="100%" stopColor="rgba(235, 108, 59, 0.06)" />
+          <stop offset="0%" stopColor="rgba(40, 122, 87, 0.3)" />
+          <stop offset="100%" stopColor="rgba(196, 123, 72, 0.12)" />
         </linearGradient>
 
-        {/* Precision Core Node */}
-        <radialGradient id="dvEmberCore" cx="50%" cy="50%" r="50%">
+        {/* Precision Copper Core Node */}
+        <radialGradient id="dvCopperCore" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="35%" stopColor="#FFA380" />
-          <stop offset="75%" stopColor="#FD2B06" />
-          <stop offset="100%" stopColor="#C42003" />
+          <stop offset="35%" stopColor="#E2A67D" />
+          <stop offset="75%" stopColor="#C47B48" />
+          <stop offset="100%" stopColor="#1D3B30" />
         </radialGradient>
 
-        {/* Ambient Ember Glow Filter */}
+        {/* Ambient Drop Shadow Filter */}
         <filter id="dvLogoDropShadow" x="0" y="2" width="48" height="46" filterUnits="userSpaceOnUse">
-          <feDropShadow dx="0" dy="3" stdDeviation="3.5" floodColor="#1C110D" floodOpacity="0.4" />
-          <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#FD2B06" floodOpacity="0.25" />
+          <feDropShadow dx="0" dy="2.5" stdDeviation="3" floodColor="#101A17" floodOpacity="0.35" />
+          <feDropShadow dx="0" dy="1" stdDeviation="1.5" floodColor="#287A57" floodOpacity="0.2" />
         </filter>
       </defs>
 
@@ -66,38 +66,38 @@ export function DocVaultLogoIcon({ size = 36, className = "" }) {
           cx="24" 
           cy="24" 
           r="14.5" 
-          stroke="url(#dvRingSunset)" 
+          stroke="url(#dvRingForest)" 
           strokeWidth="1.8" 
           strokeDasharray="4 2.5" 
-          strokeOpacity="0.75"
+          strokeOpacity="0.85"
         />
 
         {/* Dimensional Document Silhouette (Folded Origami Geometry) */}
         <path 
           d="M17 14C17 13.1716 17.6716 12.5 18.5 12.5H25.5L31 18V32.5C31 33.3284 30.3284 34 29.5 34H18.5C17.6716 34 17 33.3284 17 32.5V14Z" 
           fill="url(#dvDocGrad)" 
-          stroke="#EB6C3B" 
+          stroke="#C47B48" 
           strokeWidth="1.3" 
-          strokeOpacity="0.75"
+          strokeOpacity="0.85"
         />
         {/* Precision Folded Document Flap */}
         <path 
           d="M25.5 12.5V18H31" 
           fill="none" 
-          stroke="#FFA380" 
+          stroke="#E2A67D" 
           strokeWidth="1.3" 
           strokeLinejoin="round" 
         />
 
         {/* Central Luminous Cryptographic Aperture / Vault Lock Wheel */}
-        <circle cx="24" cy="24" r="5.5" fill="url(#dvEmberCore)" stroke="#FFFFFF" strokeWidth="1" strokeOpacity="0.9" />
-        <circle cx="24" cy="24" r="2" fill="#1C110D" />
+        <circle cx="24" cy="24" r="5.5" fill="url(#dvCopperCore)" stroke="#FFFFFF" strokeWidth="1" strokeOpacity="0.9" />
+        <circle cx="24" cy="24" r="2" fill="#101A17" />
 
-        {/* Cardinal Caliper Ticks (Laser Alignment Nodes) */}
-        <line x1="24" y1="12" x2="24" y2="14.5" stroke="#FD2B06" strokeWidth="2" strokeLinecap="round" />
-        <line x1="24" y1="33.5" x2="24" y2="36" stroke="#FD2B06" strokeWidth="2" strokeLinecap="round" />
-        <line x1="12" y1="24" x2="14.5" y2="24" stroke="#FD2B06" strokeWidth="2" strokeLinecap="round" />
-        <line x1="33.5" y1="24" x2="36" y2="24" stroke="#FD2B06" strokeWidth="2" strokeLinecap="round" />
+        {/* Cardinal Caliper Ticks (Copper & Forest Alignment Nodes) */}
+        <line x1="24" y1="12" x2="24" y2="14.5" stroke="#287A57" strokeWidth="2" strokeLinecap="round" />
+        <line x1="24" y1="33.5" x2="24" y2="36" stroke="#287A57" strokeWidth="2" strokeLinecap="round" />
+        <line x1="12" y1="24" x2="14.5" y2="24" stroke="#C47B48" strokeWidth="2" strokeLinecap="round" />
+        <line x1="33.5" y1="24" x2="36" y2="24" stroke="#C47B48" strokeWidth="2" strokeLinecap="round" />
       </g>
     </svg>
   );

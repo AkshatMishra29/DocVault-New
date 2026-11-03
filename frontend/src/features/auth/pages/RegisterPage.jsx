@@ -375,7 +375,7 @@ export default function RegisterPage() {
           className="dv-auth-about-trigger"
           onClick={() => setIsAboutModalOpen(true)}
         >
-          <HelpCircle size={14} color="#FD2B06" />
+          <HelpCircle size={14} color="#287A57" />
           <span>Know about DocVault • Sovereign Security Architecture</span>
         </button>
       </div>

@@ -1,129 +1,146 @@
 :root {
-  /* 3D Editorial Authentication Palette (Dribbble 3D Reference) */
+  /* 10. Forest Noir & Copper (Private Banking) */
   --font-display: 'DM Serif Display', Georgia, serif;
   --font-ui: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
-  --color-auth-bg: #F8F5F1;
-  --color-auth-panel: #D0AC9A;
-  --color-auth-panel-deep: #B8927E;
-  --color-auth-panel-light: #F2ECE6;
-  --color-auth-text-dark: #1C1310;
-  --color-auth-cta: #FD2B06;
-  --color-auth-cta-hover: #E02504;
-  --color-auth-cta-active: #C42003;
-  --color-auth-coral: #EB6C3B;
-  --color-auth-taupe: #BFB3AA;
-  --color-auth-soft-grey: #E4E4E3;
-  --color-auth-blue: #1A44CE;
-  --color-auth-muted: #766B65;
-  --color-auth-border: #D8CCC3;
-  --color-auth-border-focus: #FD2B06;
+  --color-auth-bg: #F5F5F0;
+  --color-auth-panel: #1D3B30;
+  --color-auth-panel-deep: #101A17;
+  --color-auth-panel-light: #F5F5F0;
+  --color-auth-text-dark: #101A17;
+  --color-auth-cta: #287A57;
+  --color-auth-cta-hover: #1E6345;
+  --color-auth-cta-active: #164E35;
+  --color-auth-copper: #C47B48;
+  --color-auth-coral: #C47B48;
+  --color-auth-taupe: #8A9A92;
+  --color-auth-soft-grey: #E5EBE3;
+  --color-auth-blue: #225C7A;
+  --color-auth-muted: #5A6D64;
+  --color-auth-border: #DCE2D9;
+  --color-auth-border-focus: #287A57;
   --color-auth-input-bg: #FFFFFF;
   --color-auth-surface: #FFFFFF;
   --color-auth-card-bg: #FFFFFF;
-  --color-auth-disabled: #EAE5E0;
-  --color-auth-disabled-text: #A89F98;
-  --color-auth-success: #287A52;
-  --color-auth-error: #C63B2E;
-  --color-auth-focus-ring: rgba(253, 43, 6, 0.16);
+  --color-auth-disabled: #E6EAE3;
+  --color-auth-disabled-text: #8A9A92;
+  --color-auth-success: #287A57;
+  --color-auth-error: #B9382C;
+  --color-auth-focus-ring: rgba(40, 122, 87, 0.18);
 
-  /* DocVault Signature Brand Palette (3D Editorial Sunset, Warm Espresso, Linen) */
-  --color-primary: #FD2B06;          /* Primary Electric Ember / Sunset */
-  --color-primary-hover: #E02504;    /* Darker Ember */
-  --color-primary-light: #EB6C3B;    /* Warm Terracotta Accent */
-  --color-secondary: #1C1310;        /* Deep Warm Espresso */
-  --color-secondary-hover: #120B09;  /* Pitch Espresso */
-  --color-accent: #EB6C3B;           /* Terracotta / Coral Accent */
-  --color-accent-hover: #D95627;
-  --color-accent-subtle: #FDF2ED;
-  --color-primary-subtle: #FFF3EE;   /* Very Light Tint of Sunset Coral */
+  /* DocVault Signature Brand Palette (Forest Noir & Copper) */
+  --color-primary: #287A57;          /* Primary Forest Green */
+  --color-primary-hover: #1E6345;    /* Deep Forest Green */
+  --color-primary-light: #34966D;    /* Vibrant Forest Accent */
+  --color-secondary: #1D3B30;        /* Deep Forest Noir */
+  --color-secondary-hover: #101A17;  /* Pitch Forest Noir */
+  --color-accent: #C47B48;           /* Warm Copper Highlight */
+  --color-accent-hover: #B06938;
+  --color-accent-subtle: #FAF2EC;
+  --color-primary-subtle: #EDF6F1;   /* Pale Tint of Forest Green */
   
   /* Foundation Surfaces */
-  --color-bg: #F8F5F1;               /* Editorial Linen Sand */
-  --color-surface: #FFFFFF;          /* Pure White */
+  --color-bg: #F5F5F0;               /* Light Background */
+  --color-surface: #FFFFFF;          /* Pure White Surface */
   --color-surface-white: #FFFFFF;
-  --color-surface-hover: #F2ECE6;
-  --color-surface-secondary: #EDE5DE;
-  --color-surface-tertiary: #E4DBD2;
-  --color-surface-dark: #1C1310;     /* Deep Espresso Surface */
-  --color-surface-dark-card: #140E0C;
+  --color-surface-hover: #EDF1EB;
+  --color-surface-secondary: #EBF0E8;
+  --color-surface-tertiary: #DFE5DC;
+  --color-surface-dark: #101A17;     /* Dark Background / Forest Noir */
+  --color-surface-dark-card: #152420;
 
   /* Typography Colors */
-  --color-text-primary: #1C1310;     /* Deep Espresso Primary */
-  --color-text-secondary: #5C524C;   /* Warm Taupe Medium */
-  --color-text-muted: #8C8077;       /* Soft Sand Muted */
+  --color-text-primary: #101A17;     /* Forest Noir Text */
+  --color-text-secondary: #3D4F46;   /* Muted Forest Pine */
+  --color-text-muted: #6E7F76;       /* Soft Foliage Gray */
   --color-text-inverse: #FFFFFF;     /* Pure White */
 
   /* Borders & Dividers */
-  --color-border: #D8CCC3;
-  --color-border-subtle: #EAE3DB;
-  --color-border-focus: #FD2B06;
-  --color-border-hover: #C2B4AA;
+  --color-border: #DCE2D9;           /* Standard Border */
+  --color-border-subtle: #E8ECE6;
+  --color-border-focus: #287A57;
+  --color-border-hover: #BCC5B8;
 
   /* Feedback Colors */
-  --color-success: #059669;
-  --color-success-bg: #ECFDF5;
-  --color-success-subtle: #ECFDF5;
-  --color-success-border: #A7F3D0;
+  --color-success: #287A57;
+  --color-success-bg: #EDF6F1;
+  --color-success-subtle: #EDF6F1;
+  --color-success-border: #A8D5C0;
 
-  --color-warning: #D97706;
-  --color-warning-bg: #FFFBEB;
-  --color-warning-subtle: #FFFBEB;
-  --color-warning-border: #FDE68A;
+  --color-warning: #C47B48;          /* Copper Warm Warning */
+  --color-warning-bg: #FDF6F0;
+  --color-warning-subtle: #FDF6F0;
+  --color-warning-border: #ECCDB8;
 
-  --color-danger: #DC2626;
-  --color-danger-bg: #FEF2F2;
-  --color-danger-subtle: #FEF2F2;
-  --color-danger-border: #FECACA;
+  --color-danger: #B9382C;
+  --color-danger-bg: #FDF2F1;
+  --color-danger-subtle: #FDF2F1;
+  --color-danger-border: #F5C2BC;
 
-  /* Layout Dimensions */
-  --sidebar-width: 260px;
-  --header-height: 70px;
-  --content-max-width: 1440px;
+  --color-info: #225C7A;
+  --color-info-bg: #EEF5F8;
+  --color-info-subtle: #EEF5F8;
+  --color-info-border: #B7D4E3;
 
-  /* Spacing Scale (4px system) */
+  /* Spacing Scale (8pt grid system) */
   --space-0-5: 2px;
   --space-1: 4px;
   --space-1-5: 6px;
   --space-2: 8px;
   --space-2-5: 10px;
   --space-3: 12px;
+  --space-3-5: 14px;
   --space-4: 16px;
   --space-5: 20px;
   --space-6: 24px;
+  --space-7: 28px;
   --space-8: 32px;
   --space-10: 40px;
   --space-12: 48px;
   --space-16: 64px;
   --space-20: 80px;
 
-  /* Radii */
+  /* Border Radii */
   --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-2xl: 28px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
   --radius-full: 9999px;
 
-  /* Elevation & Shadows */
-  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
-  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px 0 rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
-  --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 10px 10px -5px rgba(15, 23, 42, 0.02);
-  --shadow-glow: 0 0 24px -4px rgba(253, 43, 6, 0.28);
-  --shadow-glow-mint: 0 0 20px -3px rgba(235, 108, 59, 0.25);
+  /* Shadows (Subtle, crisp, high-trust) */
+  --shadow-xs: 0 1px 2px rgba(16, 26, 23, 0.04);
+  --shadow-sm: 0 1px 3px rgba(16, 26, 23, 0.06), 0 1px 2px rgba(16, 26, 23, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(16, 26, 23, 0.07), 0 2px 4px -2px rgba(16, 26, 23, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(16, 26, 23, 0.08), 0 4px 6px -4px rgba(16, 26, 23, 0.03);
+  --shadow-xl: 0 20px 25px -5px rgba(16, 26, 23, 0.08), 0 8px 10px -6px rgba(16, 26, 23, 0.03);
+  --shadow-2xl: 0 25px 50px -12px rgba(16, 26, 23, 0.15);
 
-  /* Glassmorphism tokens */
-  --glass-bg: rgba(255, 255, 255, 0.88);
-  --glass-border: rgba(255, 255, 255, 0.6);
+  /* Elevation Layers (z-index) */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+
+  /* Layout Constants */
+  --sidebar-width: 256px;
+  --sidebar-collapsed-width: 72px;
+  --header-height: 64px;
+  --max-content-width: 1280px;
+
+  /* Glassmorphism Tokens */
+  --glass-bg: rgba(245, 245, 240, 0.85);
+  --glass-border: rgba(220, 226, 217, 0.7);
   --glass-blur: blur(16px);
 
   /* Gradients */
-  --gradient-ai: linear-gradient(135deg, #FD2B06 0%, #EB6C3B 60%, #FF6E4A 100%);
-  --gradient-card: linear-gradient(180deg, #FFFFFF 0%, #F8F5F1 100%);
-  --gradient-hero: radial-gradient(circle at 50% 15%, rgba(253, 43, 6, 0.12) 0%, rgba(235, 108, 59, 0.05) 40%, transparent 70%);
+  --gradient-ai: linear-gradient(135deg, #287A57 0%, #1D3B30 60%, #C47B48 100%);
+  --gradient-card: linear-gradient(180deg, #FFFFFF 0%, #F5F5F0 100%);
+  --gradient-hero: radial-gradient(circle at 50% 15%, rgba(40, 122, 87, 0.12) 0%, rgba(196, 123, 72, 0.06) 40%, transparent 70%);
 
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -132,37 +149,37 @@
 }
 
 [data-theme="dark"] {
-  --color-auth-bg: #14100E;
-  --color-auth-panel: #2A1F1B;
-  --color-auth-panel-deep: #1F1613;
-  --color-auth-panel-light: #241A17;
-  --color-auth-text-dark: #F8F5F1;
-  --color-auth-muted: #A89F98;
-  --color-auth-border: #3D2F28;
-  --color-auth-input-bg: #1C1310;
-  --color-auth-surface: #1E1512;
-  --color-auth-card-bg: #1E1512;
-  --color-auth-disabled: #2B201B;
-  --color-auth-disabled-text: #665851;
-  --color-auth-soft-grey: #261D19;
+  --color-auth-bg: #101A17;
+  --color-auth-panel: #1D3B30;
+  --color-auth-panel-deep: #0B1210;
+  --color-auth-panel-light: #162420;
+  --color-auth-text-dark: #F5F5F0;
+  --color-auth-muted: #8A9A92;
+  --color-auth-border: #233830;
+  --color-auth-input-bg: #152420;
+  --color-auth-surface: #152420;
+  --color-auth-card-bg: #152420;
+  --color-auth-disabled: #1E332B;
+  --color-auth-disabled-text: #5A6D64;
+  --color-auth-soft-grey: #182B24;
 
-  --color-bg: #14100E;
-  --color-surface: #1E1512;
-  --color-surface-white: #1E1512;
-  --color-surface-hover: #281D19;
-  --color-surface-secondary: #281D19;
-  --color-surface-tertiary: #3D2E27;
-  --color-border: #3D2F28;
-  --color-border-subtle: #2A1F1B;
-  --color-border-hover: #544138;
-  --color-text-primary: #F8F5F1;
-  --color-text-secondary: #A89F98;
-  --color-text-muted: #766B65;
-  --glass-bg: rgba(30, 21, 18, 0.88);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --color-primary-subtle: rgba(253, 43, 6, 0.18);
-  --color-accent-subtle: rgba(235, 108, 59, 0.18);
-  --color-success-bg: rgba(40, 122, 82, 0.18);
-  --color-warning-bg: rgba(217, 119, 6, 0.15);
-  --color-danger-bg: rgba(220, 38, 38, 0.15);
+  --color-bg: #101A17;
+  --color-surface: #152420;
+  --color-surface-white: #152420;
+  --color-surface-hover: #1D322C;
+  --color-surface-secondary: #1D322C;
+  --color-surface-tertiary: #27423B;
+  --color-border: #233830;
+  --color-border-subtle: #192923;
+  --color-border-hover: #325246;
+  --color-text-primary: #F5F5F0;
+  --color-text-secondary: #9DB0A7;
+  --color-text-muted: #6E7F76;
+  --glass-bg: rgba(21, 36, 32, 0.88);
+  --glass-border: rgba(220, 226, 217, 0.12);
+  --color-primary-subtle: rgba(40, 122, 87, 0.22);
+  --color-accent-subtle: rgba(196, 123, 72, 0.22);
+  --color-success-bg: rgba(40, 122, 87, 0.2);
+  --color-warning-bg: rgba(196, 123, 72, 0.2);
+  --color-danger-bg: rgba(185, 56, 44, 0.2);
 }

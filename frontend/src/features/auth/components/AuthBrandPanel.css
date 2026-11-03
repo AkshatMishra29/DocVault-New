@@ -23,7 +23,7 @@
 
 [data-theme="dark"] .dv-auth-editorial-panel {
   background: 
-    radial-gradient(ellipse at 20% 15%, rgba(253, 43, 6, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 15%, rgba(40, 122, 87, 0.08) 0%, transparent 50%),
     radial-gradient(ellipse at 85% 85%, rgba(208, 172, 154, 0.05) 0%, transparent 60%),
     linear-gradient(155deg, #2A1F1B 0%, #201714 50%, #17100D 100%);
   border-right-color: rgba(61, 47, 40, 0.6);
@@ -159,7 +159,7 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-auth-cta, #FD2B06);
+  color: var(--color-auth-cta, #287A57);
 }
 
 .dv-editorial-title {
@@ -213,8 +213,8 @@
   width: 22px;
   height: 22px;
   border-radius: 6px;
-  background: rgba(253, 43, 6, 0.12);
-  color: var(--color-auth-cta, #FD2B06);
+  background: rgba(40, 122, 87, 0.12);
+  color: var(--color-auth-cta, #287A57);
   display: flex;
   align-items: center;
   justify-content: center;

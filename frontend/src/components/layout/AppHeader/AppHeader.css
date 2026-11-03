@@ -25,9 +25,9 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #FFF1EE;
-  color: #FD2B06;
-  border: 1.5px solid #FFE4DF;
+  background: #EDF6F1;
+  color: #287A57;
+  border: 1.5px solid #DCE2D9;
   align-items: center;
   justify-content: center;
   font-family: 'Manrope', sans-serif;
@@ -76,7 +76,7 @@
 }
 
 .dv-app-header__shield-icon {
-  color: #FD2B06;
+  color: #287A57;
 }
 
 .dv-app-header__user-email {

@@ -45,7 +45,7 @@
 .dv-keypad-btn:active:not(:disabled) {
   transform: translateY(0);
   background-color: var(--color-auth-disabled, #EAE5E0);
-  border-color: var(--color-auth-cta, #FD2B06);
+  border-color: var(--color-auth-cta, #287A57);
 }
 
 .dv-keypad-btn:disabled {

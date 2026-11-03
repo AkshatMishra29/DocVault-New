@@ -30,9 +30,9 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  background: #FFF1EE;
-  color: #FD2B06;
-  border: 1px solid #FFE4DF;
+  background: #EDF6F1;
+  color: #287A57;
+  border: 1px solid #DCE2D9;
   padding: 3px 8px;
   border-radius: 9999px;
 }
@@ -152,7 +152,7 @@
 .dv-native-alert--error {
   background: #FEF2F2;
   color: #DC2626;
-  border: 1px solid #FEE2E2;
+  border: 1px solid #EDF6F1;
 }
 
 /* Google Button */
@@ -233,7 +233,7 @@
 .dv-native-link-sm {
   font-size: 12px;
   font-weight: 600;
-  color: #FD2B06;
+  color: #287A57;
   text-decoration: none;
 }
 
@@ -267,8 +267,8 @@
 .dv-native-input:focus {
   outline: none;
   background: #FFFFFF;
-  border-color: #FD2B06;
-  box-shadow: 0 0 0 3px rgba(253, 43, 6, 0.12);
+  border-color: #287A57;
+  box-shadow: 0 0 0 3px rgba(40, 122, 87, 0.12);
 }
 
 .dv-native-eye-btn {
@@ -317,7 +317,7 @@
 }
 
 .dv-native-pin-pill.active {
-  background: #FD2B06;
+  background: #287A57;
   color: #FFFFFF;
 }
 
@@ -340,7 +340,7 @@
   width: 100%;
   height: 46px;
   margin-top: 6px;
-  background: #FD2B06;
+  background: #287A57;
   color: #FFFFFF;
   border: none;
   border-radius: 10px;
@@ -352,7 +352,7 @@
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(253, 43, 6, 0.25);
+  box-shadow: 0 4px 14px rgba(40, 122, 87, 0.25);
   transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
@@ -386,7 +386,7 @@
   gap: 8px;
   padding: 10px 12px;
   background: #FFF7F5;
-  border: 1px solid #FFE4DF;
+  border: 1px solid #DCE2D9;
   border-radius: 10px;
   color: #0F172A;
   font-family: 'Manrope', sans-serif;
