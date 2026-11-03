@@ -1,13 +1,18 @@
+/* ==========================================================================
+   MOBILE APP AUTH VIEW - ELITE DARK TITANIUM THEME
+   ========================================================================== */
+
 .dv-native-app-screen {
   min-height: 100vh;
   min-height: 100dvh;
-  background: #F8F9FA;
+  background: radial-gradient(circle at 50% 0%, #151A24 0%, #0A0C10 60%, #050709 100%);
   display: flex;
   flex-direction: column;
-  padding: max(12px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom)) 16px;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom)) 16px;
   box-sizing: border-box;
-  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-ui, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
   -webkit-font-smoothing: antialiased;
+  color: #F8FAFC;
 }
 
 /* Native App Bar */
@@ -15,7 +20,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 4px 18px 4px;
+  padding: 8px 4px 18px 4px;
 }
 
 .dv-native-app-bar__brand {
@@ -24,217 +29,96 @@
   justify-content: center;
 }
 
-.dv-native-app-bar__badge {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  background: #FFF1EE;
-  color: #FD2B06;
-  border: 1px solid #FFE4DF;
-  padding: 3px 8px;
-  border-radius: 9999px;
-}
-
-.dv-native-app-bar__status {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #374151;
-}
-
-.dv-native-ping-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #16A34A;
-  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
-}
-
-/* Main Body */
-.dv-native-app-body {
-  flex: 1;
+/* Segmented Control iOS / Android Switch */
+.dv-native-app-segmented {
   display: flex;
-  flex-direction: column;
-  max-width: 440px;
-  width: 100%;
-  margin: 0 auto;
-  justify-content: center;
-}
-
-/* Segmented Control (iOS / Material 3) */
-.dv-native-segmented-bar {
-  display: flex;
-  background: #E9ECEF;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   padding: 4px;
-  margin-bottom: 16px;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  margin: 0 auto 20px auto;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
 }
 
-.dv-native-segment-btn {
+.dv-native-app-segment {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 10px 16px;
-  border: none;
-  background: transparent;
   border-radius: 10px;
-  font-family: 'Manrope', sans-serif;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: #6C757D;
+  font-family: var(--font-ui, sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  color: #94A3B8;
+  background: transparent;
+  border: none;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  -webkit-tap-highlight-color: transparent;
-}
-
-.dv-native-segment-btn:active {
-  transform: scale(0.97);
-}
-
-.dv-native-segment-btn--active {
-  background: #FFFFFF;
-  color: #0F172A;
-  font-weight: 700;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
-}
-
-/* Card Surface */
-.dv-native-card {
-  background: #FFFFFF;
-  border-radius: 24px;
-  border: 1px solid #E9ECEF;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.02);
-  padding: 24px 20px;
-}
-
-.dv-native-card__intro {
-  margin-bottom: 20px;
-}
-
-.dv-native-card__title {
-  margin: 0 0 4px 0;
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 22px;
-  color: #0F172A;
-  font-weight: 500;
-}
-
-.dv-native-card__desc {
-  margin: 0;
-  font-size: 13px;
-  color: #64748B;
-  line-height: 1.45;
-}
-
-/* Alerts */
-.dv-native-alert {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: 12.5px;
-  margin-bottom: 16px;
-  line-height: 1.4;
-}
-
-.dv-native-alert--error {
-  background: #FEF2F2;
-  color: #DC2626;
-  border: 1px solid #FEE2E2;
-}
-
-/* Google Button */
-.dv-native-google-btn {
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  background: #FFFFFF;
-  color: #1F2937;
-  border: 1px solid #D1D5DB;
-  border-radius: 12px;
-  height: 46px;
-  font-family: 'Manrope', sans-serif;
-  font-size: 13.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
+  gap: 6px;
 }
 
-.dv-native-google-btn:active {
-  background: #F9FAFB;
-  transform: scale(0.98);
+.dv-native-app-segment.active {
+  background: #FD2B06;
+  color: #FFFFFF;
+  box-shadow: 0 4px 16px rgba(253, 43, 6, 0.4);
 }
 
-/* Divider */
-.dv-native-divider {
-  display: flex;
-  align-items: center;
+/* Auth Card Container */
+.dv-native-auth-card {
+  background: rgba(18, 22, 30, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 24px 20px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(253, 43, 6, 0.08);
+}
+
+/* Typography Inside Form */
+.dv-native-auth-header {
   text-align: center;
-  margin: 18px 0;
-  color: #9CA3AF;
-  font-size: 11.5px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  margin-bottom: 22px;
 }
 
-.dv-native-divider::before,
-.dv-native-divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid #E5E7EB;
+.dv-native-auth-title {
+  font-family: var(--font-display, sans-serif);
+  font-size: 22px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.02em;
 }
 
-.dv-native-divider span {
-  padding: 0 10px;
+.dv-native-auth-sub {
+  font-family: var(--font-ui, sans-serif);
+  font-size: 13px;
+  color: #94A3B8;
+  margin: 0;
 }
 
-/* Fields */
-.dv-native-form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
+/* Fields & Inputs */
 .dv-native-field {
+  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-}
-
-.dv-native-field-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  gap: 6px;
 }
 
 .dv-native-label {
+  font-family: var(--font-ui, sans-serif);
   font-size: 12px;
   font-weight: 700;
-  color: #374151;
-  letter-spacing: -0.01em;
-}
-
-.dv-native-link-sm {
-  font-size: 12px;
-  font-weight: 600;
-  color: #FD2B06;
-  text-decoration: none;
+  color: #E2E8F0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .dv-native-input-wrap {
@@ -246,29 +130,28 @@
 .dv-native-input-icon {
   position: absolute;
   left: 14px;
-  color: #9CA3AF;
+  color: #64748B;
   pointer-events: none;
 }
 
 .dv-native-input {
   width: 100%;
-  height: 46px;
-  padding: 0 42px 0 42px;
+  height: 48px;
+  background: rgba(10, 13, 18, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
-  border: 1px solid #D1D5DB;
-  background: #F9FAFB;
-  font-family: 'Manrope', sans-serif;
+  padding: 0 42px 0 42px;
+  color: #FFFFFF;
   font-size: 14px;
-  color: #111827;
-  transition: all 0.2s ease;
   box-sizing: border-box;
+  transition: all 0.2s ease;
 }
 
 .dv-native-input:focus {
   outline: none;
-  background: #FFFFFF;
   border-color: #FD2B06;
-  box-shadow: 0 0 0 3px rgba(253, 43, 6, 0.12);
+  box-shadow: 0 0 0 3px rgba(253, 43, 6, 0.2);
+  background: rgba(10, 13, 18, 0.95);
 }
 
 .dv-native-eye-btn {
@@ -276,163 +159,136 @@
   right: 12px;
   background: transparent;
   border: none;
-  color: #9CA3AF;
+  color: #64748B;
   cursor: pointer;
-  padding: 6px;
+  padding: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .dv-native-eye-btn:hover {
-  color: #4B5563;
+  color: #E2E8F0;
 }
 
-/* PIN Header and Toggle */
-.dv-native-pin-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 4px;
-}
-
-.dv-native-pin-toggle {
-  display: inline-flex;
-  background: #F3F4F6;
-  border-radius: 8px;
-  padding: 2px;
-  gap: 2px;
-}
-
-.dv-native-pin-pill {
-  border: none;
-  background: transparent;
-  padding: 4px 8px;
-  font-size: 11px;
-  font-weight: 700;
-  color: #6B7280;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.dv-native-pin-pill.active {
-  background: #FD2B06;
-  color: #FFFFFF;
-}
-
-.dv-native-grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.dv-native-grid-2 .dv-native-input {
-  padding-left: 38px;
-  padding-right: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 15px;
-  letter-spacing: 0.1em;
-}
-
-/* Submit CTA */
-.dv-native-submit-btn {
+/* Buttons */
+.dv-native-btn-submit {
   width: 100%;
-  height: 46px;
-  margin-top: 6px;
-  background: #FD2B06;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #FD2B06 0%, #FF5A36 100%);
   color: #FFFFFF;
-  border: none;
-  border-radius: 10px;
-  font-family: 'Manrope', sans-serif;
-  font-size: 14.5px;
-  font-weight: 600;
+  font-family: var(--font-ui, sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 18px rgba(253, 43, 6, 0.4);
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(253, 43, 6, 0.25);
-  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-  -webkit-tap-highlight-color: transparent;
-  box-sizing: border-box;
+  transition: all 0.2s ease;
+  margin-top: 10px;
 }
 
-.dv-native-submit-btn:active {
-  transform: scale(0.97);
-  background: #E02604;
+.dv-native-btn-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(253, 43, 6, 0.55);
 }
 
-.dv-native-submit-btn:disabled {
-  opacity: 0.7;
+.dv-native-btn-submit:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* App Info & About Links */
-.dv-native-app-links {
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid #F1F5F9;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.dv-native-about-btn {
+/* Google OAuth Button */
+.dv-native-btn-google {
   width: 100%;
+  height: 46px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #F8FAFC;
+  font-family: var(--font-ui, sans-serif);
+  font-size: 14px;
+  font-weight: 600;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 10px 12px;
-  background: #FFF7F5;
-  border: 1px solid #FFE4DF;
-  border-radius: 10px;
-  color: #0F172A;
-  font-family: 'Manrope', sans-serif;
-  font-size: 12.5px;
-  font-weight: 600;
+  justify-content: center;
+  gap: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
+  margin-top: 14px;
 }
 
-.dv-native-about-btn:active {
-  background: #FFE8E3;
+.dv-native-btn-google:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
-.dv-native-about-chevron {
+/* Divider */
+.dv-native-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 18px 0;
+  color: #64748B;
+  font-size: 11px;
+  font-family: var(--font-mono, monospace);
+  letter-spacing: 0.1em;
+}
+
+.dv-native-divider::before,
+.dv-native-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dv-native-divider span {
+  padding: 0 12px;
+}
+
+/* Bottom Links & Modals */
+.dv-native-footer-links {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.dv-native-about-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-ui, sans-serif);
+  font-size: 12.5px;
+  font-weight: 600;
   color: #94A3B8;
-}
-
-.dv-native-web-btn {
   background: transparent;
   border: none;
-  color: #64748B;
-  font-family: 'Manrope', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  text-decoration: underline;
   cursor: pointer;
-  padding: 4px;
+  transition: color 0.2s ease;
 }
 
-@media (max-width: 480px) {
-  .dv-native-card {
-    padding: 20px 16px;
-    border-radius: 20px;
-  }
-  .dv-native-card__title {
-    font-size: 20px;
-  }
-  .dv-native-app-screen {
-    padding: max(8px, env(safe-area-inset-top)) 12px max(20px, env(safe-area-inset-bottom)) 12px;
-  }
+.dv-native-about-link:hover {
+  color: #FD2B06;
 }
 
-@media (max-width: 350px) {
-  .dv-native-grid-2 {
-    grid-template-columns: 1fr;
-  }
+.dv-native-desktop-switch {
+  font-family: var(--font-ui, sans-serif);
+  font-size: 12px;
+  color: #64748B;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
 }
 
+.dv-native-desktop-switch:hover {
+  color: #E2E8F0;
+}

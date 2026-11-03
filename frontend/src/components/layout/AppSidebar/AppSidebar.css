@@ -1,31 +1,36 @@
+/* ==========================================================================
+   ELITEVAULT OBSIDIAN APP SIDEBAR
+   ========================================================================== */
+
 .dv-sidebar {
-  width: var(--sidebar-width);
+  width: var(--sidebar-width, 260px);
   height: 100vh;
   position: sticky;
   top: 0;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-right: 1px solid var(--color-border);
+  background: rgba(10, 13, 18, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   z-index: 50;
+  box-sizing: border-box;
 }
 
 .dv-sidebar__header {
-  height: var(--header-height);
-  padding: 0 var(--space-6);
+  height: var(--header-height, 70px);
+  padding: 0 20px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .dv-sidebar__nav {
-  padding: var(--space-5) var(--space-3);
+  padding: 20px 12px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 6px;
   flex: 1;
   overflow-y: auto;
 }
@@ -33,90 +38,81 @@
 .dv-sidebar__item {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: 10px var(--space-4);
-  border-radius: var(--radius-md);
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
-  color: var(--color-text-secondary);
-  transition: all var(--transition-fast);
+  gap: 12px;
+  padding: 11px 16px;
+  border-radius: 12px;
+  font-family: var(--font-ui, sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: #94A3B8;
+  text-decoration: none;
+  transition: all 0.2s ease;
   position: relative;
 }
 
 .dv-sidebar__item:hover {
-  background-color: var(--color-primary-subtle);
-  color: var(--color-primary);
-  transform: translateX(2px);
+  background: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
+  transform: translateX(3px);
 }
 
 .dv-sidebar__item--active {
-  background: linear-gradient(90deg, rgba(253, 43, 6, 0.12) 0%, rgba(235, 108, 59, 0.06) 100%);
-  color: var(--color-primary);
-  font-weight: var(--font-semibold);
+  background: rgba(253, 43, 6, 0.12) !important;
+  color: #FF5A36 !important;
+  border: 1px solid rgba(253, 43, 6, 0.25);
+  font-weight: 700;
 }
 
 .dv-sidebar__item--active::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 15%;
-  bottom: 15%;
-  width: 3.5px;
-  background: var(--color-primary);
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
   border-radius: 0 4px 4px 0;
-}
-
-.dv-sidebar__icon {
-  flex-shrink: 0;
-  transition: transform var(--transition-fast);
-}
-
-.dv-sidebar__item:hover .dv-sidebar__icon {
-  transform: scale(1.08);
-}
-
-.dv-sidebar__badge {
-  margin-left: auto;
-  font-size: 10px;
-  font-weight: var(--font-bold);
-  padding: 2px 7px;
-  border-radius: var(--radius-full);
-  background: var(--color-primary);
-  color: #FFFFFF;
-  box-shadow: 0 2px 6px rgba(1, 90, 71, 0.35);
+  background-color: #FD2B06;
+  box-shadow: 0 0 10px #FD2B06;
 }
 
 .dv-sidebar__footer {
-  padding: var(--space-4) var(--space-5);
-  border-top: 1px solid var(--color-border-subtle);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.dv-sidebar__tier-pill {
+.dv-sidebar-vault-status {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: 6px 12px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-primary-subtle);
-  border: 1px solid rgba(1, 90, 71, 0.2);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--color-primary);
+  gap: 10px;
 }
 
-.dv-sidebar__dot {
-  width: 6px;
-  height: 6px;
+.dv-sidebar-status-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background-color: var(--color-primary);
-  box-shadow: 0 0 6px var(--color-primary);
+  background-color: #10B981;
+  box-shadow: 0 0 8px #10B981;
+  flex-shrink: 0;
 }
 
-@media (max-width: 1024px) {
-  .dv-sidebar {
-    display: none;
-  }
+.dv-sidebar-status-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.dv-sidebar-status-title {
+  font-family: var(--font-ui, sans-serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #F8FAFC;
+}
+
+.dv-sidebar-status-sub {
+  font-family: var(--font-mono, monospace);
+  font-size: 9.5px;
+  color: #64748B;
 }

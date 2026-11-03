@@ -1,8 +1,14 @@
+/* ==========================================================================
+   ELITEVAULT OBSIDIAN APP LAYOUT (DASHBOARD CONTAINER)
+   ========================================================================== */
+
 .dv-app-shell {
   display: flex;
   min-height: 100vh;
   min-height: 100dvh;
-  background-color: #FAF8F5;
+  background-color: #07090D;
+  color: #F8FAFC;
+  font-family: var(--font-ui, 'Plus Jakarta Sans', sans-serif);
 }
 
 .dv-app-main {
@@ -13,6 +19,7 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   padding-bottom: 76px; /* Space for mobile nav */
+  background: radial-gradient(circle at 50% 0%, #10141D 0%, #07090D 70%);
 }
 
 @media (min-width: 1025px) {
@@ -25,12 +32,13 @@
   max-width: 1360px;
   width: 100%;
   margin: 0 auto;
-  padding: var(--space-6, 24px) var(--space-8, 32px);
+  padding: 24px 32px;
+  box-sizing: border-box;
 }
 
 @media (max-width: 1024px) {
   .dv-app-content-container {
-    padding: 16px 12px;
+    padding: 16px 14px;
   }
 }
 

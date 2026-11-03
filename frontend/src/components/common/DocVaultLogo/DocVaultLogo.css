@@ -11,56 +11,49 @@
 .dv-brand-logo__svg {
   display: block;
   flex-shrink: 0;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
 }
 
 .dv-brand-logo:hover .dv-brand-logo__svg {
-  transform: scale(1.04);
+  transform: scale(1.05) rotate(4deg);
+  filter: drop-shadow(0 0 10px rgba(253, 43, 6, 0.5));
 }
 
-.dv-brand-logo__img {
-  object-fit: contain;
-  object-position: left center;
-  display: block;
-  width: auto;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+.dv-brand-logo__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
-.dv-brand-logo:hover .dv-brand-logo__img {
-  transform: scale(1.03);
-}
-
-.dv-brand-logo__text {
-  font-family: var(--font-ui, 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+.dv-brand-logo__title {
+  font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
   font-weight: 800;
-  letter-spacing: -0.035em;
-  color: var(--color-auth-text-dark, #1C1310);
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
   line-height: 1;
 }
 
-[data-theme="dark"] .dv-brand-logo__text {
-  color: #F8F5F1;
-}
-
 .dv-brand-logo__accent {
-  background: linear-gradient(135deg, #FD2B06 0%, #EB6C3B 100%);
+  background: linear-gradient(135deg, #FD2B06 0%, #FF6E4A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
 }
 
-[data-theme="dark"] .dv-brand-logo__accent {
-  background: linear-gradient(135deg, #FF4D26 0%, #EB6C3B 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.dv-brand-logo__tagline {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  color: #94A3B8;
+  opacity: 0.85;
+  line-height: 1;
 }
 
-.dv-brand-logo--light .dv-brand-logo__text {
+.dv-brand-logo--light .dv-brand-logo__title {
   color: #FFFFFF;
 }
 
-.dv-brand-logo--light .dv-brand-logo__accent {
-  background: linear-gradient(135deg, #FFA07A 0%, #EB6C3B 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.dv-brand-logo--default .dv-brand-logo__title {
+  color: #F8FAFC;
 }
