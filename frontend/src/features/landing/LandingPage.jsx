@@ -3,7 +3,7 @@ import { Link, Navigate } from 'react-router-dom';
 import MobileAppAuthView from './MobileAppAuthView';
 import PublicNavbar from '../../components/layout/PublicNavbar/PublicNavbar';
 import PublicFooter from '../../components/layout/PublicFooter/PublicFooter';
-import InteractiveVaultVisual from './InteractiveVaultVisual';
+import heroArtwork from '../../assets/hero-landing.jpg';
 import { useAuth } from '../auth/context/AuthContext';
 
 import { 
@@ -13,7 +13,7 @@ import {
   KeyRound, ChevronRight, FileSpreadsheet,
   FileText, LayoutDashboard, Fingerprint, AlertCircle,
   ChevronDown, FileCheck2, ShieldAlert, Smartphone, HelpCircle,
-  MessageSquare, Mail, Terminal, Zap, Check
+  MessageSquare, Mail
 } from 'lucide-react';
 import './LandingPage.css';
 
@@ -110,26 +110,23 @@ export default function LandingPage() {
     <div className="dv-landing-root">
       <PublicNavbar />
 
-      {/* 1. HERO SECTION (ELITE TITANIUM THEME) */}
+      {/* 1. HERO SECTION */}
       <section className="dv-lp-hero">
-        <div className="dv-lp-hero__glow-sphere" />
-        <div className="dv-lp-hero__grid-pattern" />
-
         <div className="dv-lp-hero__container">
-          {/* Left Column: Elite Copy & Value Proposition */}
+          {/* Left Column: Copy & Value Proposition */}
           <div className="dv-lp-hero__left">
             <div className="dv-lp-kicker">
               <span className="dv-lp-kicker-dot" />
-              <span>MILITARY-GRADE CLIENT VAULT & CUSTODY</span>
+              <span>Sovereign Personal Document Vault</span>
             </div>
 
             <h1 className="dv-lp-hero__title">
-              Sovereign custody.<br />
-              <span className="dv-lp-hero__title-accent">Zero compromise.</span>
+              Your critical documents.<br />
+              <span className="dv-lp-hero__title-accent">Protected with absolute custody.</span>
             </h1>
 
             <p className="dv-lp-hero__desc">
-              Hardware-accelerated encryption, automated OCR extraction, proactive renewal intelligence, and grounded AI assistant — unified in a titanium-grade personal vault.
+              End-to-end encrypted storage, automated OCR extraction, proactive renewal intelligence, and a grounded AI assistant — unified in one serene personal vault.
             </p>
 
             <div className="dv-lp-hero__cta-row">
@@ -141,12 +138,12 @@ export default function LandingPage() {
               ) : (
                 <>
                   <Link to="/register" className="dv-lp-btn-primary">
-                    <span>Create Private Vault</span>
+                    <span>Create Your Private Vault</span>
                     <ArrowRight size={16} />
                   </Link>
                   <Link to="/login" className="dv-lp-btn-secondary">
                     <Lock size={15} />
-                    <span>Access Vault</span>
+                    <span>Sign In to Vault</span>
                   </Link>
                 </>
               )}
@@ -155,22 +152,28 @@ export default function LandingPage() {
             <div className="dv-lp-hero__trust-strip">
               <div className="dv-lp-trust-item">
                 <CheckCircle2 size={16} className="dv-lp-trust-icon" />
-                <span>Multi-Tier PIN Shield</span>
+                <span>Multi-Tier Vault Encryption</span>
               </div>
               <div className="dv-lp-trust-item">
                 <CheckCircle2 size={16} className="dv-lp-trust-icon" />
-                <span>Private OCR Ingestion</span>
+                <span>Automated Expiry & Renewal Alerts</span>
               </div>
               <div className="dv-lp-trust-item">
                 <CheckCircle2 size={16} className="dv-lp-trust-icon" />
-                <span>Zero Telemetry Tracking</span>
+                <span>Grounded AI Intelligence</span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Interactive Procedural Coded 3D Vault Visual */}
+          {/* Right Column: Bespoke 3D Hero Artwork */}
           <div className="dv-lp-hero__right">
-            <InteractiveVaultVisual />
+            <div className="dv-lp-hero__art-frame">
+              <img 
+                src={heroArtwork} 
+                alt="DocVault 3D Ceramic Safe with Spoke Locker Wheel and Floating Documents" 
+                className="dv-lp-hero__art-img"
+              />
+            </div>
           </div>
         </div>
 
@@ -248,8 +251,8 @@ export default function LandingPage() {
               <div className="dv-lp-bento-icon dv-lp-bento-icon--taupe">
                 <Sparkles size={20} />
               </div>
-              <h4>Automated Intelligence</h4>
-              <p>OCR engine processes incoming files, automatically extracting renewal dates, GSTINs, and key metadata.</p>
+              <h4>Grounded AI Assistant</h4>
+              <p>Query coverage clauses, claim deductibles, or policy terms with zero hallucinations and exact document citations.</p>
             </div>
 
             {/* Card 3 */}
@@ -257,80 +260,92 @@ export default function LandingPage() {
               <div className="dv-lp-bento-icon dv-lp-bento-icon--amber">
                 <Clock size={20} />
               </div>
-              <h4>Renewal Watchdog</h4>
-              <p>Never miss a lapse. Proactive countdown badges alert you weeks in advance for passport and vehicle renewals.</p>
+              <h4>Expiry & Renewal Guard</h4>
+              <p>Automated countdowns and alerts ensure passports, motor policies, and appliance warranties never lapse unnoticed.</p>
             </div>
 
             {/* Card 4 */}
             <div className="dv-lp-bento-card">
               <div className="dv-lp-bento-icon dv-lp-bento-icon--green">
-                <HardDrive size={20} />
+                <Layers size={20} />
               </div>
-              <h4>Zero-Knowledge Architecture</h4>
-              <p>Files are encrypted before leaving your browser. Even our database administrators cannot read your paperwork.</p>
+              <h4>Intelligent Categorization</h4>
+              <p>High-accuracy classification automatically tags Identity, Tax, Vehicle, Medical, and Real Estate paperwork.</p>
             </div>
 
             {/* Card 5 */}
             <div className="dv-lp-bento-card">
-              <div className="dv-lp-bento-icon dv-lp-bento-icon--ember">
-                <Fingerprint size={20} />
+              <div className="dv-lp-bento-icon dv-lp-bento-icon--blue">
+                <HardDrive size={20} />
               </div>
-              <h4>Biometric Authentication</h4>
-              <p>Unlock with Touch ID, Face ID, or Windows Hello alongside your personal security PIN challenge.</p>
+              <h4>Asset & Deed Registry</h4>
+              <p>Track valuable possessions, appliances, property deeds, and link verified receipts to calculate overall portfolio value.</p>
             </div>
 
             {/* Card 6 */}
             <div className="dv-lp-bento-card">
-              <div className="dv-lp-bento-icon dv-lp-bento-icon--taupe">
-                <ShieldAlert size={20} />
+              <div className="dv-lp-bento-icon dv-lp-bento-icon--dark">
+                <ShieldCheck size={20} />
               </div>
-              <h4>Brute-Force Lockout</h4>
-              <p>Automated rate-limiting and session locks activate after failed attempts, securing against unauthorized physical access.</p>
+              <h4>Tamper-Resistant Defense</h4>
+              <p>Automated brute-force lockout, single active session enforcement, and WebAuthn biometric fallback.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. SIMULATED INTERFACE SHOWCASE (CODED MOCKUP) */}
+      {/* 3. INTERACTIVE DASHBOARD SHOWCASE */}
       <section className="dv-lp-showcase">
         <div className="dv-lp-container">
           <div className="dv-lp-showcase__grid">
-            {/* Left Column: Realistic UI Mockup in Code */}
+            {/* Left Column: High-Fidelity UI Mockup */}
             <div className="dv-lp-showcase__left">
-              <div className="dv-lp-mockup-window">
-                <div className="dv-lp-mockup-header">
+              <div className="dv-lp-mockup-frame">
+                {/* Mockup Header */}
+                <div className="dv-lp-mockup-top">
                   <div className="dv-lp-mockup-dots">
                     <span className="dot dot--red" />
                     <span className="dot dot--yellow" />
                     <span className="dot dot--green" />
                   </div>
-                  <div className="dv-lp-mockup-address">
-                    <Lock size={12} />
-                    <span>docvault.app/dashboard</span>
+                  <div className="dv-lp-mockup-search">
+                    <Search size={13} />
+                    <span>Search documents, policies, or ask AI...</span>
+                  </div>
+                  <div className="dv-lp-mockup-avatar">
+                    <span>JD</span>
                   </div>
                 </div>
 
+                {/* Mockup Body */}
                 <div className="dv-lp-mockup-body">
-                  <div className="dv-lp-mockup-stats">
-                    <div className="stat-pill">
-                      <span className="stat-label">Total Documents</span>
-                      <strong className="stat-value">24 Secured</strong>
+                  <div className="dv-lp-mockup-banner">
+                    <div>
+                      <h3>Welcome back, John</h3>
+                      <p>All 42 documents encrypted and verified in custody.</p>
                     </div>
-                    <div className="stat-pill">
-                      <span className="stat-label">Upcoming Renewals</span>
-                      <strong className="stat-value text-amber">2 Attention</strong>
-                    </div>
-                    <div className="stat-pill">
-                      <span className="stat-label">Encryption</span>
-                      <strong className="stat-value text-green">Hardware AES</strong>
+                    <div className="dv-lp-mockup-stats">
+                      <div className="stat-pill">
+                        <strong>42</strong>
+                        <span>Files</span>
+                      </div>
+                      <div className="stat-pill">
+                        <strong>8</strong>
+                        <span>Assets</span>
+                      </div>
+                      <div className="stat-pill stat-pill--alert">
+                        <strong>2</strong>
+                        <span>Expiring</span>
+                      </div>
                     </div>
                   </div>
 
+                  {/* Dual Grid: Recent Files & Expiry Calendar */}
                   <div className="dv-lp-mockup-panels">
                     <div className="dv-lp-mockup-panel">
                       <div className="panel-title-row">
-                        <h5>Recent Uploads</h5>
-                        <small>Vault Tier 2</small>
+                        <h5>Recent Verified Files</h5>
+                        <small>View all</small>
                       </div>
                       <div className="panel-item">
                         <div className="item-icon item-icon--pdf">

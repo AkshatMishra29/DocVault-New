@@ -1,82 +1,76 @@
 /* ==========================================================================
-   ELITEVAULT MODERN CAPSULE FLOATING NAVBAR (TITANIUM OBSIDIAN)
+   DOCVAULT PUBLIC NAVIGATION BAR (ENTERPRISE MINIMALIST GLASS)
    ========================================================================== */
 
 .dv-public-navbar {
-  position: fixed;
-  top: 16px;
+  position: sticky;
+  top: 0;
   left: 0;
   right: 0;
-  width: 100%;
   z-index: 1000;
-  display: flex;
-  justify-content: center;
-  padding: 0 20px;
+  width: 100%;
+  height: 68px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(229, 231, 235, 0.85);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
-  pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dv-public-navbar--scrolled {
+  background: rgba(255, 255, 255, 0.97);
+  border-bottom-color: rgba(216, 204, 195, 0.7);
+  box-shadow: 0 4px 20px -2px rgba(28, 19, 16, 0.06);
 }
 
 .dv-public-navbar__inner {
-  pointer-events: auto;
-  width: 100%;
-  max-width: 1200px;
-  height: 64px;
-  padding: 0 20px 0 24px;
+  max-width: 1240px;
+  margin: 0 auto;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-radius: 9999px;
-  background: rgba(13, 16, 22, 0.78);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 
-    0 12px 36px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0 24px;
+  box-sizing: border-box;
+  position: relative;
 }
 
-.dv-public-navbar--scrolled .dv-public-navbar__inner {
-  background: rgba(10, 12, 16, 0.92);
-  border-color: rgba(253, 43, 6, 0.25);
-  box-shadow: 
-    0 16px 40px rgba(0, 0, 0, 0.75),
-    0 0 24px rgba(253, 43, 6, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-}
-
-/* Brand Area */
+/* Brand Identity */
 .dv-nav-brand {
   display: flex;
   align-items: center;
   text-decoration: none;
   flex-shrink: 0;
+  transition: opacity 0.2s ease;
 }
 
-/* Center Menu Links */
+.dv-nav-brand:hover {
+  opacity: 0.9;
+}
+
+/* Center Desktop Navigation Menu */
 .dv-nav-menu {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .dv-nav-link {
-  padding: 8px 16px;
-  border-radius: 9999px;
-  font-family: var(--font-ui, sans-serif);
-  font-size: 13.5px;
+  font-family: var(--font-ui, 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 14px;
   font-weight: 600;
-  color: #94A3B8;
+  color: #4B5563;
   text-decoration: none;
-  transition: all 0.2s ease;
-  position: relative;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .dv-nav-link:hover {
-  color: #F8FAFC;
-  background: rgba(255, 255, 255, 0.06);
+  color: #111827;
+  background-color: rgba(17, 24, 39, 0.05);
 }
 
 /* Right Actions */
@@ -84,6 +78,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .dv-nav-auth-actions,
@@ -93,136 +88,164 @@
   gap: 10px;
 }
 
+/* Sign In Ghost Button */
 .dv-nav-btn-ghost {
-  padding: 9px 18px;
-  border-radius: 9999px;
-  font-family: var(--font-ui, sans-serif);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 13.5px;
   font-weight: 600;
-  color: #E2E8F0;
+  color: #374151;
   text-decoration: none;
-  transition: all 0.2s ease;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
 }
 
 .dv-nav-btn-ghost:hover {
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.08);
+  color: #111827;
+  background-color: rgba(17, 24, 39, 0.05);
+  border-color: rgba(229, 231, 235, 0.9);
 }
 
+/* Primary Action CTA Button */
 .dv-nav-btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 20px;
-  border-radius: 9999px;
-  background: linear-gradient(135deg, #FD2B06 0%, #FF5A36 100%);
-  color: #FFFFFF;
-  font-family: var(--font-ui, sans-serif);
+  justify-content: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 18px;
+  background-color: #FD2B06;
+  color: #FFFFFF !important;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 13.5px;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   text-decoration: none;
-  box-shadow: 
-    0 4px 16px rgba(253, 43, 6, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 8px rgba(253, 43, 6, 0.22);
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .dv-nav-btn-primary:hover {
+  background-color: #E02504;
   transform: translateY(-1px);
-  box-shadow: 
-    0 6px 20px rgba(253, 43, 6, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 14px rgba(253, 43, 6, 0.32);
 }
 
+.dv-nav-btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Lock Vault Button (Authenticated State) */
 .dv-nav-btn-lock {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 8px 14px;
-  border-radius: 9999px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  color: #F87171;
-  font-family: var(--font-ui, sans-serif);
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 8px;
+  background: rgba(220, 38, 38, 0.08);
+  color: #DC2626;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .dv-nav-btn-lock:hover {
-  background: rgba(239, 68, 68, 0.2);
-  color: #FEF2F2;
+  background: rgba(220, 38, 38, 0.14);
+  border-color: #DC2626;
 }
 
-/* Mobile Toggle Hamburger */
+/* Mobile Toggle Hamburger Button */
 .dv-nav-mobile-toggle {
   display: none;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #F8FAFC;
+  border-radius: 8px;
+  background-color: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  color: #111827;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .dv-nav-mobile-toggle:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background-color: #E5E7EB;
 }
 
-/* Mobile Drawer Dropdown Sheet */
+/* ==========================================================================
+   MOBILE DROPDOWN SHEET
+   ========================================================================== */
+
 .dv-nav-mobile-sheet {
-  pointer-events: auto;
   position: absolute;
-  top: 74px;
-  left: 20px;
-  right: 20px;
-  background: rgba(13, 16, 22, 0.95);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 24px;
-  padding: 24px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
-  animation: dvMobileSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  top: 68px;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid #E5E7EB;
+  padding: 20px 24px;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
+  animation: dv-sheet-entrance 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  box-sizing: border-box;
 }
 
-@keyframes dvMobileSlideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes dv-sheet-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .dv-nav-mobile-links {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 20px;
+  gap: 4px;
+  margin-bottom: 16px;
 }
 
 .dv-nav-mobile-link {
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-family: var(--font-ui, sans-serif);
+  font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 15px;
   font-weight: 600;
-  color: #CBD5E1;
+  color: #1F2937;
   text-decoration: none;
-  transition: all 0.2s ease;
+  padding: 10px 14px;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
 }
 
 .dv-nav-mobile-link:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #FFFFFF;
+  background-color: #F3F4F6;
+  color: #FD2B06;
 }
 
 .dv-nav-mobile-footer {
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 14px;
+  border-top: 1px solid #E5E7EB;
 }
 
 .dv-nav-mobile-cta-group {
@@ -236,33 +259,69 @@
 .dv-nav-btn-lock--full {
   width: 100%;
   justify-content: center;
-  padding: 12px;
-  box-sizing: border-box;
-  text-align: center;
+  height: 44px;
+  font-size: 14px;
 }
 
-@media (max-width: 900px) {
+/* ==========================================================================
+   BREAKPOINTS
+   ========================================================================== */
+
+@media (max-width: 1024px) {
   .dv-nav-menu {
     display: none;
   }
+
   .dv-nav-mobile-toggle {
     display: flex;
   }
-  .dv-nav-auth-actions .dv-nav-btn-ghost {
-    display: none;
+
+  .dv-public-navbar {
+    height: 60px;
+  }
+
+  .dv-public-navbar__inner {
+    padding: 0 16px;
+  }
+
+  .dv-nav-mobile-sheet {
+    top: 60px;
+    padding: 16px;
+  }
+
+  .dv-nav-brand .dv-brand-logo__img {
+    height: 32px !important;
   }
 }
 
 @media (max-width: 600px) {
   .dv-public-navbar {
-    top: 10px;
+    height: 56px;
+  }
+
+  .dv-public-navbar__inner {
     padding: 0 12px;
   }
-  .dv-public-navbar__inner {
-    height: 58px;
-    padding: 0 14px;
+
+  .dv-nav-mobile-sheet {
+    top: 56px;
   }
-  .dv-nav-auth-actions .dv-nav-btn-primary {
+
+  /* Keep mobile navbar super clean and let the dropdown sheet provide full action buttons */
+  .dv-nav-auth-actions .dv-nav-btn-primary,
+  .dv-nav-auth-actions .dv-nav-btn-ghost,
+  .dv-nav-user-actions .dv-nav-btn-lock,
+  .dv-nav-user-actions .dv-nav-btn-primary {
     display: none;
+  }
+
+  .dv-nav-brand .dv-brand-logo__img {
+    height: 28px !important;
+    max-width: 130px !important;
+  }
+
+  .dv-nav-mobile-toggle {
+    width: 36px;
+    height: 36px;
   }
 }
