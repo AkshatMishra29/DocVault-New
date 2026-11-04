@@ -67,9 +67,9 @@ export default function RegisterPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  if (isMobileOrTablet) {
-    return <MobileAppAuthView initialTab="register" />;
-  }
+
+
+
 
   // Live Heuristic Password Advice
   const pwdAdvice = useMemo(() => {
@@ -189,6 +189,10 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
+
+  if (isMobileOrTablet) {
+    return <MobileAppAuthView initialTab="register" />;
+ }
 
   return (
     <AuthLayout 

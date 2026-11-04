@@ -224,7 +224,7 @@ export default function MobileAppAuthView({ onSwitchToDesktopWeb, initialTab = "
             /* ==========================================
                LOGIN FORM
                ========================================== */
-            <form onSubmit={handleLoginSubmit} className="dv-native-form">
+            <form onSubmit={handleLoginSubmit} className="dv-native-form dv-tab-animate">
               <div className="dv-native-card__intro">
                 <h2 className="dv-native-card__title">Sign In to Your Vault</h2>
                 <p className="dv-native-card__desc">Authenticate credentials to access your secure document vault.</p>
@@ -314,7 +314,7 @@ export default function MobileAppAuthView({ onSwitchToDesktopWeb, initialTab = "
             /* ==========================================
                REGISTRATION FORM
                ========================================== */
-            <form onSubmit={handleRegisterSubmit} className="dv-native-form">
+            <form onSubmit={handleRegisterSubmit} className="dv-native-form dv-tab-animate">
               <div className="dv-native-card__intro">
                 <h2 className="dv-native-card__title">Create Encrypted Vault</h2>
                 <p className="dv-native-card__desc">Set your master credentials and personal security PIN.</p>
@@ -486,29 +486,7 @@ export default function MobileAppAuthView({ onSwitchToDesktopWeb, initialTab = "
             </form>
           )}
 
-          {/* Under Form: App Info & About Us Link */}
-          <div className="dv-native-app-links">
-            <button
-              type="button"
-              className="dv-native-about-btn"
-              onClick={() => setIsAboutOpen(true)}
-            >
-              <HelpCircle size={15} color="#287A57" />
-              <span>Know about DocVault & Privacy Architecture</span>
-              <ChevronRight size={14} className="dv-native-about-chevron" />
-            </button>
-
-            {onSwitchToDesktopWeb && (
-              <button
-                type="button"
-                className="dv-native-web-btn"
-                onClick={onSwitchToDesktopWeb}
-              >
-                <span>Switch to full web presentation</span>
-              </button>
-            )}
           </div>
-        </div>
 
         {/* Bottom Security Assurance */}
         <footer className="dv-native-footer">
