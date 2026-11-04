@@ -10,9 +10,7 @@
   color: var(--color-text-primary, #101A17);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(16px, 3vh, 32px) clamp(12px, 4vw, 24px);
+  padding: max(12px, env(safe-area-inset-top, 0px)) clamp(12px, 4vw, 20px) max(12px, env(safe-area-inset-bottom, 0px)) clamp(12px, 4vw, 20px);
   box-sizing: border-box;
   font-family: var(--font-ui, 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif);
   -webkit-font-smoothing: antialiased;
@@ -28,11 +26,11 @@
 .dv-native-app-bar {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   max-width: 440px;
-  margin-bottom: clamp(14px, 2.5vh, 22px);
-  padding: 0;
+  margin: 0 auto clamp(8px, 1.5vh, 16px) auto;
+  padding: 0 2px;
 }
 
 .dv-native-app-bar__brand {
@@ -42,6 +40,7 @@
 
 /* App Body Container: Compact & Centered */
 .dv-native-app-body {
+  flex: 1;
   display: flex;
   flex-direction: column;
   max-width: 440px;
