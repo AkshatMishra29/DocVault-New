@@ -8,6 +8,7 @@ import {
 import { signInWithGoogle } from "../../../services/firebase";
 import AboutDocVaultModal from "../../../components/common/AboutModal/AboutDocVaultModal";
 
+import MobileAppAuthView from "../../landing/MobileAppAuthView";
 import AuthLayout from "../components/AuthLayout";
 import AuthHeader from "../components/AuthHeader";
 import AuthAlert from "../components/AuthAlert";
@@ -50,6 +51,25 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth <= 1024;
+    }
+    return false;
+  });
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobileOrTablet(window.innerWidth <= 1024);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  if (isMobileOrTablet) {
+    return <MobileAppAuthView initialTab="register" />;
+  }
 
   // Live Heuristic Password Advice
   const pwdAdvice = useMemo(() => {

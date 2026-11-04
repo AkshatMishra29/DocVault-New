@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Mail, Lock, ArrowRight, ShieldCheck, HelpCircle } from "lucide-react";
 import AboutDocVaultModal from "../../../components/common/AboutModal/AboutDocVaultModal";
 import { signInWithGoogle } from "../../../services/firebase";
+import MobileAppAuthView from "../../landing/MobileAppAuthView";
 
 import AuthLayout from "../components/AuthLayout";
 import AuthHeader from "../components/AuthHeader";
@@ -32,8 +33,28 @@ export default function LoginPage() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
 
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth <= 1024;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileOrTablet(window.innerWidth <= 1024);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const { login, loginWithFirebaseToken } = useAuth();
   const navigate = useNavigate();
+
+  // If mobile/tablet, render native mobile view with tab switcher
+  if (isMobileOrTablet) {
+    return <MobileAppAuthView initialTab="login" />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -86,22 +107,14 @@ export default function LoginPage() {
         }
       }
     } catch (err) {
-      setError(err.message || "Google authentication failed.");
+      setError(err?.message || "Failed to sign in with Google.");
     } finally {
       setGoogleLoading(false);
     }
   };
 
-  const handleForgotPassword = () => {
-    if (email) {
-      setInfoMessage(`Password reset link dispatched to ${email}. Please check your inbox.`);
-    } else {
-      setError("Please enter your email address to receive reset instructions.");
-    }
-  };
-
   return (
-    <AuthLayout brandVariant="login">
+    <AuthLayout cardClassName="dv-auth-form-card--login" brandVariant="login">
       <AuthHeader
         title="Welcome back."
         subtitle="Sign in to access your personal document vault."
@@ -110,7 +123,7 @@ export default function LoginPage() {
       {error && <AuthAlert type="error" message={error} />}
       {infoMessage && <AuthAlert type="info" message={infoMessage} />}
 
-      {/* Google Sign In */}
+      {/* Google Auth Button */}
       <button
         type="button"
         className="dv-auth-google-btn"
@@ -121,7 +134,7 @@ export default function LoginPage() {
         <span>{googleLoading ? "Connecting to Google..." : "Sign in with Google"}</span>
       </button>
 
-      {/* Divider */}
+      {/* OR Divider */}
       <div className="dv-auth-divider">
         <span className="dv-auth-divider-line" />
         <span className="dv-auth-divider-text">or sign in with email</span>
@@ -129,52 +142,51 @@ export default function LoginPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="dv-auth-form">
-        <PasswordInput
-          label="Email Address"
-          type="email"
-          name="email"
-          icon={Mail}
-          placeholder="name@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          autoComplete="email"
-          disabled={loading || googleLoading}
-        />
+        <div className="dv-form-field-wrap">
+          <PasswordInput
+            label="Email Address"
+            type="email"
+            name="email"
+            icon={Mail}
+            placeholder="admin@pindshiksha.gov.in"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+            disabled={loading || googleLoading}
+          />
+        </div>
 
-        <PasswordInput
-          label="Password"
-          type="password"
-          name="password"
-          icon={Lock}
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          autoComplete="current-password"
-          disabled={loading || googleLoading}
-        />
+        <div className="dv-form-field-wrap">
+          <PasswordInput
+            label="Password"
+            type="password"
+            name="password"
+            icon={Lock}
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoComplete="current-password"
+            disabled={loading || googleLoading}
+          />
+        </div>
 
+        {/* Remember Me and Forgot Password */}
         <div className="dv-auth-remember-row">
           <label className="dv-checkbox-label">
             <input
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              disabled={loading || googleLoading}
             />
             <span className="dv-checkbox-custom" />
             <span className="dv-checkbox-text">Remember this device</span>
           </label>
 
-          <button
-            type="button"
-            className="dv-auth-forgot-link"
-            onClick={handleForgotPassword}
-            disabled={loading || googleLoading}
-          >
+          <Link to="/login" className="dv-auth-forgot-link">
             Forgot password?
-          </button>
+          </Link>
         </div>
 
         <button
@@ -182,7 +194,7 @@ export default function LoginPage() {
           disabled={loading || googleLoading}
           className="dv-auth-submit-btn"
         >
-          {loading ? "Verifying credentials..." : (
+          {loading ? "Authenticating credentials..." : (
             <>
               <span>Continue securely</span>
               <ArrowRight size={16} />
@@ -208,7 +220,6 @@ export default function LoginPage() {
           <span>Know about DocVault • Sovereign Security Architecture</span>
         </button>
       </div>
-
 
       <AboutDocVaultModal
         isOpen={isAboutModalOpen}

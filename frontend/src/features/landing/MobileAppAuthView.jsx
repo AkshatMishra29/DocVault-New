@@ -25,8 +25,8 @@ function GoogleIcon() {
   );
 }
 
-export default function MobileAppAuthView({ onSwitchToDesktopWeb }) {
-  const [activeTab, setActiveTab] = useState("login"); // 'login' | 'register'
+export default function MobileAppAuthView({ onSwitchToDesktopWeb, initialTab = "login" }) {
+  const [activeTab, setActiveTab] = useState(initialTab); // 'login' | 'register'
   const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   // Login form state
