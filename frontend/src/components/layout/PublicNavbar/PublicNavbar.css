@@ -1,327 +1,343 @@
 /* ==========================================================================
-   DOCVAULT PUBLIC NAVIGATION BAR (ENTERPRISE MINIMALIST GLASS)
+   DOCVAULT MACBOOK FLOATING GLASS ISLAND NAVBAR (MACOS GLASSMORPHISM)
    ========================================================================== */
 
 .dv-public-navbar {
-  position: sticky;
-  top: 0;
+  position: fixed;
+  top: 16px;
   left: 0;
   right: 0;
   z-index: 1000;
   width: 100%;
-  height: 68px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border-bottom: 1px solid rgba(229, 231, 235, 0.85);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none; /* Let background clicks pass through empty outer space */
+  display: flex;
+  justify-content: center;
+  padding: 0 16px;
   box-sizing: border-box;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.dv-public-navbar--scrolled {
-  background: rgba(255, 255, 255, 0.97);
-  border-bottom-color: rgba(216, 204, 195, 0.7);
-  box-shadow: 0 4px 20px -2px rgba(28, 19, 16, 0.06);
-}
-
+/* Floating MacBook Glass Capsule */
 .dv-public-navbar__inner {
-  max-width: 1240px;
-  margin: 0 auto;
-  height: 100%;
+  pointer-events: auto;
+  width: 100%;
+  max-width: 1060px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 6px 14px 6px 18px;
+  border-radius: 9999px;
   box-sizing: border-box;
-  position: relative;
+  
+  /* Liquid Glass macOS Styling */
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 12px 32px -4px rgba(16, 26, 23, 0.08),
+    0 4px 12px -2px rgba(16, 26, 23, 0.04),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Brand Identity */
-.dv-nav-brand {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  flex-shrink: 0;
-  transition: opacity 0.2s ease;
+.dv-public-navbar--scrolled .dv-public-navbar__inner {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(220, 226, 217, 0.8);
+  box-shadow: 
+    0 16px 40px -4px rgba(16, 26, 23, 0.12),
+    0 6px 16px -2px rgba(16, 26, 23, 0.06),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 1);
 }
 
-.dv-nav-brand:hover {
-  opacity: 0.9;
+[data-theme="dark"] .dv-public-navbar__inner {
+  background: rgba(16, 26, 23, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 16px 40px -6px rgba(0, 0, 0, 0.6),
+    0 4px 16px -2px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-/* Center Desktop Navigation Menu */
-.dv-nav-menu {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+[data-theme="dark"] .dv-public-navbar--scrolled .dv-public-navbar__inner {
+  background: rgba(16, 26, 23, 0.88);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
-.dv-nav-link {
-  font-family: var(--font-ui, 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif);
-  font-size: 14px;
-  font-weight: 600;
-  color: #4B5563;
-  text-decoration: none;
-  padding: 8px 14px;
-  border-radius: 8px;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-}
 
-.dv-nav-link:hover {
-  color: #111827;
-  background-color: rgba(17, 24, 39, 0.05);
-}
-
-/* Right Actions */
-.dv-nav-actions {
+/* Left Section: Brand Logo */
+.dv-nav-left-cluster {
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-shrink: 0;
+}
+
+.dv-nav-brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform var(--transition-fast, 150ms ease);
+}
+
+.dv-nav-brand:hover {
+  transform: translateY(-0.5px);
+}
+
+/* Center Desktop Menu: Segmented macOS Capsule */
+.dv-nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.035);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 3px;
+  border-radius: 9999px;
+}
+
+[data-theme="dark"] .dv-nav-menu {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.dv-nav-link {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-text-secondary, #3D4F46);
+  text-decoration: none;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: -0.01em;
+}
+
+.dv-nav-link:hover {
+  color: var(--color-text-primary, #101A17);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .dv-nav-link {
+  color: #BAC7C1;
+}
+
+[data-theme="dark"] .dv-nav-link:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Right Section: macOS Pill Actions */
+.dv-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .dv-nav-auth-actions,
 .dv-nav-user-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
-/* Sign In Ghost Button */
+/* Ghost Action */
 .dv-nav-btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-ui, 'Manrope', sans-serif);
-  font-size: 13.5px;
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 12.5px;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-text-primary, #101A17);
   text-decoration: none;
-  height: 38px;
-  padding: 0 16px;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  transition: all 0.15s ease;
-  box-sizing: border-box;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  transition: all 0.18s ease;
 }
 
 .dv-nav-btn-ghost:hover {
-  color: #111827;
-  background-color: rgba(17, 24, 39, 0.05);
-  border-color: rgba(229, 231, 235, 0.9);
+  background: rgba(0, 0, 0, 0.05);
 }
 
-/* Primary Action CTA Button */
+[data-theme="dark"] .dv-nav-btn-ghost {
+  color: #F5F5F0;
+}
+
+[data-theme="dark"] .dv-nav-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Primary macOS Button (Forest Green / Copper tactile) */
 .dv-nav-btn-primary {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #FFFFFF !important;
+  background: linear-gradient(180deg, #34966D 0%, #287A57 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    0 2px 8px rgba(40, 122, 87, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 7px;
-  height: 38px;
-  padding: 0 18px;
-  background-color: #287A57;
-  color: #FFFFFF !important;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  font-family: var(--font-ui, 'Manrope', sans-serif);
-  font-size: 13.5px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  text-decoration: none;
-  box-shadow: 0 2px 8px rgba(40, 122, 87, 0.22);
-  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-  white-space: nowrap;
-  box-sizing: border-box;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
 }
 
 .dv-nav-btn-primary:hover {
-  background-color: #1E6345;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(40, 122, 87, 0.32);
+  background: linear-gradient(180deg, #3EB080 0%, #2E8A63 100%);
+  box-shadow: 
+    0 4px 12px rgba(40, 122, 87, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  transform: translateY(-0.5px);
 }
 
 .dv-nav-btn-primary:active {
-  transform: translateY(0);
+  transform: translateY(0.5px);
+  box-shadow: 0 1px 4px rgba(40, 122, 87, 0.3);
 }
 
-/* Lock Vault Button (Authenticated State) */
 .dv-nav-btn-lock {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  color: #B9382C;
+  background: rgba(185, 56, 44, 0.08);
+  border: 1px solid rgba(185, 56, 44, 0.2);
+  padding: 6px 12px;
+  border-radius: 9999px;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  height: 38px;
-  padding: 0 14px;
-  border-radius: 8px;
-  background: rgba(220, 38, 38, 0.08);
-  color: #DC2626;
-  border: 1px solid rgba(220, 38, 38, 0.2);
-  font-family: var(--font-ui, 'Manrope', sans-serif);
-  font-size: 13px;
-  font-weight: 600;
+  gap: 5px;
   cursor: pointer;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-  box-sizing: border-box;
+  transition: all 0.18s ease;
 }
 
 .dv-nav-btn-lock:hover {
-  background: rgba(220, 38, 38, 0.14);
-  border-color: #DC2626;
+  background: rgba(185, 56, 44, 0.15);
+  border-color: rgba(185, 56, 44, 0.35);
 }
 
-/* Mobile Toggle Hamburger Button */
+/* Mobile Toggle */
 .dv-nav-mobile-toggle {
   display: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.03);
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background-color: #F3F4F6;
-  border: 1px solid #E5E7EB;
-  color: #111827;
+  color: var(--color-text-primary, #101A17);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
 
-.dv-nav-mobile-toggle:hover {
-  background-color: #E5E7EB;
+[data-theme="dark"] .dv-nav-mobile-toggle {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
 }
 
-/* ==========================================================================
-   MOBILE DROPDOWN SHEET
-   ========================================================================== */
-
+/* Mobile Drawer Sheet */
 .dv-nav-mobile-sheet {
   position: absolute;
-  top: 68px;
-  left: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid #E5E7EB;
-  padding: 20px 24px;
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
-  animation: dv-sheet-entrance 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  box-sizing: border-box;
+  top: 60px;
+  left: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(220, 226, 217, 0.8);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: auto;
+  animation: dvMacSheetFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes dv-sheet-entrance {
-  0% {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+[data-theme="dark"] .dv-nav-mobile-sheet {
+  background: rgba(16, 26, 23, 0.95);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+@keyframes dvMacSheetFadeIn {
+  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .dv-nav-mobile-links {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin-bottom: 16px;
 }
 
 .dv-nav-mobile-link {
-  font-family: var(--font-ui, 'Manrope', sans-serif);
-  font-size: 15px;
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 14px;
   font-weight: 600;
-  color: #1F2937;
+  color: var(--color-text-primary, #101A17);
   text-decoration: none;
   padding: 10px 14px;
-  border-radius: 8px;
-  transition: background-color 0.15s ease;
+  border-radius: 10px;
+  transition: background 0.15s ease;
 }
 
 .dv-nav-mobile-link:hover {
-  background-color: #F3F4F6;
-  color: #287A57;
+  background: rgba(0, 0, 0, 0.05);
 }
 
-.dv-nav-mobile-footer {
-  padding-top: 14px;
-  border-top: 1px solid #E5E7EB;
+[data-theme="dark"] .dv-nav-mobile-link {
+  color: #FFFFFF;
 }
 
-.dv-nav-mobile-cta-group {
+[data-theme="dark"] .dv-nav-mobile-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dv-nav-mobile-sheet-actions {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.dv-nav-btn-ghost--full,
-.dv-nav-btn-primary--full,
-.dv-nav-btn-lock--full {
+[data-theme="dark"] .dv-nav-mobile-sheet-actions {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.dv-nav-mobile-btn-primary {
   width: 100%;
   justify-content: center;
-  height: 44px;
-  font-size: 14px;
+  padding: 10px 0;
 }
 
-/* ==========================================================================
-   BREAKPOINTS
-   ========================================================================== */
-
-@media (max-width: 1024px) {
-  .dv-nav-menu {
-    display: none;
-  }
-
-  .dv-nav-mobile-toggle {
-    display: flex;
-  }
-
-  .dv-public-navbar {
-    height: 60px;
-  }
-
-  .dv-public-navbar__inner {
-    padding: 0 16px;
-  }
-
-  .dv-nav-mobile-sheet {
-    top: 60px;
-    padding: 16px;
-  }
-
-  .dv-nav-brand .dv-brand-logo__img {
-    height: 32px !important;
-  }
+.dv-nav-mobile-btn-ghost {
+  text-align: center;
+  padding: 8px 0;
+  font-weight: 600;
+  color: var(--color-text-secondary, #3D4F46);
+  text-decoration: none;
 }
 
-@media (max-width: 600px) {
-  .dv-public-navbar {
-    height: 56px;
-  }
-
-  .dv-public-navbar__inner {
-    padding: 0 12px;
-  }
-
-  .dv-nav-mobile-sheet {
-    top: 56px;
-  }
-
-  /* Keep mobile navbar super clean and let the dropdown sheet provide full action buttons */
-  .dv-nav-auth-actions .dv-nav-btn-primary,
-  .dv-nav-auth-actions .dv-nav-btn-ghost,
-  .dv-nav-user-actions .dv-nav-btn-lock,
-  .dv-nav-user-actions .dv-nav-btn-primary {
+/* Responsive Breakpoints */
+@media (max-width: 860px) {
+  .dv-nav-menu,
+  .dv-nav-window-dots {
     display: none;
   }
-
-  .dv-nav-brand .dv-brand-logo__img {
-    height: 28px !important;
-    max-width: 130px !important;
-  }
-
   .dv-nav-mobile-toggle {
-    width: 36px;
-    height: 36px;
+    display: inline-flex;
+  }
+  .dv-public-navbar__inner {
+    height: 48px;
+    padding: 4px 12px 4px 16px;
   }
 }

@@ -13,8 +13,8 @@
 .dv-dashboard__content {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding-top: 16px;
+  gap: clamp(14px, 2vw, 24px);
+  padding-top: clamp(8px, 1.5vh, 16px);
   width: 100%;
   box-sizing: border-box;
 }
@@ -85,7 +85,7 @@
   background: #FFFFFF;
   border: 1px solid var(--color-border, #DCE2D9);
   border-radius: 16px;
-  padding: 24px 28px;
+  padding: clamp(16px, 2.5vw, 28px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
   box-sizing: border-box;
   width: 100%;
@@ -179,7 +179,7 @@
 /* Section B: Stats Grid */
 .dv-stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 18px;
   width: 100%;
   box-sizing: border-box;
@@ -269,7 +269,7 @@
 .dv-ai-copilot-card {
   background: linear-gradient(135deg, #101A17 0%, #1D3B30 60%, #0B1210 100%);
   border-radius: 18px;
-  padding: 24px 28px;
+  padding: clamp(16px, 2.5vw, 28px);
   color: #FFFFFF;
   box-shadow: 0 10px 30px rgba(28, 19, 16, 0.25);
   position: relative;
@@ -304,7 +304,7 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #287A57, #E02604);
+  background: linear-gradient(135deg, #287A57, #C47B48);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -416,7 +416,7 @@
 
 .dv-review-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 16px;
   width: 100%;
   box-sizing: border-box;
@@ -756,7 +756,7 @@
   background: linear-gradient(135deg, rgba(40, 122, 87, 0.03) 0%, rgba(235, 108, 59, 0.02) 100%);
   border: 1px solid #EDF6F1;
   border-radius: 16px;
-  padding: 24px 28px;
+  padding: clamp(16px, 2.5vw, 28px);
   box-sizing: border-box;
   width: 100%;
 }
@@ -805,7 +805,7 @@
   background-color: #FFFFFF;
   border: 1px solid var(--color-border, #DCE2D9);
   border-radius: 18px;
-  padding: 24px 28px;
+  padding: clamp(16px, 2.5vw, 28px);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   box-sizing: border-box;
   width: 100%;
@@ -840,7 +840,7 @@
 
 .dv-trust-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 20px;
   width: 100%;
   box-sizing: border-box;

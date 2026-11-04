@@ -23,7 +23,7 @@
 .dv-admin-hero {
   background: linear-gradient(135deg, #101A17 0%, #1D3B30 100%);
   border-radius: 18px;
-  padding: 24px 30px;
+  padding: clamp(16px, 2.5vw, 28px);
   color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -184,7 +184,7 @@
 /* KPI Cards 4-Column Grid */
 .dv-admin-kpi-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 16px;
   width: 100%;
   box-sizing: border-box;

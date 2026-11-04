@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import DocVaultLogo from '../../common/DocVaultLogo/DocVaultLogo';
 import { 
-  ArrowRight, Lock, LayoutDashboard, ShieldCheck, 
-  Menu, X, Sparkles 
+  ArrowRight, Lock, LayoutDashboard, 
+  Menu, X
 } from 'lucide-react';
 import { useAuth } from '../../../features/auth/context/AuthContext';
 import './PublicNavbar.css';
@@ -16,17 +16,15 @@ export default function PublicNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Monitor scroll for dynamic header elevation
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 15);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile drawer on route / hash change
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location]);
@@ -39,12 +37,14 @@ export default function PublicNavbar() {
   return (
     <header className={`dv-public-navbar ${scrolled ? 'dv-public-navbar--scrolled' : ''}`} role="banner">
       <div className="dv-public-navbar__inner">
-        {/* Brand Identity */}
-        <Link to="/" className="dv-nav-brand" title="DocVault - Sovereign Document Vault">
-          <DocVaultLogo height={42} />
-        </Link>
+        {/* Left Cluster: Pure Text Wordmark */}
+        <div className="dv-nav-left-cluster">
+          <Link to="/" className="dv-nav-brand" title="DocVault - Sovereign Document Vault">
+            <DocVaultLogo height={28} />
+          </Link>
+        </div>
 
-        {/* Center Desktop Navigation */}
+        {/* Center Desktop Navigation: macOS Segmented Capsule */}
         <nav className="dv-nav-menu" aria-label="Primary Navigation">
           <a href="#features" className="dv-nav-link">
             <span>Features</span>
@@ -53,7 +53,7 @@ export default function PublicNavbar() {
             <span>Intelligence</span>
           </a>
           <a href="#how-it-works" className="dv-nav-link">
-            <span>How It Works</span>
+            <span>Workflow</span>
           </a>
           <a href="#security" className="dv-nav-link">
             <span>Security</span>
@@ -63,7 +63,7 @@ export default function PublicNavbar() {
           </a>
         </nav>
 
-        {/* Right Actions */}
+        {/* Right Actions: macOS Glass Pill Actions */}
         <div className="dv-nav-actions">
           {user && isVaultUnlocked ? (
             <div className="dv-nav-user-actions">
@@ -73,13 +73,13 @@ export default function PublicNavbar() {
                 className="dv-nav-btn-lock"
                 title="Lock vault session immediately"
               >
-                <Lock size={14} />
-                <span>Lock Vault</span>
+                <Lock size={12} />
+                <span>Lock</span>
               </button>
 
               <Link to="/dashboard" className="dv-nav-btn-primary">
-                <LayoutDashboard size={14} />
-                <span>Dashboard</span>
+                <LayoutDashboard size={13} />
+                <span>Vault</span>
               </Link>
             </div>
           ) : (
@@ -89,8 +89,8 @@ export default function PublicNavbar() {
               </Link>
 
               <Link to="/register" className="dv-nav-btn-primary">
-                <span>Get Started</span>
-                <ArrowRight size={14} />
+                <span>Open Vault</span>
+                <ArrowRight size={13} />
               </Link>
             </div>
           )}
@@ -103,93 +103,47 @@ export default function PublicNavbar() {
             aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
             aria-expanded={mobileMenuOpen}
           >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Dropdown Sheet */}
+      {/* Mobile Glass Sheet Dropdown */}
       {mobileMenuOpen && (
         <div className="dv-nav-mobile-sheet">
           <nav className="dv-nav-mobile-links">
-            <a 
-              href="#features" 
-              className="dv-nav-mobile-link"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <span>Features</span>
+            <a href="#features" className="dv-nav-mobile-link" onClick={() => setMobileMenuOpen(false)}>
+              Features
             </a>
-            <a 
-              href="#intelligence" 
-              className="dv-nav-mobile-link"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <span>Intelligence</span>
+            <a href="#intelligence" className="dv-nav-mobile-link" onClick={() => setMobileMenuOpen(false)}>
+              Intelligence
             </a>
-            <a 
-              href="#how-it-works" 
-              className="dv-nav-mobile-link"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <span>How It Works</span>
+            <a href="#how-it-works" className="dv-nav-mobile-link" onClick={() => setMobileMenuOpen(false)}>
+              Workflow
             </a>
-            <a 
-              href="#security" 
-              className="dv-nav-mobile-link"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <span>Security</span>
+            <a href="#security" className="dv-nav-mobile-link" onClick={() => setMobileMenuOpen(false)}>
+              Security
             </a>
-            <a 
-              href="#faq" 
-              className="dv-nav-mobile-link"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <span>FAQ</span>
+            <a href="#faq" className="dv-nav-mobile-link" onClick={() => setMobileMenuOpen(false)}>
+              FAQ
             </a>
           </nav>
 
-          <div className="dv-nav-mobile-footer">
-            {user && isVaultUnlocked ? (
-              <div className="dv-nav-mobile-cta-group">
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleManualLock();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="dv-nav-btn-lock dv-nav-btn-lock--full"
-                >
-                  <Lock size={14} />
-                  <span>Lock Vault</span>
-                </button>
-                <Link 
-                  to="/dashboard" 
-                  className="dv-nav-btn-primary dv-nav-btn-primary--full"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <LayoutDashboard size={15} />
-                  <span>Open Dashboard</span>
-                </Link>
-              </div>
-            ) : (
-              <div className="dv-nav-mobile-cta-group">
-                <Link 
-                  to="/login" 
-                  className="dv-nav-btn-ghost dv-nav-btn-ghost--full"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
+          <div className="dv-nav-mobile-sheet-actions">
+            {!user ? (
+              <>
+                <Link to="/login" className="dv-nav-mobile-btn-ghost">
                   Sign In
                 </Link>
-                <Link 
-                  to="/register" 
-                  className="dv-nav-btn-primary dv-nav-btn-primary--full"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <span>Create Account</span>
-                  <ArrowRight size={15} />
+                <Link to="/register" className="dv-nav-btn-primary dv-nav-mobile-btn-primary">
+                  <span>Open Vault</span>
+                  <ArrowRight size={14} />
                 </Link>
-              </div>
+              </>
+            ) : (
+              <Link to="/dashboard" className="dv-nav-btn-primary dv-nav-mobile-btn-primary">
+                <span>Dashboard</span>
+              </Link>
             )}
           </div>
         </div>

@@ -177,7 +177,6 @@ export default function RegisterPage() {
     >
       <AuthHeader
         title="Create your account"
-        subtitle="Create an account to access your secure document vault."
       />
 
       {error && <AuthAlert type="error" message={error} />}
@@ -380,10 +379,6 @@ export default function RegisterPage() {
         </button>
       </div>
 
-      <div className="dv-auth-security-note">
-        <ShieldCheck size={14} className="dv-auth-security-note-icon" />
-        <span>Your documents. Your privacy. Your control.</span>
-      </div>
 
       <AboutDocVaultModal
         isOpen={isAboutModalOpen}

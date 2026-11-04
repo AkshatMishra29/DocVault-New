@@ -1,9 +1,10 @@
 import React from 'react';
 import Button from '../Button/Button';
+import { FolderLock } from 'lucide-react';
 import './EmptyState.css';
 
 export default function EmptyState({
-  illustration,
+  icon: Icon = FolderLock,
   title,
   description,
   actionLabel,
@@ -12,11 +13,9 @@ export default function EmptyState({
 }) {
   return (
     <div className={`dv-empty-state ${className}`}>
-      {illustration && (
-        <div className="dv-empty-state__media">
-          <img src={illustration} alt="" aria-hidden="true" />
-        </div>
-      )}
+      <div className="dv-empty-state__icon-wrap">
+        <Icon size={32} className="dv-empty-state__icon" strokeWidth={1.75} />
+      </div>
       <h3 className="dv-empty-state__title">{title}</h3>
       {description && <p className="dv-empty-state__desc">{description}</p>}
       {actionLabel && onAction && (
@@ -27,4 +26,3 @@ export default function EmptyState({
     </div>
   );
 }
-
