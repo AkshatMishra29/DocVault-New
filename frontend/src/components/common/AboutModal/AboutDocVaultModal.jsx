@@ -1,9 +1,8 @@
 import React from 'react';
 import { 
-  ShieldCheck, Lock, Cpu, Sparkles, FileText, 
-  CheckCircle2, ArrowRight, X, ExternalLink, HelpCircle
+  ShieldCheck, Lock, Cpu, Sparkles,
+  CheckCircle2, ArrowRight, X, KeyRound, Terminal
 } from 'lucide-react';
-import heroArtwork from '../../../assets/hero-landing.jpg';
 import './AboutDocVaultModal.css';
 
 export default function AboutDocVaultModal({ isOpen, onClose }) {
@@ -33,12 +32,18 @@ export default function AboutDocVaultModal({ isOpen, onClose }) {
         </div>
 
         <div className="dv-about-body">
-          {/* Visual Showcase Card */}
+          {/* Typographic Hero Banner (Pure CSS & Typography) */}
           <div className="dv-about-hero-card">
-            <img src={heroArtwork} alt="DocVault Safe" className="dv-about-hero-img" />
-            <div className="dv-about-hero-scrim">
-              <span className="dv-about-hero-tag">DocVault v2.6 Core</span>
+            <div className="dv-about-hero-card__glow" />
+            <div className="dv-about-hero-card__content">
+              <div className="dv-about-hero-tag">
+                <Terminal size={12} />
+                <span>DocVault v2.6 Core Architecture</span>
+              </div>
               <h4 className="dv-about-hero-heading">Where high security meets actionable intelligence.</h4>
+              <p className="dv-about-hero-sub">
+                Dual-tier hardware-backed cryptographic protection designed for your private documents.
+              </p>
             </div>
           </div>
 
@@ -95,15 +100,15 @@ export default function AboutDocVaultModal({ isOpen, onClose }) {
           {/* Trust Guarantees */}
           <div className="dv-about-trust-bar">
             <div className="dv-about-trust-chip">
-              <CheckCircle2 size={13} color="#16A34A" />
+              <CheckCircle2 size={13} color="#287A57" />
               <span>Encrypted Vault Protection</span>
             </div>
             <div className="dv-about-trust-chip">
-              <CheckCircle2 size={13} color="#16A34A" />
+              <CheckCircle2 size={13} color="#287A57" />
               <span>Zero Ad Tracking</span>
             </div>
             <div className="dv-about-trust-chip">
-              <CheckCircle2 size={13} color="#16A34A" />
+              <CheckCircle2 size={13} color="#287A57" />
               <span>Tamper-Evident Audit</span>
             </div>
           </div>
@@ -119,4 +124,3 @@ export default function AboutDocVaultModal({ isOpen, onClose }) {
     </div>
   );
 }
-

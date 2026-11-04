@@ -3,6 +3,7 @@
   min-height: 100vh;
   min-height: 100dvh;
   background-color: var(--color-bg, #F5F5F0);
+  width: 100%;
 }
 
 .dv-app-main {
@@ -25,12 +26,13 @@
   max-width: 1360px;
   width: 100%;
   margin: 0 auto;
-  padding: var(--space-6, 24px) var(--space-8, 32px);
+  padding: clamp(12px, 2.5vw, 28px) clamp(10px, 3vw, 32px);
+  box-sizing: border-box;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .dv-app-content-container {
-    padding: 16px 12px;
+    padding: clamp(10px, 2.5vw, 16px) clamp(8px, 2.5vw, 14px);
   }
 }
 

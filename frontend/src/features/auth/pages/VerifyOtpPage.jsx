@@ -181,10 +181,6 @@ export default function VerifyOtpPage() {
         </button>
       </div>
 
-      <div className="dv-auth-security-note">
-        <ShieldCheck size={14} className="dv-auth-security-note-icon" />
-        <span>Your documents. Your privacy. Your control.</span>
-      </div>
     </AuthLayout>
   );
 }

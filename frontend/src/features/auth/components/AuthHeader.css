@@ -1,36 +1,50 @@
 /* ==========================================================================
-   DOCVAULT AUTH HEADER COMPONENT
+   DOCVAULT AUTH HEADER COMPONENT (COMPACT PROFESSIONAL FLUID SPACING)
    ========================================================================== */
 
 .dv-auth-header {
-  margin-bottom: 24px;
+  margin-bottom: clamp(8px, 1.6vh, 16px);
   display: flex;
   flex-direction: column;
 }
 
 .dv-auth-header__title {
-  font-family: var(--font-display, 'DM Serif Display', Georgia, serif);
-  font-size: clamp(28px, 2.5vw, 34px);
-  font-weight: 400;
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(18px, 2.8vw, 24px);
+  font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--color-auth-text-dark, #1C1310);
-  margin: 0 0 6px 0;
+  color: var(--color-text-primary, #101A17);
+  margin: 0 0 2px 0;
   line-height: 1.15;
 }
 
 [data-theme="dark"] .dv-auth-header__title {
-  color: #F8F5F1;
+  color: #F8FAFC;
 }
 
 .dv-auth-header__subtitle {
-  font-family: var(--font-ui, 'Manrope', sans-serif);
-  font-size: 14px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: clamp(11.5px, 1.8vw, 13px);
   font-weight: 500;
-  color: var(--color-auth-muted, #766B65);
-  line-height: 1.45;
+  color: var(--color-text-secondary, #6E7F76);
+  line-height: 1.35;
   margin: 0;
 }
 
 [data-theme="dark"] .dv-auth-header__subtitle {
-  color: #A89F98;
+  color: #94A3B8;
+}
+
+@media (max-height: 680px) {
+  .dv-auth-header {
+    margin-bottom: 6px;
+  }
+  .dv-auth-header__title {
+    font-size: 18px;
+    margin-bottom: 1px;
+  }
+  .dv-auth-header__subtitle {
+    font-size: 11.5px;
+    line-height: 1.25;
+  }
 }
