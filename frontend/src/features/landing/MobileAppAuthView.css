@@ -1,19 +1,25 @@
 /* ==========================================================================
    DOCVAULT COMPACT NATIVE APP GUI (MOBILE & TABLET: FIT VIEWPORT, NO SCROLL)
+   Theme: Forest Noir (#101A17) & Emerald (#287A57) with Warm Copper (#C47B48)
    ========================================================================== */
 
 .dv-native-app-screen {
   min-height: 100vh;
   min-height: 100dvh;
-  background-color: var(--color-bg, #070B12);
-  color: var(--color-text-primary, #F8FAFC);
+  background-color: var(--color-bg, #F5F5F0);
+  color: var(--color-text-primary, #101A17);
   display: flex;
   flex-direction: column;
-  padding: max(10px, env(safe-area-inset-top, 0px)) 16px max(12px, env(safe-area-inset-bottom, 0px)) 16px;
+  padding: max(8px, env(safe-area-inset-top, 0px)) clamp(10px, 3.5vw, 16px) max(10px, env(safe-area-inset-bottom, 0px)) clamp(10px, 3.5vw, 16px);
   box-sizing: border-box;
   font-family: var(--font-ui, 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif);
   -webkit-font-smoothing: antialiased;
   overflow-y: auto;
+}
+
+[data-theme="dark"] .dv-native-app-screen {
+  background-color: #0E1420;
+  color: #F8FAFC;
 }
 
 /* App Header */
@@ -21,7 +27,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 2px 10px 2px;
+  padding: 0 2px clamp(6px, 1.2vh, 10px) 2px;
 }
 
 .dv-native-app-bar__brand {
@@ -34,25 +40,25 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  max-width: 420px;
+  max-width: 440px;
   width: 100%;
   margin: 0 auto;
   justify-content: flex-start;
 }
 
-/* Segmented Control Bar */
+/* Segmented Control Bar (Sign In / Create Account) */
 .dv-native-segmented-bar {
   display: flex;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
-  padding: 2.5px;
-  margin-bottom: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(16, 26, 23, 0.06);
+  border-radius: 12px;
+  padding: 3px;
+  margin-bottom: clamp(8px, 1.4vh, 12px);
+  border: 1px solid var(--color-border, #DCE2D9);
 }
 
-[data-theme="light"] .dv-native-segmented-bar {
-  background: rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.06);
+[data-theme="dark"] .dv-native-segmented-bar {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .dv-native-segment-btn {
@@ -60,14 +66,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 7px 10px;
+  padding: clamp(7px, 1vh, 9px) 12px;
   border: none;
   background: transparent;
-  border-radius: 8px;
-  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
-  font-size: 12.5px;
+  border-radius: 9px;
+  font-family: var(--font-ui, 'Manrope', sans-serif);
+  font-size: clamp(12.5px, 1.8vw, 13.5px);
   font-weight: 600;
-  color: var(--color-text-secondary, #94A3B8);
+  color: var(--color-text-secondary, #5A6D64);
   cursor: pointer;
   transition: all 0.16s ease;
   -webkit-tap-highlight-color: transparent;
@@ -78,57 +84,64 @@
 }
 
 .dv-native-segment-btn--active {
-  background: var(--color-surface, #0E1524);
-  color: #F8FAFC;
+  background: #FFFFFF;
+  color: var(--color-text-primary, #101A17);
   font-weight: 700;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(16, 26, 23, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
-[data-theme="light"] .dv-native-segment-btn--active {
-  background: #FFFFFF;
-  color: #0F172A;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
+[data-theme="dark"] .dv-native-segment-btn--active {
+  background: #152420;
+  color: #F8FAFC;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Native Card Surface: Compact Padding */
 .dv-native-card {
-  background: var(--color-surface, #0E1524);
-  border-radius: 16px;
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
-  padding: 16px 14px;
+  background: var(--color-surface, #FFFFFF);
+  border-radius: clamp(14px, 2vw, 18px);
+  border: 1px solid var(--color-border, #DCE2D9);
+  padding: clamp(12px, 2vh, 18px) clamp(12px, 3vw, 18px);
   box-shadow: 
-    0 12px 30px -8px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
+    0 8px 24px -4px rgba(16, 26, 23, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.02);
+  box-sizing: border-box;
 }
 
-[data-theme="light"] .dv-native-card {
-  background: #FFFFFF;
-  border-color: #DCE2D9;
-  box-shadow: 0 6px 18px -3px rgba(16, 26, 23, 0.06);
+[data-theme="dark"] .dv-native-card {
+  background: #141C2B;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.5);
 }
 
 .dv-native-card__intro {
-  margin-bottom: 10px;
+  margin-bottom: clamp(6px, 1.2vh, 10px);
 }
 
 .dv-native-card__title {
   margin: 0 0 2px 0;
-  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
-  font-size: 16px;
+  font-family: var(--font-ui, 'Manrope', sans-serif);
+  font-size: clamp(16px, 2.5vw, 18px);
   font-weight: 700;
-  color: var(--color-text-primary, #F8FAFC);
+  color: var(--color-text-primary, #101A17);
+  letter-spacing: -0.015em;
 }
 
-[data-theme="light"] .dv-native-card__title {
-  color: #101A17;
+[data-theme="dark"] .dv-native-card__title {
+  color: #F8FAFC;
 }
 
 .dv-native-card__desc {
   margin: 0;
-  font-size: 11.5px;
-  color: var(--color-text-secondary, #94A3B8);
+  font-size: clamp(11.5px, 1.6vw, 12.5px);
+  color: var(--color-text-secondary, #5A6D64);
   line-height: 1.35;
+}
+
+[data-theme="dark"] .dv-native-card__desc {
+  color: #94A3B8;
 }
 
 /* Native Error Alert */
@@ -140,25 +153,25 @@
   border-radius: 8px;
   font-size: 11.5px;
   font-weight: 500;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .dv-native-alert--error {
-  background: rgba(239, 68, 68, 0.12);
-  color: #EF4444;
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: #FDF2F1;
+  color: var(--color-danger, #B9382C);
+  border: 1px solid var(--color-danger-border, #F5C2BC);
 }
 
 /* Google OAuth Native Button */
 .dv-native-google-btn {
   width: 100%;
-  height: 38px;
+  height: clamp(36px, 4.6vh, 40px);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--color-text-primary, #F8FAFC);
-  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
-  font-size: 12.5px;
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #DCE2D9);
+  color: var(--color-text-primary, #101A17);
+  font-family: var(--font-ui, 'Manrope', sans-serif);
+  font-size: clamp(12px, 1.8vw, 13px);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -167,16 +180,18 @@
   cursor: pointer;
   transition: all 0.15s ease;
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
 .dv-native-google-btn:active {
   transform: scale(0.98);
+  background-color: var(--color-surface-hover, #EDF1EB);
 }
 
-[data-theme="light"] .dv-native-google-btn {
-  background: #FFFFFF;
-  border-color: #DCE2D9;
-  color: #101A17;
+[data-theme="dark"] .dv-native-google-btn {
+  background: #1B263B;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #F8FAFC;
 }
 
 /* Native Divider */
@@ -184,7 +199,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 8px 0;
+  margin: clamp(6px, 1vh, 9px) 0;
   position: relative;
   text-align: center;
 }
@@ -195,29 +210,35 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: var(--color-border, rgba(255, 255, 255, 0.08));
+  background: var(--color-border, #DCE2D9);
+}
+
+[data-theme="dark"] .dv-native-divider::before {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .dv-native-divider span {
   position: relative;
-  background: var(--color-surface, #0E1524);
+  background: var(--color-surface, #FFFFFF);
   padding: 0 8px;
-  font-family: var(--font-mono, monospace);
+  font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 9.5px;
-  font-weight: 600;
-  color: var(--color-text-muted, #64748B);
+  font-weight: 700;
+  color: var(--color-text-muted, #766B65);
   text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-[data-theme="light"] .dv-native-divider span {
-  background: #FFFFFF;
+[data-theme="dark"] .dv-native-divider span {
+  background: #141C2B;
+  color: #94A3B8;
 }
 
 /* Native Forms: Compact Gap */
 .dv-native-form {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: clamp(6px, 1vh, 9px);
 }
 
 .dv-native-field {
@@ -233,22 +254,29 @@
 }
 
 .dv-native-label {
-  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
-  font-size: 11.5px;
+  font-family: var(--font-ui, 'Manrope', sans-serif);
+  font-size: clamp(11.5px, 1.6vw, 12.5px);
   font-weight: 600;
-  color: var(--color-text-primary, #F8FAFC);
+  color: var(--color-text-primary, #101A17);
 }
 
-[data-theme="light"] .dv-native-label {
-  color: #101A17;
+[data-theme="dark"] .dv-native-label {
+  color: #F8FAFC;
 }
 
+/* Forgot link changed from blue to theme primary/muted */
 .dv-native-link-sm {
-  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 11px;
   font-weight: 600;
-  color: #38BDF8;
+  color: var(--color-text-muted, #6E7F76);
   text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.dv-native-link-sm:hover {
+  color: var(--color-primary, #287A57);
+  text-decoration: underline;
 }
 
 .dv-native-input-wrap {
@@ -261,42 +289,42 @@
 .dv-native-input-icon {
   position: absolute;
   left: 10px;
-  color: var(--color-text-muted, #64748B);
+  color: var(--color-text-muted, #766B65);
   pointer-events: none;
 }
 
 .dv-native-input {
   width: 100%;
-  height: 36px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  height: clamp(34px, 4.4vh, 38px);
+  background: var(--color-surface, #FFFFFF);
+  border: 1.5px solid var(--color-border, #DCE2D9);
   border-radius: 9px;
   padding: 0 12px 0 34px;
   font-family: var(--font-ui, 'Manrope', sans-serif);
-  font-size: 12.5px;
+  font-size: clamp(12px, 1.8vw, 13px);
   font-weight: 500;
-  color: var(--color-text-primary, #F8FAFC);
+  color: var(--color-text-primary, #101A17);
   outline: none;
   transition: all 0.15s ease;
   box-sizing: border-box;
 }
 
 .dv-native-input:focus {
-  border-color: #38BDF8;
-  background: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 0 2.5px rgba(56, 189, 248, 0.15);
-}
-
-[data-theme="light"] .dv-native-input {
-  background: rgba(0, 0, 0, 0.02);
-  border-color: #DCE2D9;
-  color: #101A17;
-}
-
-[data-theme="light"] .dv-native-input:focus {
+  border-color: var(--color-primary, #287A57);
   background: #FFFFFF;
-  border-color: #287A57;
-  box-shadow: 0 0 0 2.5px rgba(40, 122, 87, 0.15);
+  box-shadow: 0 0 0 2.5px var(--color-auth-focus-ring, rgba(40, 122, 87, 0.15));
+}
+
+[data-theme="dark"] .dv-native-input {
+  background: rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #F8FAFC;
+}
+
+[data-theme="dark"] .dv-native-input:focus {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: var(--color-primary, #287A57);
+  box-shadow: 0 0 0 2.5px rgba(40, 122, 87, 0.25);
 }
 
 .dv-native-eye-btn {
@@ -304,7 +332,7 @@
   right: 8px;
   background: transparent;
   border: none;
-  color: var(--color-text-muted, #64748B);
+  color: var(--color-text-muted, #766B65);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -323,13 +351,15 @@
 .dv-native-pin-toggle {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-surface-hover, #EDF1EB);
+  border: 1px solid var(--color-border, #DCE2D9);
   border-radius: 6px;
   padding: 1.5px;
 }
 
-[data-theme="light"] .dv-native-pin-toggle {
-  background: rgba(0, 0, 0, 0.05);
+[data-theme="dark"] .dv-native-pin-toggle {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .dv-native-pin-pill {
@@ -338,14 +368,14 @@
   font-family: var(--font-mono, monospace);
   font-size: 10px;
   font-weight: 600;
-  color: var(--color-text-muted, #64748B);
+  color: var(--color-text-muted, #766B65);
   background: transparent;
   border: none;
   cursor: pointer;
 }
 
 .dv-native-pin-pill.active {
-  background: #3B82F6;
+  background: var(--color-primary, #287A57);
   color: #FFFFFF;
 }
 
@@ -355,30 +385,36 @@
   gap: 8px;
 }
 
-/* Native Submit Action Button */
+/* Native Submit Action Button (Themed: Forest Green #287A57 instead of blue) */
 .dv-native-submit-btn {
   width: 100%;
-  height: 38px;
-  margin-top: 4px;
+  height: clamp(38px, 4.8vh, 42px);
+  margin-top: clamp(3px, 0.8vh, 6px);
   border-radius: 10px;
-  background: #3B82F6;
+  background: var(--color-primary, #287A57);
   color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
-  font-size: 13px;
+  border: none;
+  font-family: var(--font-ui, 'Manrope', sans-serif);
+  font-size: clamp(12.5px, 1.8vw, 13.5px);
   font-weight: 700;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   cursor: pointer;
-  box-shadow: 0 3px 10px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 3px 12px rgba(40, 122, 87, 0.3);
   transition: all 0.16s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
+.dv-native-submit-btn:hover:not(:disabled) {
+  background: var(--color-primary-hover, #1E6345);
+  box-shadow: 0 4px 14px rgba(40, 122, 87, 0.38);
+}
+
 .dv-native-submit-btn:active {
   transform: scale(0.97);
+  background: var(--color-auth-cta-active, #164E35);
 }
 
 .dv-native-submit-btn:disabled {
@@ -392,29 +428,42 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  margin-top: 10px;
-  padding-top: 8px;
-  border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.06));
+  margin-top: clamp(8px, 1.4vh, 12px);
+  padding-top: clamp(6px, 1vh, 8px);
+  border-top: 1px solid var(--color-border, #DCE2D9);
+}
+
+[data-theme="dark"] .dv-native-app-links {
+  border-top-color: rgba(255, 255, 255, 0.06);
 }
 
 .dv-native-about-btn,
 .dv-native-web-btn {
   background: transparent;
   border: none;
-  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-family: var(--font-ui, 'Manrope', sans-serif);
   font-size: 11px;
   font-weight: 600;
-  color: var(--color-text-secondary, #94A3B8);
+  color: var(--color-text-secondary, #5A6D64);
   display: flex;
   align-items: center;
   gap: 4px;
   cursor: pointer;
   padding: 3px;
+  transition: color 0.15s ease;
+}
+
+.dv-native-about-btn:hover {
+  color: var(--color-primary, #287A57);
 }
 
 .dv-native-web-btn {
   text-decoration: underline;
-  color: var(--color-text-muted, #64748B);
+  color: var(--color-text-muted, #766B65);
+}
+
+.dv-native-web-btn:hover {
+  color: var(--color-text-primary, #101A17);
 }
 
 .dv-native-footer {
